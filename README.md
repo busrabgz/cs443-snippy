@@ -1,5 +1,7 @@
 # Snippy.me: URL Shortener ![Java application](https://github.com/Dogacel/Kalas-Iris/workflows/Python%20application/badge.svg) ![Node.js CI](https://github.com/Dogacel/Kalas-Iris/workflows/Node.js%20CI/badge.svg)
-#yukardaki svgleri değiş
+<!--
+***yukardaki svgleri değiş
+-->
 
 https://www.snippy.me
 

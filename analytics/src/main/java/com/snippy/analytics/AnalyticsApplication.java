@@ -1,4 +1,4 @@
-package com.snippy.app;
+package com.snippy.analytics;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

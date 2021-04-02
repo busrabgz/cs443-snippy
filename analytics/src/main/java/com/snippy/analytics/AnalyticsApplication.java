@@ -19,4 +19,9 @@ public class AnalyticsApplication {
 		return String.format("Hello from analytics %s!", name);
 	}
 
+	@GetMapping("/sync")
+	public String sync() {
+		return "analytics";
+	}
+
 }

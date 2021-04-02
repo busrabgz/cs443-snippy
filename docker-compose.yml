@@ -1,13 +1,18 @@
 version: "3.9"
 services:
   app:
-    build: ./app/
+    build: ./app
     ports:
       - "8080:8080"
     volumes:
       - ./app:/home/src/app
+    links:
+      - "auth:auth"
+      - "analytics:analytics"
     working_dir: /home/src/app
-    command: gradle bootRun 
+    # stdin_open: true # docker run -i
+    # tty: true        # docker run -t
+    command: gradle bootRun
     
   auth:
     build: ./auth/

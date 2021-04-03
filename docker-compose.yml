@@ -1,7 +1,8 @@
-version: "3.9"
+version: "3"
 services:
   app:
     build: ./app
+    image: app-microservice
     ports:
       - "8080:8080"
     volumes:
@@ -16,6 +17,7 @@ services:
     
   auth:
     build: ./auth/
+    image: auth-microservice
     volumes:
       - ./auth:/home/src/auth
     ports:
@@ -25,6 +27,7 @@ services:
 
   analytics:
     build: ./analytics
+    image: analytics-microservice
     volumes:
       - ./analytics:/home/src/analytics
     ports:

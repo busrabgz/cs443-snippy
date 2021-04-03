@@ -36,13 +36,10 @@ public class AppApplication {
 		// create a client
 		var client = HttpClient.newHttpClient();
 
-		// create a reques
-		var authRequest = HttpRequest.newBuilder(URI.create("http://auth:8080/sync")).build();
-		var analyticsRequest = HttpRequest.newBuilder(URI.create("http://analytics:8080/sync")).build();
-
 		boolean authStatus = false, analyticsStatus = false;
 		// use the client to send the request
 		try {
+			var authRequest = HttpRequest.newBuilder(URI.create("http://auth-service:8080/sync")).build();
 			var authResponse = client.send(authRequest, BodyHandlers.ofString()).body();
 			authStatus = authResponse.compareTo("auth") == 0;
 		} catch (IOException | InterruptedException e) {
@@ -50,8 +47,9 @@ public class AppApplication {
 		}
 
 		try {
+			var analyticsRequest = HttpRequest.newBuilder(URI.create("http://analytics-service:8080/sync")).build();
 			var analyticsResponse = client.send(analyticsRequest, BodyHandlers.ofString()).body();
-			analyticsStatus = analyticsResponse.compareTo("analytics	") == 0;
+			analyticsStatus = analyticsResponse.compareTo("analytics") == 0;
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}

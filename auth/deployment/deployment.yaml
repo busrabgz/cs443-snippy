@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+      - name: auth
+        image: cs443-snippy_auth
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /home/src/app
+          name: test-volume
+        workingDir: /home/src/app
+        command: ["gradle", "bootRun"]
+      volumes:
+      - name: test-volume
+        hostPath:
+          path: /run/desktop/mnt/host/wsl/work/auth
+          type: Directory 

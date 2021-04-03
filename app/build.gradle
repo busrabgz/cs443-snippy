@@ -12,11 +12,23 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 test {
 	useJUnitPlatform()
+}
+
+bootRun { 
+	classpath = sourceSets.main.runtimeClasspath + configurations.runtimeClasspath
 }

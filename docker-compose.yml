@@ -8,13 +8,12 @@ services:
     volumes:
       - ./app:/home/src/app
     links:
-      - "auth:auth"
-      - "analytics:analytics"
+      - "auth:auth-service"
+      - "analytics:analytics-service"
     working_dir: /home/src/app
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t
-    command: gradle bootRun
-    
+    command: sh -c "gradle clean --stop && (gradle build --continuous | gradle bootRun)"
   auth:
     build: ./auth/
     image: auth-microservice
@@ -23,8 +22,7 @@ services:
     ports:
       - "8081:8080"
     working_dir: /home/src/auth
-    command: gradle bootRun
-
+    command: sh -c "gradle clean --stop && (gradle build --continuous | gradle bootRun)"
   analytics:
     build: ./analytics
     image: analytics-microservice
@@ -33,4 +31,4 @@ services:
     ports:
       - "8082:8080"
     working_dir: /home/src/analytics
-    command: gradle bootRun
+    command: sh -c "gradle clean --stop && (gradle build --continuous | gradle bootRun)"

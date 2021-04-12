@@ -1,15 +1,21 @@
 version: "3"
 services:
+  firestore_emulator:
+    image: mtlynch/firestore-emulator
+    environment:
+      - FIRESTORE_PROJECT_ID=snippy-me-cs443
+      - PORT=8200
   app:
     build: ./app
     image: app-microservice
     ports:
-      - "8080:8080"
+      - "8200:8200"
     volumes:
       - ./app:/home/src/app
     links:
       - "auth:auth-service"
       - "analytics:analytics-service"
+      - firestore_emulator
     working_dir: /home/src/app
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t

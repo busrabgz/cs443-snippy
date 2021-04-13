@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,25 +41,49 @@ public class AppApplication {
 		SpringApplication.run(AppApplication.class, args);
 	}
 
-	@GetMapping("/hello")
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) throws Exception {
+	@GetMapping("logs/{id}")
+	public String logs(@PathVariable(value="id") String id) throws Exception {
+		var docRef = db.document("logs/"+id);
+		var doc = docRef.get();
+		var snapshot = doc.get();
 
+		if (!snapshot.exists()) {
+			return "Log does not exist.";
+		}
+
+		String result = "";
+	
+		for (var kv : snapshot.getData().entrySet()) {
+			result += kv.getKey() + " : " + kv.getValue().toString() + "<br/>";
+		}
+
+		return result;
+	}
+
+	@GetMapping("/collections")
+	public String collections() throws Exception {
+		String collections = "";
 		for (var item : db.listCollections())
-			System.out.println(item.getPath());
+			collections += item.getPath();
 
-		System.out.println("Hey!");
+		var docRef = db.document("logs/collections");
 
-		var docRef = db.document("doc/test");
-		Map<String, Object> data = new HashMap<>();
-		data.put("first", "Ada");
-		data.put("last", "Lovelace");
-		data.put("born", 1815);
-		// asynchronously write data
-		ApiFuture<WriteResult> result = docRef.set(data);
-		// ...
-		// result.get() blocks on response
+		ApiFuture<WriteResult> result;
+		if (docRef.get().get().exists()) {
+			result = docRef.update("" + System.currentTimeMillis(), "accessed");
+		} else {
+			HashMap<String, Object> data = new HashMap<>();
+			data.put("" + System.currentTimeMillis(), "accessed");
+			result = docRef.create(data);
+		}
+
 		System.out.println("Update time : " + result.get().getUpdateTime());
 
+		return collections;
+	}
+
+	@GetMapping("/hello")
+	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
 		return String.format("Hello from app 2 %s!", name);
 	}
 

@@ -15,14 +15,11 @@ services:
       - "8080:8080"
     volumes:
       - ./app:/home/src/app
-      - ./.d.env:/home/env
     links:
       - "auth:auth-service"
       - "analytics:analytics-service"
       - "firestore_emulator:firestore"
     working_dir: /home/src/app
-    # stdin_open: true # docker run -i
-    # tty: true        # docker run -t
     command: sh -c "gradle clean --stop && (gradle build --continuous | gradle bootRun)"
   auth:
     build: ./auth/

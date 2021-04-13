@@ -8,14 +8,18 @@ services:
   app:
     build: ./app
     image: app-microservice
+    environment:
+      - FIRESTORE_EMULATOR_HOST=firestore:8200
+      - FIRESTORE_PROJECT_ID=snippy-me-cs443
     ports:
-      - "8200:8200"
+      - "8080:8080"
     volumes:
       - ./app:/home/src/app
+      - ./.d.env:/home/env
     links:
       - "auth:auth-service"
       - "analytics:analytics-service"
-      - firestore_emulator
+      - "firestore_emulator:firestore"
     working_dir: /home/src/app
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t

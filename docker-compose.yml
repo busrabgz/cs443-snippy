@@ -1,5 +1,12 @@
 version: "3"
 services:
+  redis:
+    image: redis:latest
+    ports:
+        - 6379:6379
+    volumes:
+        - ./config/redis.conf:/redis.conf
+    command: [ "redis-server", "/redis.conf" ]
   app:
     build: ./app
     image: app-microservice
@@ -10,6 +17,7 @@ services:
     links:
       - "auth:auth-service"
       - "analytics:analytics-service"
+      - "redis"
     working_dir: /home/src/app
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t
@@ -19,7 +27,7 @@ services:
     image: auth-microservice
     volumes:
       - ./auth:/home/src/auth
-    ports:
+    ports: 
       - "8081:8080"
     working_dir: /home/src/auth
     command: sh -c "gradle clean --stop && (gradle build --continuous | gradle bootRun)"

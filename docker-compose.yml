@@ -1,8 +1,12 @@
 version: "3"
 services:
+
   app:
     build: ./app
     image: app-microservice
+    environment:
+      - FIRESTORE_EMULATOR_HOST=firestore:8200
+      - FIRESTORE_PROJECT_ID=snippy-me-cs443
     ports:
       - "8089:8080"
     volumes:
@@ -10,10 +14,9 @@ services:
     links:
       - "auth:auth-service"
       - "analytics:analytics-service"
+      - "firestore_emulator:firestore"
       - "redis:redis-service"
     working_dir: /home/src/app
-    # stdin_open: true # docker run -i
-    # tty: true        # docker run -t
     command: sh -c "gradle clean --stop && (gradle build --continuous | gradle bootRun)"
   auth:
     build: ./auth/
@@ -33,7 +36,11 @@ services:
       - "8082:8080"
     working_dir: /home/src/analytics
     command: sh -c "gradle clean --stop && (gradle build --continuous | gradle bootRun)"
-  
+  firestore_emulator:
+    image: mtlynch/firestore-emulator
+    environment:
+      - FIRESTORE_PROJECT_ID=snippy-me-cs443
+      - PORT=8200
   redis:
     image: redis:latest
     ports:

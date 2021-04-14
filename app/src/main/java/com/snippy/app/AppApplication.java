@@ -6,22 +6,24 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController; 
+import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import redis.clients.jedis.Jedis;
-
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.WriteResult;;
+import com.google.cloud.firestore.WriteResult;
 
 @SpringBootApplication
 @RestController
@@ -41,6 +43,10 @@ public class AppApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+
+		jedis = new Jedis("redis-service", 6379);
+		jedis.connect();
 
 		SpringApplication.run(AppApplication.class, args);
 	}
@@ -88,19 +94,24 @@ public class AppApplication {
 
 	@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-		Jedis jedis = new Jedis("redis-service", 6379);
 		jedis.set("foo", "bar");
+
 		String value = jedis.get("foo");
 		System.out.println("GOT:" + value);
 
 		return String.format("Hello from app 2 %s!", name);
 	}
 
-	@GetMapping("/sync")
-	public String sync() {
-		return "app";
-	}
-
+	@Operation(summary = "Checks health status of the microservices")
+	@ApiResponses(
+		value={
+			@ApiResponse(
+			responseCode = "200",
+			description = "The status of the services are described in the content body.",
+			content = @Content
+			)
+		}
+	)
 	@GetMapping("/healthcheck")
 	public String healthCheck() {
 
@@ -125,8 +136,14 @@ public class AppApplication {
 			e.printStackTrace();
 		}
 
-		return String.format("App status: up<br/>Auth status: %s<br/>Analytics status: %s", authStatus ? "up" : "down",
-				analyticsStatus ? "up" : "down");
+		var redisResponse = jedis.isConnected();
+		var firestoreStatus = db != null;
+
+		return String.format("App status: up<br/>Auth status: %s<br/>Analytics status: %s<br/>Redis status: %s<br/>Firestore status: %s", 
+				authStatus ? "up" : "down",
+				analyticsStatus ? "up" : "down",
+				redisResponse ? "up" : "down",
+				firestoreStatus ? "up" : "down");
 	}
 
 }

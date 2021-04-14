@@ -23,6 +23,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	compile 'redis.clients:jedis:2.7.0'
+   // compile 'org.springframework.data:spring-data-redis:1.5.0.RELEASE'
+
 }
 
 test {

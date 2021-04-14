@@ -13,7 +13,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestController; 
+
+import redis.clients.jedis.Jedis;
+
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
@@ -25,6 +28,7 @@ import com.google.cloud.firestore.WriteResult;;
 public class AppApplication {
 
 	static Firestore db;
+	static Jedis jedis;
 
 	public static void main(String[] args) {
 
@@ -84,6 +88,11 @@ public class AppApplication {
 
 	@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+		Jedis jedis = new Jedis("redis-service", 6379);
+		jedis.set("foo", "bar");
+		String value = jedis.get("foo");
+		System.out.println("GOT:" + value);
+
 		return String.format("Hello from app 2 %s!", name);
 	}
 

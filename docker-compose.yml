@@ -12,6 +12,7 @@ services:
       - "8089:8080"
     volumes:
       - ./app:/home/src/app
+      - ./libs:/home/src/libs
     links:
       - "auth:auth-service"
       - "analytics:analytics-service"
@@ -28,6 +29,7 @@ services:
       - GRADLE_USER_HOME=.my-gradle
     volumes:
       - ./auth:/home/src/auth 
+      - ./libs:/home/src/libs
     ports: 
       - "8081:8080"
     links:
@@ -43,6 +45,7 @@ services:
       - GRADLE_USER_HOME=.my-gradle
     volumes:
       - ./analytics:/home/src/analytics
+      - ./libs:/home/src/libs
     ports:
       - "8082:8080"
     links:

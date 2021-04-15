@@ -25,6 +25,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
 
+import com.snippy.libs.User;
+
 @SpringBootApplication
 @RestController
 public class AppApplication {
@@ -98,6 +100,8 @@ public class AppApplication {
 
 		String value = jedis.get("foo");
 		System.out.println("GOT:" + value);
+
+		User user = new User();
 
 		return String.format("Hello from app 2 %s!", name);
 	}

@@ -46,12 +46,14 @@ public class AppApplication {
 			e.printStackTrace();
 		}
 
-
-		jedis = new Jedis("redis-service", 6379);
-		jedis.connect();
+ 
+		//jedis = new Jedis("redis-service", 6379);
+		//jedis.connect();
 
 		SpringApplication.run(AppApplication.class, args);
 	}
+
+
 
 	@GetMapping("logs/{id}")
 	public String logs(@PathVariable(value="id") String id) throws Exception {
@@ -140,7 +142,7 @@ public class AppApplication {
 			e.printStackTrace();
 		}
 
-		var redisResponse = jedis.isConnected();
+		var redisResponse = true; //jedis.isConnected();
 		var firestoreStatus = db != null;
 
 		return String.format("App status: up<br/>Auth status: %s<br/>Analytics status: %s<br/>Redis status: %s<br/>Firestore status: %s", 

@@ -10,6 +10,8 @@ import java.util.HashMap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +27,10 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
 
+import org.apache.commons.validator.routines.UrlValidator;
+
 import com.snippy.libs.User;
+import com.snippy.libs.Url;
 
 @SpringBootApplication
 @RestController
@@ -46,11 +51,36 @@ public class AppApplication {
 			e.printStackTrace();
 		}
 
-
+ 
 		jedis = new Jedis("redis-service", 6379);
 		jedis.connect();
 
 		SpringApplication.run(AppApplication.class, args);
+	}
+
+	@PostMapping("/urls")
+	public String create(@RequestBody String url) {
+		UrlValidator urlValidator = new UrlValidator(new String[]{"http", "https"});
+		if (!urlValidator.isValid(url)) {
+			return "Url is not valid.";
+		}
+
+		Url shortUrl = Url.create(url);
+		System.out.println("GOT:" + shortUrl.getId());
+		jedis.set(shortUrl.getId(), shortUrl.getUrl());
+		
+		return shortUrl.getId();
+	}
+
+	@GetMapping("/urls/{id}")
+    public String getUrl(@PathVariable String id) {
+		String actualUrl = jedis.get(id);
+		if (actualUrl == null) {
+			return "No such url exists.";
+		}
+		else {
+			return actualUrl;
+		}
 	}
 
 	@GetMapping("logs/{id}")

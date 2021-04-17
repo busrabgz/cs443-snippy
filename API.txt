@@ -1,0 +1,31 @@
+Services:
+- Auth:
+  - POST /login (username or email, password) -> (JWT)
+  - POST /logout (JWT) -> ()
+  - POST /register (username, email, password) -> (JWT)
+  - GET  /me (JWT) -> (User)
+- Analytics:
+  - GET  /stats?[s|m|h|D|W|M|Y]=x (JWT, URLId) -> (URLActivityStatistic)
+  - GET  /history?[s|m|h|D|W|M|Y]=x (JWT, URLId) -> (URLActivityHistory)
+- App:
+  - GET  /u/{id} () -> Redirect
+  - POST /url (URL, URLId?=null, JWT=null) -> (URLId)
+  - GET  /url (JWT) -> (Map<URLId, URL>) // All URLS for that user
+  - [..] /auth/.. -> Forward to auth API
+  - [..] /analytics/.. -> Forward to analytics API
+
+Models:
+- URL: String
+- URLId: String [a-zA-Z0-9]{8}
+- JWT: Authentication token, details unclear.
+- User:
+  - Username: String
+  - E-mail: String
+  - Password: String (hashed)
+- URLActivityStatistic: 
+  - Visits: Map<TimeRange, Integer>
+  - Accessibility: Map<TimeRange, Percentage>
+- URLActivityHistory: Array<URLEvent>
+- URLEvent: 
+  - RoundtripDelay: Millis
+  - Status: StatusCode (Accepted|Rejected)

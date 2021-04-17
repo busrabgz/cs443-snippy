@@ -39,11 +39,18 @@ public class Config {
   public static void SetupFirestore() {
     try {
 
-      var credentialPath = "/home/env/key.json";
-      var serviceAccount = new FileInputStream(credentialPath);
-      var credentials = GoogleCredentials.fromStream(serviceAccount);
+      var useEmulator = false;
 
-      firestoreOptions = FirestoreOptions.newBuilder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
+      if (useEmulator) {
+        firestoreOptions = FirestoreOptions.newBuilder().setProjectId("snippy-me-cs443").build();
+      } else {
+        var credentialPath = "/home/env/key.json";
+        var serviceAccount = new FileInputStream(credentialPath);
+        var credentials = GoogleCredentials.fromStream(serviceAccount);
+  
+        firestoreOptions = FirestoreOptions.newBuilder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
+      }
+
       
     } catch (Exception e) {
       e.printStackTrace();

@@ -32,8 +32,8 @@ services:
       - './libs:/home/src/libs'
     ports:
       - '8081:8080'
-    # links:
-    #   - 'firestore_emulator:firestore'
+    links:
+      - 'firestore_emulator:firestore'
     working_dir: /home/src/auth
     command: sh -c "./gradlew clean --stop && (./gradlew build --continuous | ./gradlew bootRun)"
   analytics:
@@ -52,11 +52,11 @@ services:
     #   - 'firestore_emulator:firestore'
     working_dir: /home/src/analytics
     command: sh -c "./gradlew clean --stop && (./gradlew build --continuous | ./gradlew bootRun )"
-  # firestore_emulator:
-  #   image: mtlynch/firestore-emulator
-  #   environment:
-  #     - FIRESTORE_PROJECT_ID=snippy-me-cs443
-  #     - PORT=8200
+  firestore_emulator:
+    image: mtlynch/firestore-emulator
+    environment:
+      - FIRESTORE_PROJECT_ID=snippy-me-cs443
+      - PORT=8200
   redis:
     image: 'redis:latest'
     ports:

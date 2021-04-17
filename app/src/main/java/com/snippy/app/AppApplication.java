@@ -1,17 +1,21 @@
 package com.snippy.app;
 
+import static com.snippy.libs.Config.SetupFirestore;
+import static com.snippy.libs.Config.SetupJedis;
+import static com.snippy.libs.Config.getDb;
+import static com.snippy.libs.Config.getJedis;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,71 +24,27 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import redis.clients.jedis.Jedis;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
-
-import org.apache.commons.validator.routines.UrlValidator;
-
-import com.snippy.libs.User;
-import com.snippy.libs.Url;
 
 @SpringBootApplication
 @RestController
 public class AppApplication {
 
-	static Firestore db;
-	static Jedis jedis;
 
 	public static void main(String[] args) {
 
-		try {
-			FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
-					.setProjectId("snippy-me-cs443").build();
-
-			db = firestoreOptions.getService();
-			System.out.println(db.document("doc/test"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
- 
-		jedis = new Jedis("redis-service", 6379);
-		jedis.connect();
+		SetupFirestore();
+		SetupJedis();
 
 		SpringApplication.run(AppApplication.class, args);
 	}
 
-	@PostMapping("/urls")
-	public String create(@RequestBody String url) {
-		UrlValidator urlValidator = new UrlValidator(new String[]{"http", "https"});
-		if (!urlValidator.isValid(url)) {
-			return "Url is not valid.";
-		}
-
-		Url shortUrl = Url.create(url);
-		System.out.println("GOT:" + shortUrl.getId());
-		jedis.set(shortUrl.getId(), shortUrl.getUrl());
-		
-		return shortUrl.getId();
-	}
-
-	@GetMapping("/urls/{id}")
-    public String getUrl(@PathVariable String id) {
-		String actualUrl = jedis.get(id);
-		if (actualUrl == null) {
-			return "No such url exists.";
-		}
-		else {
-			return actualUrl;
-		}
-	}
 
 	@GetMapping("logs/{id}")
 	public String logs(@PathVariable(value="id") String id) throws Exception {
+		var db = getDb();
 		var docRef = db.document("logs/"+id);
 		var doc = docRef.get();
 		var snapshot = doc.get();
@@ -104,6 +64,7 @@ public class AppApplication {
 
 	@GetMapping("/collections")
 	public String collections() throws Exception {
+		var db = getDb();
 		String collections = "";
 		for (var item : db.listCollections())
 			collections += item.getPath();
@@ -126,12 +87,11 @@ public class AppApplication {
 
 	@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+		var jedis = getJedis();
 		jedis.set("foo", "bar");
 
 		String value = jedis.get("foo");
 		System.out.println("GOT:" + value);
-
-		User user = new User();
 
 		return String.format("Hello from app 2 %s!", name);
 	}
@@ -149,6 +109,8 @@ public class AppApplication {
 	@GetMapping("/healthcheck")
 	public String healthCheck() {
 
+		var db = getDb();
+		var jedis = getJedis();
 		// create a client
 		var client = HttpClient.newHttpClient();
 
@@ -172,6 +134,14 @@ public class AppApplication {
 
 		var redisResponse = jedis.isConnected();
 		var firestoreStatus = db != null;
+
+		if (firestoreStatus) {
+			try {
+				db.document("doc/test").get().get(5000, TimeUnit.MILLISECONDS);
+			} catch (Exception e) {
+				firestoreStatus = false;
+			}
+		}
 
 		return String.format("App status: up<br/>Auth status: %s<br/>Analytics status: %s<br/>Redis status: %s<br/>Firestore status: %s", 
 				authStatus ? "up" : "down",

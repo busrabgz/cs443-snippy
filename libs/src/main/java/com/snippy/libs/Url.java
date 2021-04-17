@@ -8,6 +8,10 @@ public class Url {
     private String id;
     private String url;
 
+    public Url() {
+        this("", "");
+    }
+
     public Url(String id, String url) {
         this.id = id;
         this.url = url;

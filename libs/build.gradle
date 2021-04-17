@@ -10,16 +10,22 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	google()
 }
-
-
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		
+	compile 'com.google.firebase:firebase-admin:7.1.1'
+	implementation 'com.google.firebase:firebase-firestore:22.1.1'
+	
+	compile 'redis.clients:jedis:2.7.0'
 
 	implementation "com.google.guava:guava:16+"
+
+	implementation 'commons-validator:commons-validator:1.7'
 }
 
 test {

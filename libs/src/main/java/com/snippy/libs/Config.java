@@ -4,8 +4,10 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.io.FileInputStream;
 import java.time.Duration;
 
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 
@@ -36,7 +38,13 @@ public class Config {
 
   public static void SetupFirestore() {
     try {
-      firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder().setProjectId("snippy-me-cs443").build();
+
+      var credentialPath = "/home/env/key.json";
+      var serviceAccount = new FileInputStream(credentialPath);
+      var credentials = GoogleCredentials.fromStream(serviceAccount);
+
+      firestoreOptions = FirestoreOptions.newBuilder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
+      
     } catch (Exception e) {
       e.printStackTrace();
     }

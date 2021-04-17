@@ -28,4 +28,5 @@ Models:
 - URLActivityHistory: Array<URLEvent>
 - URLEvent: 
   - RoundtripDelay: Millis
+  - EventTime
   - Status: StatusCode (Accepted|Rejected)

@@ -10,7 +10,17 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	google()  
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java'
+            srcDirs "../libs/src/main/java"
+        }
+    }
+ }
 
 configurations {
 	developmentOnly
@@ -23,6 +33,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	
+	compile 'com.google.firebase:firebase-admin:7.1.1'
+	implementation 'com.google.firebase:firebase-firestore:22.1.1'
+	
+	compile 'redis.clients:jedis:2.7.0'
+
+	implementation 'org.springdoc:springdoc-openapi-ui:1.5.7'
+
+	implementation "com.google.guava:guava:16+"
+
+	implementation 'commons-validator:commons-validator:1.7'
 }
 
 test {

@@ -7,9 +7,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,14 +31,29 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
 
+import org.apache.commons.validator.routines.UrlValidator;
+
 import com.snippy.libs.User;
+import com.snippy.libs.Url;
 
 @SpringBootApplication
 @RestController
+@PropertySource("classpath:application.properties") 
 public class AppApplication {
 
+	@Value("${spring.redis.host}")
+	static String redisHost;
+
+	@Value("${spring.redis.port}")
+	static int redisPort;
+	
 	static Firestore db;
 	static Jedis jedis;
+	
+	@Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 
 	public static void main(String[] args) {
 
@@ -46,14 +67,36 @@ public class AppApplication {
 			e.printStackTrace();
 		}
 
- 
-		//jedis = new Jedis("redis-service", 6379);
-		//jedis.connect();
+		jedis = new Jedis(redisHost, redisPort);
+		jedis.connect();
 
 		SpringApplication.run(AppApplication.class, args);
 	}
 
+	@PostMapping("/urls")
+	public String create(@RequestBody String url) {
+		UrlValidator urlValidator = new UrlValidator(new String[]{"http", "https"});
+		if (!urlValidator.isValid(url)) {
+			return "Url is not valid.";
+		}
 
+		Url shortUrl = Url.create(url);
+		System.out.println("GOT:" + shortUrl.getId());
+		jedis.set(shortUrl.getId(), shortUrl.getUrl());
+		
+		return shortUrl.getId();
+	}
+
+	@GetMapping("/urls/{id}")
+    public String getUrl(@PathVariable String id) {
+		String actualUrl = jedis.get(id);
+		if (actualUrl == null) {
+			return "No such url exists.";
+		}
+		else {
+			return actualUrl;
+		}
+	}
 
 	@GetMapping("logs/{id}")
 	public String logs(@PathVariable(value="id") String id) throws Exception {
@@ -142,7 +185,7 @@ public class AppApplication {
 			e.printStackTrace();
 		}
 
-		var redisResponse = true; //jedis.isConnected();
+		var redisResponse = jedis.isConnected();
 		var firestoreStatus = db != null;
 
 		return String.format("App status: up<br/>Auth status: %s<br/>Analytics status: %s<br/>Redis status: %s<br/>Firestore status: %s", 

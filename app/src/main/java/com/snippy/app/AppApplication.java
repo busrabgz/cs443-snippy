@@ -7,12 +7,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.HashMap;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,22 +34,10 @@ import com.snippy.libs.Url;
 
 @SpringBootApplication
 @RestController
-@PropertySource("classpath:application.properties") 
 public class AppApplication {
 
-	@Value("${spring.redis.host}")
-	static String redisHost;
-
-	@Value("${spring.redis.port}")
-	static int redisPort;
-	
 	static Firestore db;
 	static Jedis jedis;
-	
-	@Bean
-    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
 
 	public static void main(String[] args) {
 
@@ -67,7 +51,8 @@ public class AppApplication {
 			e.printStackTrace();
 		}
 
-		jedis = new Jedis(redisHost, redisPort);
+ 
+		jedis = new Jedis("redis-service", 6379);
 		jedis.connect();
 
 		SpringApplication.run(AppApplication.class, args);

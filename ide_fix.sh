@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo rm -r auth/.gradle app/.gradle analytics/.gradle libs/.gradle
+sudo rm -r core/.gradle analytics/.gradle libs/.gradle

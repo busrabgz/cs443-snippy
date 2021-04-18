@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    build: ./app
+    build: ./core
     image: app-microservice
     environment:
       # - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
@@ -10,7 +10,7 @@ services:
     ports:
       - '8089:8080'
     volumes:
-      - './app:/home/src/app'
+      - './core:/home/src/app'
       - './libs:/home/src/libs'
       - './.d.env:/home/env'
     links:

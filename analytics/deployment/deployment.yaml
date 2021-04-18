@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: analytics
-        image: gcr.io/snippy-me-cs443/cs443-snippy_analytics:v1
+        image: gcr.io/snippy-me-cs443/cs443-snippy_analytics:v1-fix
         ports:
         - containerPort: 8080
-        workingDir: /home/app/build/libs/
+        workingDir: /home/app
         command: ["java", "-jar", "analytics-0.0.1-SNAPSHOT.jar"]

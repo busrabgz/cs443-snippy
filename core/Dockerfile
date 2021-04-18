@@ -1,4 +1,4 @@
 FROM gradle:6.8.3-jdk11
 
-COPY . /home/app
+COPY ./build/libs /home/app
 WORKDIR /home/app

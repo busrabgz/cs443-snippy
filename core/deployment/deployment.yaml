@@ -18,11 +18,11 @@ spec:
           secretName: gauth-key
       containers:
       - name: app
-        image: gcr.io/snippy-me-cs443/cs443-snippy_app:v1
+        image: gcr.io/snippy-me-cs443/cs443-snippy_app:v1-fix
         volumeMounts:
           - name: google-cloud-key
             mountPath: /home/env
         ports:
         - containerPort: 8080
-        workingDir: /home/app/build/libs
+        workingDir: /home/app
         command: ["java", "-jar", "core-0.0.1-SNAPSHOT.jar"]

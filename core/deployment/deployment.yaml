@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: app-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: app
@@ -12,19 +12,17 @@ spec:
       labels:
         app: app
     spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: gauth-key
       containers:
       - name: app
-        image: cs443-snippy_app
-        imagePullPolicy: Never
+        image: gcr.io/snippy-me-cs443/cs443-snippy_app:v1
+        volumeMounts:
+          - name: google-cloud-key
+            mountPath: /home/env
         ports:
         - containerPort: 8080
-        volumeMounts:
-        - mountPath: /home/src/app
-          name: test-volume
-        workingDir: /home/src/app
-        command: ["gradle", "bootRun"]
-      volumes:
-      - name: test-volume
-        hostPath:
-          path: /run/desktop/mnt/host/wsl/work/app
-          type: Directory 
+        workingDir: /home/app/build/libs
+        command: ["java", "-jar", "core-0.0.1-SNAPSHOT.jar"]

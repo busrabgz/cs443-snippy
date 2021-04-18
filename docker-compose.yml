@@ -45,7 +45,7 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - './config/redis.conf:/redis.conf'
+      - './redis_config/redis.conf:/redis.conf'
     command:
       - redis-server
       - /redis.conf

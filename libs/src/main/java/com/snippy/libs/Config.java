@@ -54,10 +54,12 @@ public class Config {
         var credentials = GoogleCredentials.fromStream(serviceAccount);
   
         firestoreOptions = FirestoreOptions.newBuilder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
-        firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443").build(); 
+        firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
+      
       }
 
       FirebaseApp.initializeApp(firebaseOptions);
+
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -65,7 +67,7 @@ public class Config {
   }
 
   public static FirebaseAuth getAuth() {
-    return FirebaseAuth.getInstance();
+    return FirebaseAuth.getInstance(FirebaseApp.getInstance());
   }
 
   public static Firestore getDb() {

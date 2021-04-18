@@ -14,7 +14,6 @@ services:
       - './libs:/home/src/libs'
       - './.d.env:/home/env'
     links:
-      - 'auth:auth-service'
       - 'analytics:analytics-service'
       # - 'firestore_emulator:firestore'
       - 'redis:redis-service'
@@ -36,11 +35,11 @@ services:
     #   - 'firestore_emulator:firestore'
     working_dir: /home/src/analytics
     command: sh -c "./gradlew clean --stop && (./gradlew build --continuous | ./gradlew bootRun )"
-  firestore_emulator:
-    image: mtlynch/firestore-emulator
-    environment:
-      - FIRESTORE_PROJECT_ID=snippy-me-cs443
-      - PORT=8200
+  # firestore_emulator:
+  #   image: mtlynch/firestore-emulator
+  #   environment:
+  #     - FIRESTORE_PROJECT_ID=snippy-me-cs443
+  #     - PORT=8200
   redis:
     image: 'redis:latest'
     ports:

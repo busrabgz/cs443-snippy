@@ -4,6 +4,7 @@ import static com.snippy.libs.Config.SetupFirestore;
 import static com.snippy.libs.Config.SetupJedis;
 import static com.snippy.libs.Config.getDb;
 import static com.snippy.libs.Config.getJedis;
+import static com.snippy.libs.Config.getAuth;
 
 import java.io.IOException;
 import java.net.URI;
@@ -114,15 +115,14 @@ public class AppApplication {
 		// create a client
 		var client = HttpClient.newHttpClient();
 
-		boolean authStatus = false, analyticsStatus = false;
-		// use the client to send the request
+		var authStatus = false;
 		try {
-			var authRequest = HttpRequest.newBuilder(URI.create("http://auth-service:8080/sync")).build();
-			var authResponse = client.send(authRequest, BodyHandlers.ofString()).body();
-			authStatus = authResponse.compareTo("auth") == 0;
-		} catch (IOException | InterruptedException e) {
+			authStatus = getAuth().getUser("lnSE1qjnn1R70TwfWomSPzqmx7Q2").getEmail().compareTo("dogacel@gmail.com") == 0;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+			
+		boolean analyticsStatus = false;
 
 		try {
 			var analyticsRequest = HttpRequest.newBuilder(URI.create("http://analytics-service:8080/sync")).build();

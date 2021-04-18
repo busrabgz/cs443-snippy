@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: analytics-service
 spec:
-  type: NodePort
+  type: LoadBalancer 
   selector:
     app: analytics
   ports:

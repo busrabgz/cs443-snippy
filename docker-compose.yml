@@ -2,7 +2,7 @@ version: '3'
 services:
   app:
     build: ./core
-    image: app-microservice
+    image: gradle:6.8.3-jdk11 
     environment:
       # - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
       - FIRESTORE_PROJECT_ID=snippy-me-cs443
@@ -21,7 +21,7 @@ services:
     command: sh -c "./gradlew clean --stop && (./gradlew build --continuous | ./gradlew bootRun)"
   analytics:
     build: ./analytics
-    image: analytics-microservice
+    image: gradle:6.8.3-jdk11
     environment:
       # - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
       - FIRESTORE_PROJECT_ID=snippy-me-cs443

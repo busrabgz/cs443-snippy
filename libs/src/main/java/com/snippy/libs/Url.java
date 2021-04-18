@@ -1,7 +1,7 @@
 package com.snippy.libs;
 
 import com.google.common.hash.Hashing;
- import java.nio.charset.StandardCharsets;
+import java.nio.charset.StandardCharsets;
 
 public class Url {
  

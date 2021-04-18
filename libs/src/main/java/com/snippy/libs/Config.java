@@ -10,6 +10,9 @@ import java.time.Duration;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Config {
 
@@ -35,6 +38,7 @@ public class Config {
   }
 
   private static FirestoreOptions firestoreOptions;
+  private static FirebaseOptions firebaseOptions;
 
   public static void SetupFirestore() {
     try {
@@ -43,18 +47,27 @@ public class Config {
 
       if (useEmulator) {
         firestoreOptions = FirestoreOptions.newBuilder().setProjectId("snippy-me-cs443").build();
+        firebaseOptions = FirebaseOptions.builder().setProjectId("snippy-me-cs443").build();
       } else {
         var credentialPath = "/home/env/key.json";
         var serviceAccount = new FileInputStream(credentialPath);
         var credentials = GoogleCredentials.fromStream(serviceAccount);
   
         firestoreOptions = FirestoreOptions.newBuilder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
+        firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
+      
       }
+
+      FirebaseApp.initializeApp(firebaseOptions);
 
       
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public static FirebaseAuth getAuth() {
+    return FirebaseAuth.getInstance(FirebaseApp.getInstance());
   }
 
   public static Firestore getDb() {

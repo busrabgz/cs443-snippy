@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: analytics-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: analytics
@@ -14,17 +14,8 @@ spec:
     spec:
       containers:
       - name: analytics
-        image: cs443-snippy_analytics
-        imagePullPolicy: Never
+        image: gcr.io/snippy-me-cs443/cs443-snippy_analytics:v1-fix
         ports:
         - containerPort: 8080
-        volumeMounts:
-        - mountPath: /home/src/app
-          name: test-volume
-        workingDir: /home/src/app
-        command: ["gradle", "bootRun"]
-      volumes:
-      - name: test-volume
-        hostPath:
-          path: /run/desktop/mnt/host/wsl/work/analytics
-          type: Directory 
+        workingDir: /home/app
+        command: ["java", "-jar", "analytics-0.0.1-SNAPSHOT.jar"]

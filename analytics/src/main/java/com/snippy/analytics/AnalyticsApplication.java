@@ -14,6 +14,11 @@ public class AnalyticsApplication {
 		SpringApplication.run(AnalyticsApplication.class, args);
 	}
 
+	@GetMapping("/")
+	public String rootPath() {
+		return "OK";
+	}
+
 	@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
 		return String.format("Hello from analytics %s!", name);

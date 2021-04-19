@@ -10,11 +10,11 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
-    if (user == null) {
-      return RegisterScreen();
-    }
-    else {
-      return MainScreen();
-    }
+    // if (user == null) {
+    return RegisterScreen();
+    // }
+    // else {
+    // return MainScreen();
+    // }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snippy_ui/screens/Drawer/drawer.dart';
 import 'package:snippy_ui/screens/Login/login_screen.dart';
 import 'package:snippy_ui/screens/Register/register_screen.dart';
+import 'package:snippy_api/api.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -11,8 +12,8 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
-    double width=MediaQuery.of(context).size.width;
-    double height=MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -40,8 +41,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             children: [
               Container(
                 width: width,
-                height: height*0.45,
-                child: Image.asset('assets/images/trans2.png',fit: BoxFit.scaleDown,),
+                height: height * 0.45,
+                child: Image.asset(
+                  'assets/images/trans2.png',
+                  fit: BoxFit.scaleDown,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -54,10 +58,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               SizedBox(height: 40.0),
               SizedBox(
-                height: 50.0, 
-                width: 350.0, 
+                height: 50.0,
+                width: 350.0,
                 child: TextField(
-                obscureText: true,
+                  obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Enter your URL here!',
                     border: OutlineInputBorder(
@@ -66,78 +70,93 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ),
               ),
-              SizedBox(height:10.0,),
               SizedBox(
-                height: 40.0, 
+                height: 10.0,
+              ),
+              SizedBox(
+                height: 40.0,
                 width: 300.0,
                 child: TextButton(
-                  child: Text(
-                    "Snippy Me!".toUpperCase(),
-                    style: TextStyle(fontSize: 14)
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(156, 239, 182, 1)),
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.white)
-                      )
-                    )
-                  )
-                ),
+                    child: Text("Snippy Me!".toUpperCase(),
+                        style: TextStyle(fontSize: 14)),
+                    onPressed: () {
+                      final urlControllerApi = UrlControllerApi();
+                      final body = "http://www.facebook.com"; // String |
+
+                      try {
+                        print(body);
+                        final result = urlControllerApi.create(body);
+                        result.then((value) => print(value));
+                      } catch (e) {
+                        print(
+                            'Exception when calling UrlControllerApi->create: $e\n');
+                      }
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromRGBO(156, 239, 182, 1)),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.white))))),
               ),
-              SizedBox(height: 150.0,),
+              SizedBox(
+                height: 150.0,
+              ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      height: 40.0, 
+                      height: 40.0,
                       width: 150.0,
                       child: TextButton(
-                        child: Text(
-                          "Login".toUpperCase(),
-                          style: TextStyle(fontSize: 14)
-                        ),
+                        child: Text("Login".toUpperCase(),
+                            style: TextStyle(fontSize: 14)),
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(156, 239, 182, 1)),
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.white)
-                            )
-                          )
-                        ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color.fromRGBO(156, 239, 182, 1)),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.white)))),
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
                         },
                       ),
                     ),
                     SizedBox(
-                      height: 40.0, 
+                      height: 40.0,
                       width: 150.0,
                       child: TextButton(
-                        child: Text(
-                          "Register".toUpperCase(),
-                          style: TextStyle(fontSize: 14)
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(156, 239, 182, 1)),
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.white)
-                            )
-                          )
-                        ),
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterScreen()));
-                        }
-                      ),
+                          child: Text("Register".toUpperCase(),
+                              style: TextStyle(fontSize: 14)),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Color.fromRGBO(156, 239, 182, 1)),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: Colors.white)))),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterScreen()));
+                          }),
                     ),
                   ],
                 ),

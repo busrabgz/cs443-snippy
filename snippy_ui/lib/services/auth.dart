@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:snippy_ui/models/custom_user.dart';
+// import 'package:snippy_ui/models/custom_user.dart';
 
 class AuthService {
-  
   final FirebaseAuth _auth = FirebaseAuth.instance;
   /*
   CustomUser _userFromFirebaseUser(User user) {
@@ -29,26 +28,30 @@ class AuthService {
   Stream<User> get user {
     return _auth.authStateChanges();
   }
+
   Future createNewUser(String email, String password) async {
-    try{
-      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
       User user = result.user;
       return user;
-    } catch(e) {
+    } catch (e) {
       print(e.toString());
     }
   }
+
   Future signInWithEmailAndPassword(String email, String password) async {
-  try{
-    UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-    User user = result.user;
-    return user;
-  } catch(e) {
-    print(e.toString());
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User user = result.user;
+      return user;
+    } catch (e) {
+      print(e.toString());
+    }
   }
-}
 
   //sign in with email and password
-  
+
   //register with email
 }

@@ -10,6 +10,6 @@ docker build -t gcr.io/${PROJECT_ID}/cs443-snippy_app:${VERSION} .
 pushd ../analytics
 docker build -t gcr.io/${PROJECT_ID}/cs443-snippy_analytics:${VERSION} . 
 
-docker push gcr.io/${PROJECT_ID}/cs443-snippy_app:${VERSION}
-docker push gcr.io/${PROJECT_ID}/cs443-snippy_analytics:${VERSION}
+docker push eu.gcr.io/${PROJECT_ID}/cs443-snippy_app:${VERSION}
+docker push eu.gcr.io/${PROJECT_ID}/cs443-snippy_analytics:${VERSION}
 

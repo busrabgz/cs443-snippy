@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: analytics
-        image: gcr.io/snippy-me-cs443/cs443-snippy_analytics:latest
+        image: eu.gcr.io/snippy-me-cs443/cs443-snippy_analytics:latest
         ports:
         - containerPort: 8080
         workingDir: /home/app

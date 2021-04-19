@@ -61,6 +61,11 @@ public class UrlController {
 	public ResponseEntity<Void> redirectToURL(@PathVariable String id) throws Exception {
 		String actualUrl = getUrl(id);
 		String redirectUrl = "redirect:" + actualUrl == null ? "https://www.cloudflare.com/404/" : actualUrl;
+
+		int redirectCount = db.document("urls/" + id).get("redirect");
+		redirectCount++;
+		db.collection("urls").document(id).update("redirect", redirectCount);
+		
 		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(redirectUrl)).build();
 	}
 }

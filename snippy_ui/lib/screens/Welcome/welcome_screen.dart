@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:snippy_ui/screens/Drawer/drawer.dart';
+import 'package:snippy_ui/screens/Login/login_screen.dart';
+import 'package:snippy_ui/screens/Register/register_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -84,7 +87,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   )
                 ),
               ),
-              SizedBox(height: 200.0,),
+              SizedBox(height: 150.0,),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
@@ -107,7 +110,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               side: BorderSide(color: Colors.white)
                             )
                           )
-                        )
+                        ),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                        },
                       ),
                     ),
                     SizedBox(
@@ -127,7 +133,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               side: BorderSide(color: Colors.white)
                             )
                           )
-                        )
+                        ),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterScreen()));
+                        }
                       ),
                     ),
                   ],

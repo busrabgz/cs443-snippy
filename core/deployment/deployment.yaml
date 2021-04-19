@@ -1,20 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: analytics-deployment
+  name: app-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: analytics
+      app: app
   template:
     metadata:
       labels:
-        app: analytics
+        app: app
     spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: gauth-key
       containers:
-      - name: analytics
-        image: eu.gcr.io/snippy-me-cs443/cs443-snippy_analytics:latest
+      - name: app
+        image: eu.gcr.io/snippy-me-cs443/cs443-snippy_app:latest
         imagePullPolicy: Always
         resources:
           requests:
@@ -23,7 +27,10 @@ spec:
           limits:
             cpu: "100m"
             memory: "256Mi"
+        volumeMounts:
+          - name: google-cloud-key
+            mountPath: /home/env
         ports:
         - containerPort: 8080
         workingDir: /home/app
-        command: ["java", "-jar", "analytics-0.0.1-SNAPSHOT.jar"]
+        command: ["java", "-jar", "core-0.0.1-SNAPSHOT.jar"]

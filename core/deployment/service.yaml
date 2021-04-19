@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: analytics-service
+  name: app-service
 spec:
-  type: LoadBalancer 
+  type: LoadBalancer
   loadBalancerIP: "35.189.115.2"
   selector:
-    app: analytics
+    app: app
   ports:
     - protocol: TCP
-      port: 8080
+      port: 80
+      targetPort: 8080

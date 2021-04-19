@@ -1,12 +1,16 @@
 package com.snippy.libs;
 
 import com.google.common.hash.Hashing;
- import java.nio.charset.StandardCharsets;
+import java.nio.charset.StandardCharsets;
 
 public class Url {
  
     private String id;
     private String url;
+
+    public Url() {
+        this("", "");
+    }
 
     public Url(String id, String url) {
         this.id = id;

@@ -1,3 +1,0 @@
-<configuration debug="true" scan="true" scanPeriod="30 seconds" > 
-    <logger name="io.grpc.netty.shaded.io" level="OFF"/>
-</configuration> 

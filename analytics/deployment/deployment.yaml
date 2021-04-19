@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: analytics-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: analytics
@@ -15,6 +15,14 @@ spec:
       containers:
       - name: analytics
         image: eu.gcr.io/snippy-me-cs443/cs443-snippy_analytics:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "100m"
+            memory: "256Mi"
         ports:
         - containerPort: 8080
         workingDir: /home/app

@@ -1,7 +1,6 @@
 version: '3'
 services:
   app:
-    build: ./core
     image: gradle:6.8.3-jdk11 
     environment:
       # - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
@@ -20,7 +19,6 @@ services:
     working_dir: /home/src/app
     command: sh -c "./gradlew clean --stop && (./gradlew build --continuous | ./gradlew bootRun)"
   analytics:
-    build: ./analytics
     image: gradle:6.8.3-jdk11
     environment:
       # - 'FIRESTORE_EMULATOR_HOST=firestore:8200'

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: app-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: app
@@ -18,7 +18,15 @@ spec:
           secretName: gauth-key
       containers:
       - name: app
-        image: gcr.io/snippy-me-cs443/cs443-snippy_app:v1-fix
+        image: eu.gcr.io/snippy-me-cs443/cs443-snippy_app:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "100m"
+            memory: "256Mi"
         volumeMounts:
           - name: google-cloud-key
             mountPath: /home/env

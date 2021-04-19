@@ -29,4 +29,16 @@ public class AnalyticsApplication {
 		return "analytics";
 	}
 
+	@GetMapping("/analytics/{id}")
+	public String getAnalytics(@PathVariable String id) throws Exception {
+		int redirectCount = db.document("urls/" + id).get("redirect");
+		// Other analytics to get here...
+
+		response = {
+			"redirectCount": redirectCount
+			// Other analytics to be returned here...
+		}
+		return response;
+	}
+
 }

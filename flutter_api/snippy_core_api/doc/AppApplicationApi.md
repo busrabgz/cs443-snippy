@@ -1,11 +1,11 @@
-# snippy_api.api.AppApplicationApi
+# snippy_core_api.api.AppApplicationApi
 
 ## Load the API package
 ```dart
-import 'package:snippy_api/api.dart';
+import 'package:snippy_core_api/api.dart';
 ```
 
-All URIs are relative to *http://snippy.me*
+All URIs are relative to *http://localhost:8089*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 ### Example 
 ```dart
-import 'package:snippy_api/api.dart';
+import 'package:snippy_core_api/api.dart';
 
 final api_instance = AppApplicationApi();
 
@@ -60,7 +60,7 @@ Checks health status of the microservices
 
 ### Example 
 ```dart
-import 'package:snippy_api/api.dart';
+import 'package:snippy_core_api/api.dart';
 
 final api_instance = AppApplicationApi();
 
@@ -96,7 +96,7 @@ No authorization required
 
 ### Example 
 ```dart
-import 'package:snippy_api/api.dart';
+import 'package:snippy_core_api/api.dart';
 
 final api_instance = AppApplicationApi();
 final name = name_example; // String | 
@@ -137,7 +137,7 @@ No authorization required
 
 ### Example 
 ```dart
-import 'package:snippy_api/api.dart';
+import 'package:snippy_core_api/api.dart';
 
 final api_instance = AppApplicationApi();
 final id = id_example; // String | 
@@ -178,7 +178,7 @@ No authorization required
 
 ### Example 
 ```dart
-import 'package:snippy_api/api.dart';
+import 'package:snippy_core_api/api.dart';
 
 final api_instance = AppApplicationApi();
 

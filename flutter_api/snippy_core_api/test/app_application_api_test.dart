@@ -7,8 +7,9 @@
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:snippy_api/api.dart';
+import 'package:snippy_core_api/api.dart';
 import 'package:test/test.dart';
+
 
 /// tests for AppApplicationApi
 void main() {
@@ -41,5 +42,6 @@ void main() {
     test('test rootPath', () async {
       // TODO
     });
+
   });
 }

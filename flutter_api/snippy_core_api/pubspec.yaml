@@ -2,9 +2,9 @@
 # AUTO-GENERATED FILE, DO NOT MODIFY!
 #
 
-name: 'snippy_api'
+name: 'snippy_core_api'
 version: '0.0.1'
-description: 'Snippy API Client'
+description: 'Snippy Core API Client'
 authors:
   - 'Author <author@homepage>'
 homepage: 'homepage'

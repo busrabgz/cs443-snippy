@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snippy_ui/screens/Drawer/drawer.dart';
 import 'package:snippy_ui/screens/Login/login_screen.dart';
 import 'package:snippy_ui/screens/Register/register_screen.dart';
-import 'package:snippy_api/api.dart';
+import 'package:snippy_core_api/api.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override

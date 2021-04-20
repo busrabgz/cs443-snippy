@@ -1,12 +1,11 @@
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 README.md
-doc/AppApplicationApi.md
-doc/UrlControllerApi.md
+doc/AnalyticsApplicationApi.md
 git_push.sh
 lib/api.dart
-lib/api/app_application_api.dart
-lib/api/url_controller_api.dart
+lib/api/analytics_application_api.dart
 lib/api_client.dart
 lib/api_exception.dart
 lib/api_helper.dart
@@ -16,3 +15,4 @@ lib/auth/http_basic_auth.dart
 lib/auth/http_bearer_auth.dart
 lib/auth/oauth.dart
 pubspec.yaml
+test/analytics_application_api_test.dart

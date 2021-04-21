@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1030988610703",
+    "project_id": "snippy-me-cs443",
+    "storage_bucket": "snippy-me-cs443.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030988610703:android:f6ffc2c591aa92a0b384fa",
+        "android_client_info": {
+          "package_name": "com.example.snippy_ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030988610703-evrr482j27nkfe0ubip0mehsui65k50f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.snippy_ui",
+            "certificate_hash": "7c7c0439f94aeee5b87b8edaa1a4287e1e081a18"
+          }
+        },
+        {
+          "client_id": "1030988610703-c0n7030043cflfi0t7hqeom709419e5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBhs05bTW4T0H9K8UUPgV6lfYOeCynv-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030988610703-c0n7030043cflfi0t7hqeom709419e5v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

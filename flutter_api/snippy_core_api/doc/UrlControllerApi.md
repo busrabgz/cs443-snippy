@@ -10,6 +10,7 @@ All URIs are relative to *http://10.0.2.2:8089*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create**](UrlControllerApi.md#create) | **POST** /urls | 
+[**create1**](UrlControllerApi.md#create1) | **POST** /namedUrls | 
 [**getUrlForId**](UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | 
 [**getUrlForUser**](UrlControllerApi.md#geturlforuser) | **GET** /urls | 
 [**redirectToURL**](UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | 
@@ -52,6 +53,49 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: text/plain
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create1**
+> String create1(faAuth, url)
+
+
+
+### Example 
+```dart
+import 'package:snippy_core_api/api.dart';
+
+final api_instance = UrlControllerApi();
+final faAuth = faAuth_example; // String | 
+final url = Url(); // Url | 
+
+try { 
+    final result = api_instance.create1(faAuth, url);
+    print(result);
+} catch (e) {
+    print('Exception when calling UrlControllerApi->create1: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **faAuth** | **String**|  | 
+ **url** | [**Url**](Url.md)|  | 
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

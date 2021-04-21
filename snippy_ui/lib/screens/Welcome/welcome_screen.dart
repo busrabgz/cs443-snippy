@@ -109,6 +109,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 .getUrlForUser(token)
                                 .then((value) => print(value)));
 
+                        FirebaseAuth.instance.currentUser.getIdToken().then(
+                            (token) => urlControllerApi
+                                .create1(
+                                    token,
+                                    Url(
+                                        id: "gog",
+                                        url: "http://www.google.com"))
+                                .then((value) => print(value)));
+
                         result.then((value) =>
                             copyToClipboard("http://snippy.me/u/" + value));
                       } catch (e) {

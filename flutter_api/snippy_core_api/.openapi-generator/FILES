@@ -3,6 +3,7 @@
 .travis.yml
 README.md
 doc/AppApplicationApi.md
+doc/Url.md
 doc/UrlControllerApi.md
 git_push.sh
 lib/api.dart
@@ -16,6 +17,8 @@ lib/auth/authentication.dart
 lib/auth/http_basic_auth.dart
 lib/auth/http_bearer_auth.dart
 lib/auth/oauth.dart
+lib/model/url.dart
 pubspec.yaml
 test/app_application_api_test.dart
 test/url_controller_api_test.dart
+test/url_test.dart

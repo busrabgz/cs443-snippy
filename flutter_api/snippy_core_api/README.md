@@ -63,6 +63,7 @@ Class | Method | HTTP request | Description
 *AppApplicationApi* | [**logs**](doc//AppApplicationApi.md#logs) | **GET** /logs/{id} | 
 *AppApplicationApi* | [**rootPath**](doc//AppApplicationApi.md#rootpath) | **GET** / | 
 *UrlControllerApi* | [**create**](doc//UrlControllerApi.md#create) | **POST** /urls | 
+*UrlControllerApi* | [**create1**](doc//UrlControllerApi.md#create1) | **POST** /namedUrls | 
 *UrlControllerApi* | [**getUrlForId**](doc//UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | 
 *UrlControllerApi* | [**getUrlForUser**](doc//UrlControllerApi.md#geturlforuser) | **GET** /urls | 
 *UrlControllerApi* | [**redirectToURL**](doc//UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | 
@@ -70,6 +71,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Url](doc//Url.md)
 
 
 ## Documentation For Authorization

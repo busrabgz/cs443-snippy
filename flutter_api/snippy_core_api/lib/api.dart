@@ -30,6 +30,7 @@ part 'auth/http_bearer_auth.dart';
 part 'api/app_application_api.dart';
 part 'api/url_controller_api.dart';
 
+part 'model/url.dart';
 
 
 const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};

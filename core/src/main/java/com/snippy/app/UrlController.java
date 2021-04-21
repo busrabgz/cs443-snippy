@@ -72,12 +72,42 @@ public class UrlController {
 		return shortUrl.getId();
 	}
 
+	@RequestMapping(value="/namedUrls", method = RequestMethod.POST)
+	public ResponseEntity<String> create(@RequestBody Url url, @RequestHeader("fa-auth") String auth) {
+		var db = getDb();
+		var jedis = getJedis();
+
+
+		System.out.println(url.getId() + " " + url.getUrl());
+
+		UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
+		if (!urlValidator.isValid(url.getUrl())) {
+			return new ResponseEntity<String>("Url is not valid.", HttpStatus.BAD_REQUEST);
+		}
+
+		try { 
+			getUrl(url.getId());
+	
+			return new ResponseEntity<String>("Url already taken.", HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			jedis.set(url.getId(), url.getUrl());
+			db.document("urls/" + url.getId()).create(url);
+
+			return new ResponseEntity<String>(url.getId(), HttpStatus.OK);
+		}
+
+	}
+
 	@GetMapping("/urls")
 	public List<String> getUrlForUser(@RequestHeader("fa-auth") String auth) throws Exception {
 		
 		var retList = new ArrayList<String>(); 
 
 		FirebaseToken token = FirebaseAuth.getInstance().verifyIdToken(auth);
+
+		System.out.println("Auth is: " + auth);
+
+
 
 		return retList;
 	}
@@ -89,7 +119,7 @@ public class UrlController {
 	}
 
 	@GetMapping("/u/{id}")
-	public ResponseEntity<Void> redirectToURL(@PathVariable String id) throws Exception {
+	public ResponseEntity<Void> redirectToURL(@PathVariable String id) throws Exception {		
 		String actualUrl = getUrl(id);
 		String redirectUrl = "redirect:" + actualUrl == null ? "https://www.cloudflare.com/404/" : actualUrl;
 		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(redirectUrl)).build();

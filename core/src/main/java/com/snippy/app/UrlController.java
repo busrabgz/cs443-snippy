@@ -1,5 +1,9 @@
 package com.snippy.app;
 
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.net.http.HttpRequest.BodyPublishers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.validator.routines.UrlValidator;
 import com.snippy.libs.Url;
+import com.snippy.libs.Request;
 
 import static com.snippy.libs.Config.getDb;
 import static com.snippy.libs.Config.getJedis;
 
+import org.json.JSONObject;
+
 import java.net.URI;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 public class UrlController {
@@ -59,12 +69,14 @@ public class UrlController {
 
 	@GetMapping("/u/{id}")
 	public ResponseEntity<Void> redirectToURL(@PathVariable String id) throws Exception {
+		String incoming_time = String.valueOf(System.currentTimeMillis());
 		String actualUrl = getUrl(id);
-		String redirectUrl = "redirect:" + actualUrl == null ? "https://www.cloudflare.com/404/" : actualUrl;
+		String redirectUrl = "redirect:" + actualUrl == null ? "https://www.cloudflare.com/404/" : actualUrl; 
 
-		int redirectCount = db.document("urls/" + id).get("redirect");
-		redirectCount++;
-		db.collection("urls").document(id).update("redirect", redirectCount);
+		var client = HttpClient.newHttpClient();
+		var analyticsRequest = HttpRequest.newBuilder(URI.create("http://analytics-service:8080/analytics/" + id))
+						.POST(BodyPublishers.ofString(incoming_time)).build();
+		client.send(analyticsRequest, BodyHandlers.ofString()).body();
 		
 		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(redirectUrl)).build();
 	}

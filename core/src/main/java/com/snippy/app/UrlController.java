@@ -54,8 +54,8 @@ public class UrlController {
 		var db = getDb();
 		var jedis = getJedis();
 
-		System.out.println(url);
-		
+		if (url.startsWith("\"") && url.endsWith(("\"")))
+			url = url.substring(1, url.length() - 1);
 
 		UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
 		if (!urlValidator.isValid(url)) {

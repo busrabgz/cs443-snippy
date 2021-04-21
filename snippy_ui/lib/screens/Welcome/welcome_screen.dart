@@ -5,6 +5,7 @@ import 'package:snippy_ui/screens/Login/login_screen.dart';
 import 'package:snippy_ui/screens/Register/register_screen.dart';
 import 'package:snippy_core_api/api.dart';
 import 'package:snippy_ui/services/auth.dart';
+import 'package:flutter/services.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -12,9 +13,20 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  String url = "";
+
+  void copyToClipboard(String text) {
+    Clipboard.setData(new ClipboardData(text: text)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("URL: " + text + " is copied to clipboard"),
+        behavior: SnackBarBehavior.floating,
+      ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
+    final urlControllerApi = UrlControllerApi();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -65,13 +77,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 50.0,
                 width: 350.0,
                 child: TextField(
-                  obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Enter your URL here!',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                   ),
+                  onChanged: (val) {
+                    print(val);
+                    setState(() => url = val);
+                  },
                 ),
               ),
               SizedBox(
@@ -84,19 +99,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Text("Snippy Me!".toUpperCase(),
                         style: TextStyle(fontSize: 14)),
                     onPressed: () {
-                      final urlControllerApi = UrlControllerApi();
-                      final body = "http://www.facebook.com"; // String |
-
                       try {
-                        print(body);
-                        final result = urlControllerApi.create(body: body);
+                        print(url);
+                        FocusScope.of(context).unfocus();
+                        final result = urlControllerApi.create(url);
 
                         FirebaseAuth.instance.currentUser.getIdToken().then(
                             (token) => urlControllerApi
                                 .getUrlForUser(token)
                                 .then((value) => print(value)));
 
-                        result.then((value) => print(value));
+                        result.then((value) =>
+                            copyToClipboard("http://snippy.me/u/" + value));
                       } catch (e) {
                         print(
                             'Exception when calling UrlControllerApi->create: $e\n');

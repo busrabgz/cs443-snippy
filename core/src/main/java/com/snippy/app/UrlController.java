@@ -6,14 +6,32 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.Parameter;
+
 import org.apache.commons.validator.routines.UrlValidator;
+
+import org.springframework.http.MediaType;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.auth.internal.FirebaseTokenFactory;
+import com.google.firebase.auth.internal.FirebaseTokenVerifier;
 import com.snippy.libs.Url;
+
 
 import static com.snippy.libs.Config.getDb;
 import static com.snippy.libs.Config.getJedis;
 
+import java.lang.reflect.Array;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.print.attribute.standard.Media;
 
 @RestController
 public class UrlController {
@@ -31,10 +49,13 @@ public class UrlController {
 		return shortUrl.getUrl();
 	}
 
-	@PostMapping("/urls")
+	@RequestMapping(value="/urls", method = RequestMethod.POST, consumes = MediaType.TEXT_PLAIN_VALUE)
 	public String create(@RequestBody String url) {
 		var db = getDb();
 		var jedis = getJedis();
+
+		System.out.println(url);
+		
 
 		UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
 		if (!urlValidator.isValid(url)) {
@@ -49,6 +70,16 @@ public class UrlController {
 		db.document("urls/" + shortUrl.getId()).create(shortUrl);
 
 		return shortUrl.getId();
+	}
+
+	@GetMapping("/urls")
+	public List<String> getUrlForUser(@RequestHeader("fa-auth") String auth) throws Exception {
+		
+		var retList = new ArrayList<String>(); 
+
+		FirebaseToken token = FirebaseAuth.getInstance().verifyIdToken(auth);
+
+		return retList;
 	}
 
 	@GetMapping("/urls/{id}")

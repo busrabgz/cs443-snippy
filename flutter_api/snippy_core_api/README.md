@@ -53,7 +53,7 @@ try {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:8089*
+All URIs are relative to *http://10.0.2.2:8089*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -64,6 +64,7 @@ Class | Method | HTTP request | Description
 *AppApplicationApi* | [**rootPath**](doc//AppApplicationApi.md#rootpath) | **GET** / | 
 *UrlControllerApi* | [**create**](doc//UrlControllerApi.md#create) | **POST** /urls | 
 *UrlControllerApi* | [**getUrlForId**](doc//UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | 
+*UrlControllerApi* | [**getUrlForUser**](doc//UrlControllerApi.md#geturlforuser) | **GET** /urls | 
 *UrlControllerApi* | [**redirectToURL**](doc//UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | 
 
 

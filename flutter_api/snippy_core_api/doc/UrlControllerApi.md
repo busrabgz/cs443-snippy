@@ -5,12 +5,13 @@
 import 'package:snippy_core_api/api.dart';
 ```
 
-All URIs are relative to *http://localhost:8089*
+All URIs are relative to *http://10.0.2.2:8089*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create**](UrlControllerApi.md#create) | **POST** /urls | 
 [**getUrlForId**](UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | 
+[**getUrlForUser**](UrlControllerApi.md#geturlforuser) | **GET** /urls | 
 [**redirectToURL**](UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | 
 
 
@@ -50,7 +51,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: text/plain
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -84,6 +85,47 @@ Name | Type | Description  | Notes
 ### Return type
 
 **String**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getUrlForUser**
+> List<String> getUrlForUser(faAuth)
+
+
+
+### Example 
+```dart
+import 'package:snippy_core_api/api.dart';
+
+final api_instance = UrlControllerApi();
+final faAuth = faAuth_example; // String | 
+
+try { 
+    final result = api_instance.getUrlForUser(faAuth);
+    print(result);
+} catch (e) {
+    print('Exception when calling UrlControllerApi->getUrlForUser: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **faAuth** | **String**|  | 
+
+### Return type
+
+**List<String>**
 
 ### Authorization
 

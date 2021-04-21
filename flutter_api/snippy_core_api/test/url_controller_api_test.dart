@@ -26,6 +26,11 @@ void main() {
       // TODO
     });
 
+    //Future<List<String>> getUrlForUser(String faAuth) async
+    test('test getUrlForUser', () async {
+      // TODO
+    });
+
     //Future redirectToURL(String id) async
     test('test redirectToURL', () async {
       // TODO

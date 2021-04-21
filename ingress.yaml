@@ -3,19 +3,12 @@ kind: Ingress
 metadata:
   name: outgress
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: snippy-outgress-ip
+    kubernetes.io/ingress.global-static-ip-name: snippy-ip
 spec:
   backend:
     serviceName: app-service
     servicePort: 80
   rules:
-  - host: app.snippy.me
-    http:
-      paths:
-      - backend:
-          serviceName: app-service
-          servicePort: 80
-        pathType: ImplementationSpecific
   - host: analytics.snippy.me
     http:
       paths:

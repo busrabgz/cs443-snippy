@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:snippy_ui/screens/Drawer/drawer.dart';
 import 'package:snippy_ui/screens/Login/login_screen.dart';
 import 'package:snippy_ui/screens/Register/register_screen.dart';
 import 'package:snippy_core_api/api.dart';
+import 'package:snippy_ui/services/auth.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -12,6 +14,8 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final AuthService _auth = AuthService();
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -85,7 +89,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                       try {
                         print(body);
-                        final result = urlControllerApi.create(body);
+                        final result = urlControllerApi.create(body: body);
+
+                        FirebaseAuth.instance.currentUser.getIdToken().then(
+                            (token) => urlControllerApi
+                                .getUrlForUser(token)
+                                .then((value) => print(value)));
+
                         result.then((value) => print(value));
                       } catch (e) {
                         print(

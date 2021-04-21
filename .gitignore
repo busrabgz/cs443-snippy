@@ -2,3 +2,4 @@
 .d.env
 **/.my-gradle/
 .env
+.dart_tool

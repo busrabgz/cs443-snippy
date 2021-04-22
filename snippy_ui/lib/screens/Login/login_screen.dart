@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snippy_ui/screens/Register/register_screen.dart';
 import 'package:snippy_ui/screens/Welcome/welcome_screen.dart';
 import 'package:snippy_ui/services/auth.dart';
 class LoginScreen extends StatefulWidget {
@@ -20,12 +21,14 @@ class _LoginScreenState extends State<LoginScreen> {
     double height=MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple[100],
-        elevation: 0.0,
+        backgroundColor: Color.fromRGBO(61, 82, 155, 1.0),
+        elevation: 10.0,
+        toolbarHeight: 100,
         title: Text('Sign In'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.house),
+            iconSize: 40,
             color: Colors.white,
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomeScreen()));
@@ -36,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background2.png"),
+            image: AssetImage("assets/images/loginbackground.png"),
             fit: BoxFit.cover,
           )
         ),
@@ -50,12 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height:1.0),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Sign In',style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold),),
-                  ],
-                ),
               ),
               SizedBox(height:40.0),
               SizedBox(
@@ -101,16 +98,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 300.0,
                 child: TextButton(
                   child: Text(
-                    "Sign In!".toUpperCase(),
+                    "Sign In".toUpperCase(),
                     style: TextStyle(fontSize: 14)
                   ),
                   style: ButtonStyle(
-                     backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(156, 239, 182, 1)),
+                      elevation: MaterialStateProperty.all(5), //Defines Elevation
+                      shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
+                     backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(61, 82, 155, 1.0)),
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.white)
                       )
                     )
                   ),
@@ -146,12 +144,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       )
                     ),
                     GestureDetector(
-                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomeScreen()));},
+                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterScreen()));},
                       child: Text.rich(
                         TextSpan(
                           text: 'Sign Up',
                           style: TextStyle(
-                            color: Colors.purple[900]
+                            color: Colors.purple[300]
                           )
                         )
                       )

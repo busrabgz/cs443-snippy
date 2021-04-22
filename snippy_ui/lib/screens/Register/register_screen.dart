@@ -21,9 +21,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     double height=MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple[100],
-        elevation: 0.0,
-        title: Text('Sign In'),
+        backgroundColor: Color.fromRGBO(61, 82, 155, 1.0),
+          elevation: 10.0,
+          toolbarHeight: 100,
+        title: Text('Sign Up'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.house),
@@ -37,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background2.png"),
+            image: AssetImage("assets/images/registerbackground.png"),
             fit: BoxFit.cover,
           )
         ),
@@ -50,12 +51,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Sign Up',style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold),),
-                  ],
-                ),
               ),
               SizedBox(height:40.0),
               SizedBox(
@@ -117,16 +112,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 width: 300.0,
                 child: TextButton(
                   child: Text(
-                    "Sign Up!".toUpperCase(),
+                    "Sign Up".toUpperCase(),
                     style: TextStyle(fontSize: 14)
                   ),
                   style: ButtonStyle(
-                     backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(156, 239, 182, 1)),
+                      elevation: MaterialStateProperty.all(5), //Defines Elevation
+                      shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
+                     backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(61, 82, 155, 1.0)),
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.white)
                       )
                     )
                   ),

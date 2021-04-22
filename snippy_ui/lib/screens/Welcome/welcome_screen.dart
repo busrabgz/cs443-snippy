@@ -45,7 +45,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             tileMode: TileMode.repeated
           )*/
           image: DecorationImage(
-            image: AssetImage("assets/images/background2.png"),
+            image: AssetImage("assets/images/background.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -57,12 +57,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             children: [
               Container(
                 width: width,
-                height: height * 0.45,
-                child: Image.asset(
-                  'assets/images/trans2.png',
-                  fit: BoxFit.scaleDown,
+                height: height * 0.4,
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -78,9 +74,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 width: 350.0,
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Enter your URL here!',
+                    hintText: 'Enter your URL here.',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: const BorderSide(color: Color.fromRGBO(109, 143, 192, 1.0), width: 2.0),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
+                      borderSide: const BorderSide(color: Color.fromRGBO(109, 143, 192, 1.0), width: 5.0),
                     ),
                   ),
                   onChanged: (val) {
@@ -93,11 +94,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 10.0,
               ),
               SizedBox(
-                height: 40.0,
-                width: 300.0,
+                height: 45.0,
+                width: 200.0,
                 child: TextButton(
-                    child: Text("Snippy Me!".toUpperCase(),
-                        style: TextStyle(fontSize: 14)),
+                    child: Text("Snip!".toUpperCase(),
+                        style: TextStyle(fontFamily: 'Quicksand', fontSize: 18)),
                     onPressed: () {
                       try {
                         print(url);
@@ -130,15 +131,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       }
                     },
                     style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(5), //Defines Elevation
+                        shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromRGBO(156, 239, 182, 1)),
+                            Color.fromRGBO(61, 82, 155, 1.0)),
                         foregroundColor:
                             MaterialStateProperty.all<Color>(Colors.white),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.white))))),
+                                    borderRadius: BorderRadius.circular(18.0))))),
+                                    //side: BorderSide(color: Colors.white))))),
               ),
               SizedBox(
                 height: 150.0,
@@ -152,18 +155,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       height: 40.0,
                       width: 150.0,
                       child: TextButton(
-                        child: Text("Login".toUpperCase(),
-                            style: TextStyle(fontSize: 14)),
+                        child: Text("Sign in".toUpperCase(),
+                            style: TextStyle(fontSize: 16)),
                         style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(5), //Defines Elevation
+                            shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
                             backgroundColor: MaterialStateProperty.all<Color>(
-                                Color.fromRGBO(156, 239, 182, 1)),
+                                Color.fromRGBO(61, 82, 155, 1.0)),
                             foregroundColor:
                                 MaterialStateProperty.all<Color>(Colors.white),
                             shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.white)))),
+                                    borderRadius: BorderRadius.circular(18.0)))),
+                                    //side: BorderSide(color: Colors.white)))),
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -176,18 +181,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       height: 40.0,
                       width: 150.0,
                       child: TextButton(
-                          child: Text("Register".toUpperCase(),
-                              style: TextStyle(fontSize: 14)),
+                          child: Text("Sign up".toUpperCase(),
+                              style: TextStyle(fontSize: 16)),
                           style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(5), //Defines Elevation
+                              shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color.fromRGBO(156, 239, 182, 1)),
+                                  Color.fromRGBO(61, 82, 155, 1.0)),
                               foregroundColor: MaterialStateProperty.all<Color>(
                                   Colors.white),
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(color: Colors.white)))),
+                                      borderRadius: BorderRadius.circular(18.0)))),
+                                      //side: BorderSide(color: Colors.white)))),
                           onPressed: () {
                             Navigator.push(
                                 context,

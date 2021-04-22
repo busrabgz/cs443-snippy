@@ -7,7 +7,6 @@ public class Url {
  
     private String id;
     private String url;
-    private int redirect;
     private String ownerEmail;
 
     public Url() {
@@ -22,7 +21,6 @@ public class Url {
     public Url(String id, String url) {
         this.id = id;
         this.url = url;
-        this.redirect = 0;
     }
  
     public static Url create(String url) {
@@ -40,10 +38,6 @@ public class Url {
 
     public String getUrl() {
         return this.url;
-    }
-
-    public int getRedirectCount() {
-        return this.redirect;
     }
 
     public String getOwnerEmail() {

@@ -55,7 +55,13 @@ public class UrlController {
 		var client = HttpClient.newHttpClient();
 		var analyticsRequest = HttpRequest.newBuilder(URI.create("http://analytics-service:8080/analytics/" + id))
 						.POST(BodyPublishers.ofString(incoming_time)).build();
-		client.send(analyticsRequest, BodyHandlers.ofString()).body();
+		
+		try {
+			var body = client.send(analyticsRequest, BodyHandlers.ofString()).body();
+			System.out.println(body);
+		}	catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(redirectUrl)).build();
 	}

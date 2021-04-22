@@ -46,6 +46,10 @@ public class Config {
   private static FirebaseOptions firebaseOptions;
 
   public static void SetupFirestore() {
+    if (firebaseOptions != null || firebaseOptions != null) {
+      return;
+    }
+
     try {
 
       var useEmulator = System.getenv("FIRESTORE_EMULATOR_HOST") != null;
@@ -75,9 +79,7 @@ public class Config {
   }
 
   public static FirebaseAuth getAuth() {
-
-    var inst = FirebaseAuth.getInstance(FirebaseApp.getInstance());
-    return inst;
+    return FirebaseAuth.getInstance();
   }
 
   public static Firestore getDb() {

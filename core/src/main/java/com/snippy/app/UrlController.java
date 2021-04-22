@@ -1,5 +1,9 @@
 package com.snippy.app;
 
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.net.http.HttpRequest.BodyPublishers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +23,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.snippy.libs.Url;
-
 import static com.snippy.libs.Config.getDb;
 import static com.snippy.libs.Config.getJedis;
 
@@ -45,13 +48,14 @@ public class UrlController {
 
 	@GetMapping("/u/{id}")
 	public ResponseEntity<Void> redirectToURL(@PathVariable String id) throws Exception {
+		String incoming_time = String.valueOf(System.currentTimeMillis());
 		String actualUrl = getUrl(id);
 		String redirectUrl = "redirect:" + actualUrl == null ? "https://www.cloudflare.com/404/" : actualUrl;
-		var db = getDb();
-
-		int redirectCount = db.document("urls/" + id).get("redirect");
-		redirectCount++;
-		db.collection("urls").document(id).update("redirect", redirectCount);
+		
+		var client = HttpClient.newHttpClient();
+		var analyticsRequest = HttpRequest.newBuilder(URI.create("http://analytics-service:8080/analytics/" + id))
+						.POST(BodyPublishers.ofString(incoming_time)).build();
+		client.send(analyticsRequest, BodyHandlers.ofString()).body();
 
 		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(redirectUrl)).build();
 	}

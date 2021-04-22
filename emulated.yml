@@ -1,0 +1,17 @@
+version: '3'
+services:
+  app:
+    environment:
+      - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
+    links:
+      - 'firestore_emulator:firestore'
+  analytics:
+    environment:
+      - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
+    links:
+      - 'firestore_emulator:firestore'
+  firestore_emulator:
+    image: mtlynch/firestore-emulator
+    environment:
+      - FIRESTORE_PROJECT_ID=snippy-me-cs443
+      - PORT=8200

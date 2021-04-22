@@ -4,3 +4,5 @@
 .env
 **/.dart_tool/
 .openapi-generator
+venv/
+__pycache__/

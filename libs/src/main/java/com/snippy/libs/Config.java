@@ -35,6 +35,11 @@ public class Config {
 
   public static void SetupJedis() {
     jedisPool = new JedisPool(buildPoolConfig(), "redis-service", 6379, 4000);
+
+    var useEmulator = System.getenv("FIRESTORE_EMULATOR_HOST") != null;
+
+    if (useEmulator)
+      jedisPool.getResource().flushAll();
   }
 
   private static FirestoreOptions firestoreOptions;
@@ -43,7 +48,7 @@ public class Config {
   public static void SetupFirestore() {
     try {
 
-      var useEmulator = false;
+      var useEmulator = System.getenv("FIRESTORE_EMULATOR_HOST") != null;
 
       if (useEmulator) {
         firestoreOptions = FirestoreOptions.newBuilder().setProjectId("snippy-me-cs443").build();

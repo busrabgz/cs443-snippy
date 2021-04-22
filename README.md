@@ -47,6 +47,11 @@ You can run the API using
 docker-compose up
 ```
 
+If you want to run the local firestore emulator suit (e.g. for testing)
+```bash
+docker-compose up -f docker-compose.yml -f emulated.yml up
+```
+
 You can run the flutter project by importing it into VSCode or Android Studio.
 
 If you have changed the API and you want to access those endpoints from flutter run the following command to auto generate the API client for your local development:

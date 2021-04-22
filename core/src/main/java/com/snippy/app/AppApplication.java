@@ -42,6 +42,11 @@ public class AppApplication {
 		SpringApplication.run(AppApplication.class, args);
 	}
 
+	@GetMapping("/")
+	public String rootPath() {
+		return "OK";
+	}
+
 
 	@GetMapping("logs/{id}")
 	public String logs(@PathVariable(value="id") String id) throws Exception {

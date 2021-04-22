@@ -8,9 +8,15 @@ public class Url {
     private String id;
     private String url;
     private int redirect;
+    private String ownerEmail;
 
     public Url() {
-        this("", "");
+        this("", "", "");
+    }
+
+    public Url(String id, String url, String email) {
+        this(id, url);
+        this.ownerEmail = email;
     }
 
     public Url(String id, String url) {
@@ -20,8 +26,12 @@ public class Url {
     }
  
     public static Url create(String url) {
-        String id = Hashing.murmur3_32().hashString(url, StandardCharsets.UTF_8).toString();
-        return new Url(id, url);
+        return Url.create(url, "");
+    }
+
+    public static Url create(String url, String email) {
+        String id = Hashing.murmur3_32().hashString(url+email, StandardCharsets.UTF_8).toString();
+        return new Url(id, url, email);
     }
 
     public String getId(){
@@ -32,7 +42,15 @@ public class Url {
         return this.url;
     }
 
-    public String getRedirectCount() {
+    public int getRedirectCount() {
         return this.redirect;
+    }
+
+    public String getOwnerEmail() {
+        return this.ownerEmail;
+    }
+
+    public void setOwnerEmail(String email) {
+        this.ownerEmail = email;
     }
 }

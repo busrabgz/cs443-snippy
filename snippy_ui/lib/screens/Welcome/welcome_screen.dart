@@ -1,4 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:snippy_ui/screens/Drawer/drawer.dart';
+import 'package:snippy_ui/screens/Login/login_screen.dart';
+import 'package:snippy_ui/screens/Register/register_screen.dart';
+import 'package:snippy_core_api/api.dart';
+import 'package:snippy_ui/services/auth.dart';
+import 'package:flutter/services.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -6,10 +13,23 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  String url = "";
+
+  void copyToClipboard(String text) {
+    Clipboard.setData(new ClipboardData(text: text)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("URL: " + text + " is copied to clipboard"),
+        behavior: SnackBarBehavior.floating,
+      ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    double width=MediaQuery.of(context).size.width;
-    double height=MediaQuery.of(context).size.height;
+    final urlControllerApi = UrlControllerApi();
+
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -37,8 +57,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             children: [
               Container(
                 width: width,
-                height: height*0.45,
-                child: Image.asset('assets/images/trans2.png',fit: BoxFit.scaleDown,),
+                height: height * 0.45,
+                child: Image.asset(
+                  'assets/images/trans2.png',
+                  fit: BoxFit.scaleDown,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -51,84 +74,126 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               SizedBox(height: 40.0),
               SizedBox(
-                height: 50.0, 
-                width: 350.0, 
+                height: 50.0,
+                width: 350.0,
                 child: TextField(
-                obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Enter your URL here!',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                   ),
+                  onChanged: (val) {
+                    print(val);
+                    setState(() => url = val);
+                  },
                 ),
               ),
-              SizedBox(height:10.0,),
               SizedBox(
-                height: 40.0, 
+                height: 10.0,
+              ),
+              SizedBox(
+                height: 40.0,
                 width: 300.0,
                 child: TextButton(
-                  child: Text(
-                    "Snippy Me!".toUpperCase(),
-                    style: TextStyle(fontSize: 14)
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(156, 239, 182, 1)),
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.white)
-                      )
-                    )
-                  )
-                ),
+                    child: Text("Snippy Me!".toUpperCase(),
+                        style: TextStyle(fontSize: 14)),
+                    onPressed: () {
+                      try {
+                        print(url);
+                        FocusScope.of(context).unfocus();
+                        final result = urlControllerApi.create(url);
+
+                        FirebaseAuth.instance.currentUser
+                            .getIdToken()
+                            .then((token) {
+                          print(token);
+                          urlControllerApi
+                              .getUrlForUser(token)
+                              .then((value) => print(value));
+                        });
+
+                        FirebaseAuth.instance.currentUser.getIdToken().then(
+                            (token) => urlControllerApi
+                                .create1(
+                                    token,
+                                    Url(
+                                        id: "gog",
+                                        url: "http://www.google.com"))
+                                .then((value) => print(value)));
+
+                        result.then((value) =>
+                            copyToClipboard("http://snippy.me/u/" + value));
+                      } catch (e) {
+                        print(
+                            'Exception when calling UrlControllerApi->create: $e\n');
+                      }
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromRGBO(156, 239, 182, 1)),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.white))))),
               ),
-              SizedBox(height: 200.0,),
+              SizedBox(
+                height: 150.0,
+              ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      height: 40.0, 
+                      height: 40.0,
                       width: 150.0,
                       child: TextButton(
-                        child: Text(
-                          "Login".toUpperCase(),
-                          style: TextStyle(fontSize: 14)
-                        ),
+                        child: Text("Login".toUpperCase(),
+                            style: TextStyle(fontSize: 14)),
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(156, 239, 182, 1)),
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.white)
-                            )
-                          )
-                        )
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color.fromRGBO(156, 239, 182, 1)),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.white)))),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
+                        },
                       ),
                     ),
                     SizedBox(
-                      height: 40.0, 
+                      height: 40.0,
                       width: 150.0,
                       child: TextButton(
-                        child: Text(
-                          "Register".toUpperCase(),
-                          style: TextStyle(fontSize: 14)
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(156, 239, 182, 1)),
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.white)
-                            )
-                          )
-                        )
-                      ),
+                          child: Text("Register".toUpperCase(),
+                              style: TextStyle(fontSize: 14)),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Color.fromRGBO(156, 239, 182, 1)),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: Colors.white)))),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterScreen()));
+                          }),
                     ),
                   ],
                 ),

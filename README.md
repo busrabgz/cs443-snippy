@@ -1,9 +1,9 @@
-# Snippy.me: URL Shortener ![Java application](https://github.com/Dogacel/Kalas-Iris/workflows/Python%20application/badge.svg) ![Node.js CI](https://github.com/Dogacel/Kalas-Iris/workflows/Node.js%20CI/badge.svg)
+# Snippy.me: URL Shortener
 <!--
 ***yukardaki svgleri değiş
 -->
 
-https://www.snippy.me
+http://www.snippy.me
 
 Feel free to edit this document.
 
@@ -11,95 +11,80 @@ Feel free to edit this document.
 
 Snippy.me is a CS443 Cloud Computing project for shortening URLs.
 
-[Design Report](design report here)
+[Design Report](design report here)]
 
 
-### TODO:
-
-- [x] Initialize Spring Boot microservices
-- [x] Second
-- [x] Third
-- [ ] ..
-- [ ] ..
-- [ ] Add more tasks
 
 ## Project Structure
 
-- `app/`
-- `web/` 
-- 
+- `core/` - Contains core microservice source code and deployment files.
+- `analytics/` - Contains analytics microservice source code and deployment files.
+- `libs/` - Contains shared models and functions used by both microservices.
+- `snippy_ui/` - Contains flutter source code.
+- `flutter_api/` - Contains auto-generated dart api connectors to the backend.
+- `redis_config/` - Contains redis config and deployment files.
+- `scripts/` - Contains handy scripts to speed up deployment process.
+- `docker-compose.yml` - Contains local development stack configuration.
 
 ## Project Setup
 
-...
+1. Clone the repository using the command: 
+`git clone https://github.com/busrabgz/cs443-snippy.git`
 
-### Requirements
+2. Request the google-auth key from the firebase console and put it under `.d.env/key.json`
 
-...
+3. Install docker and docker-compose.
 
-### Java SDK (... prefered)
+4. Install Flutter 2.0.4.
 
-```bash
-$ blablabla
-```
+5. Install OpenJDK11m set PATH and JAVA_HOME (Optional, recommended for autocomplete)
 
-### ...
-
-[More info]()
-
-```bash
-```
-
-### Setup
-
-You only have to setup once unless there are new features added.
-
-```bash
-$ ..
-```
-
-_Note_: There are no database connections right now. The setup instructions are open to change.
+6. Install Google Cloud SDK (Optional, required for deployment)
 
 ### Running
-
-#### API
-
-```bash
-$ cd api
-$ sh run.sh # Or ./run.sh
+You can run the API using
+```bash 
+docker-compose up
 ```
 
-#### Website
-
+If you want to run the local firestore emulator suit (e.g. for testing)
 ```bash
-$ cd web
-$ npm start # This might take a while on the first run. It will install dependencies
+docker-compose up -f docker-compose.yml -f emulated.yml up
 ```
 
-#### Redis
-After gaining permission to the database, create a .env file containing your username and password. It should have the following format. 
+You can run the flutter project by importing it into VSCode or Android Studio.
+
+If you have changed the API and you want to access those endpoints from flutter run the following command to auto generate the API client for your local development:
+
 ```bash
-$ DATABASE_USERNAME = "yourusername"
-$ DATABASE_PASSWORD = "yourpassword"
+cd flutter_api
+./generate.sh local
 ```
-For more on .env files, you can visit [here](https://pypi.org/project/python-dotenv/) and [here](https://www.ibm.com/support/knowledgecenter/ssw_aix_72/osmanagement/env_file.html)
 
-### About Git and Github
+Or if you want to use the deployed API on the live server snippy.me:
+```bash
+./generate.sh
+```
 
-If you are having troubles using git on command line, I highly suggest you to use [GitKraken](https://www.gitkraken.com/). You can also see their [tutorials](https://www.gitkraken.com/learn/git) they are short. But still I will try to explain some about the workflow.
+### Deploying
 
-- Use issues and pull requests.
+Make sure you have setup Google Cloud SDK. You should setup the project-id and region of the project based on your GKE cluster location.
 
-- Everyone uses their own branches ideally. Those branches get merged after they are completed. For example if you want to add an about page, create a branch ata/about-page. Work on that branch. If someone needs to work with you, they will also work on that branch. This might not be the case in the beginning of the project, it is OK to use until codebase gets complex. But still, please don't upload broken commits.
+1. Run project at least once using `docker-compose` and test whether `/healthcheck` endpoint is working. By doing this you ensure that the jars are generated before deploying.
 
-- **Never force push.**
+2. Go to `scripts` folder. Modify `image_update.sh` if you want to change the version. Run `./image_update.sh` to build and upload the images to the Google Cloud Registry.
 
-- Stash your local changes before you pull.
+3. If no clusters are running, create one. If a cluster is running and there are deployments / services running, delete those. The services for this project can be deleted using `./delete.sh`.
 
-- Pull the master or the branch you are working on everytime you start doing something. **NEVER** pull while you have local changes and merge. Unnecessary merge commits will make git repository very complex and hard to deal with. Also you might mess up the code.
+4. Upload your authentication key to the GCP services.
 
-- When a merge is necessary, please don't just overwrite the incoming changes. Take your time and work on it.
+5. Deploy using `./apply.sh`.
 
-### Useful Links
+6. (Optional) Deploy ingress using the command `kubectl apply -f ingress.yaml` on the project root.
 
-- [AntDesign](https://ant.design/)
+If you want to modify the kubernetes deployment files those are the paths where the files are stored:
+
+- `core/deployment/[deployment|service|autoscale].yaml`: Contains Deployment, LoadBalancer and HorizontalPodAutoscaler config files for the core microservice.
+- `analytics/[deployment/deployment|service|autoscale].yaml`: Contains Deployment, LoadBalancer and HorizontalPodAutoscaler config files for the analytics microservice.
+- `redis_config/redis_[deployment|service].yaml`: Contains Deployment and LoadBalancer for the redis microservice.
+- `ingress.yaml`: Ingress file for hostname resolution and load balancing.

@@ -1,10 +1,8 @@
 version: '3'
 services:
   app:
-    build: ./core
     image: gradle:6.8.3-jdk11 
     environment:
-      # - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
       - FIRESTORE_PROJECT_ID=snippy-me-cs443
       - GRADLE_USER_HOME=.my-gradle
     ports:
@@ -15,31 +13,22 @@ services:
       - './.d.env:/home/env'
     links:
       - 'analytics:analytics-service'
-      # - 'firestore_emulator:firestore'
       - 'redis:redis-service'
     working_dir: /home/src/app
     command: sh -c "./gradlew clean --stop && (./gradlew build --continuous | ./gradlew bootRun)"
   analytics:
-    build: ./analytics
     image: gradle:6.8.3-jdk11
     environment:
-      # - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
       - FIRESTORE_PROJECT_ID=snippy-me-cs443
       - GRADLE_USER_HOME=.my-gradle
     volumes:
       - './analytics:/home/src/analytics'
       - './libs:/home/src/libs'
+      - './.d.env:/home/env'
     ports:
       - '8082:8080'
-    # links:
-    #   - 'firestore_emulator:firestore'
     working_dir: /home/src/analytics
     command: sh -c "./gradlew clean --stop && (./gradlew build --continuous | ./gradlew bootRun )"
-  # firestore_emulator:
-  #   image: mtlynch/firestore-emulator
-  #   environment:
-  #     - FIRESTORE_PROJECT_ID=snippy-me-cs443
-  #     - PORT=8200
   redis:
     image: 'redis:latest'
     ports:

@@ -36,6 +36,8 @@ dependencies {
 
 	compile 'redis.clients:jedis:2.7.0'
 
+	implementation 'org.springdoc:springdoc-openapi-ui:1.5.7'
+
 	compile 'com.google.firebase:firebase-admin:7.1.1'
 	compile 'com.google.firebase:firebase-server-sdk:3.0.1'
 	implementation 'com.google.firebase:firebase-firestore:22.1.1'

@@ -23,6 +23,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: "^0.7.0"
+  firebase_auth: "^0.20.1"
+  provider: ^5.0.0
+  snippy_core_api:
+    path: ../flutter_api/snippy_core_api
+  snippy_analytics_api:
+    path: ../flutter_api/snippy_analytics_api
 
 
   # The following adds the Cupertino Icons font to your application.

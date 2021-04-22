@@ -28,6 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.house),
+            iconSize: 40,
             color: Colors.white,
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomeScreen()));
@@ -38,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/registerbackground.png"),
+            image: AssetImage("assets/images/loginbackground.png"),
             fit: BoxFit.cover,
           )
         ),

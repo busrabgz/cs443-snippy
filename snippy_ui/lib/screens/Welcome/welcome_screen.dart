@@ -104,10 +104,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         FocusScope.of(context).unfocus();
                         final result = urlControllerApi.create(url);
 
-                        FirebaseAuth.instance.currentUser.getIdToken().then(
-                            (token) => urlControllerApi
-                                .getUrlForUser(token)
-                                .then((value) => print(value)));
+                        FirebaseAuth.instance.currentUser
+                            .getIdToken()
+                            .then((token) {
+                          print(token);
+                          urlControllerApi
+                              .getUrlForUser(token)
+                              .then((value) => print(value));
+                        });
 
                         FirebaseAuth.instance.currentUser.getIdToken().then(
                             (token) => urlControllerApi

@@ -2,41 +2,26 @@ from locust import HttpUser, TaskSet, task
 
 
 class MyTaskSet(TaskSet):
+
     @task
     def post_urls(self, **kwargs):
-        return self.client.post("/urls", name="/urls", **kwargs)
-
+        
+        headers = {'content-type': 'text/plain'}
+        return self.client.post("/urls", data="http://www.google.com", headers=headers, name="/urls", **kwargs)
+    
     @task
-    def post_namedUrls(self, **kwargs):
-        return self.client.post("/namedUrls", name="/namedUrls", **kwargs)
-
-    @task
-    def get_userUrls(self, **kwargs):
-        return self.client.get("/userUrls", name="/userUrls", **kwargs)
-
-    @task
-    def get_urls_id(self, object_id, **kwargs):
+    def get_urls_id(self, **kwargs):
+        object_id =  "4170157c"
         return self.client.get("/urls/{0}".format(object_id), name="/urls/{id}", **kwargs)
 
     @task
-    def get_u_id(self, object_id, **kwargs):
+    def get_u_id(self, **kwargs):
+        object_id =  "4170157c"
         return self.client.get("/u/{0}".format(object_id), name="/u/{id}", **kwargs)
-
-    @task
-    def get_logs_id(self, object_id, **kwargs):
-        return self.client.get("/logs/{0}".format(object_id), name="/logs/{id}", **kwargs)
-
-    @task
-    def get_hello(self, **kwargs):
-        return self.client.get("/hello", name="/hello", **kwargs)
 
     @task
     def get_healthcheck(self, **kwargs):
         return self.client.get("/healthcheck", name="/healthcheck", **kwargs)
-
-    @task
-    def get_collections(self, **kwargs):
-        return self.client.get("/collections", name="/collections", **kwargs)
 
     @task
     def get(self, **kwargs):

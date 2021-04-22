@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import org.springframework.http.MediaType;
+
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
 import com.snippy.libs.Url;
 
 import static com.snippy.libs.Config.getDb;
@@ -57,7 +61,8 @@ public class UrlController {
 	}
 
 	@RequestMapping(value = "/urls", method = RequestMethod.POST, consumes = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> create(@RequestBody String url) {
+	public ResponseEntity<String> create(@RequestBody String url,
+			@RequestHeader(name = "fa-auth", required = false) String auth) {
 		var db = getDb();
 		var jedis = getJedis();
 
@@ -69,7 +74,14 @@ public class UrlController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid URL.");
 		}
 
-		Url shortUrl = Url.create(url);
+		var email = "";
+		try {
+			var token = FirebaseAuth.getInstance().verifyIdToken(auth);
+			email = token.getEmail();
+		} catch (Exception e) {
+		}
+
+		Url shortUrl = Url.create(url, email);
 
 		jedis.set(shortUrl.getId(), shortUrl.getUrl());
 		db.document("urls/" + shortUrl.getId()).create(shortUrl);
@@ -81,8 +93,10 @@ public class UrlController {
 		var db = getDb();
 		var jedis = getJedis();
 
+		FirebaseToken token;
 		try {
-			FirebaseAuth.getInstance().verifyIdToken(auth);
+			token = FirebaseAuth.getInstance().verifyIdToken(auth);
+			url.setOwnerEmail(token.getEmail());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
 		}
@@ -106,15 +120,24 @@ public class UrlController {
 	}
 
 	@GetMapping("/userUrls")
-	public ResponseEntity<List<String>> getUrlForUser(@RequestHeader("fa-auth") String auth) throws Exception {
+	public ResponseEntity<List<Url>> getUrlForUser(@RequestHeader("fa-auth") String auth) throws Exception {
+		var db = getDb();
 
+		FirebaseToken token;
 		try {
-			FirebaseAuth.getInstance().verifyIdToken(auth);
+			token = FirebaseAuth.getInstance().verifyIdToken(auth);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 
-		var retList = new ArrayList<String>();
+		var ref = db.collection("urls/").whereEqualTo("ownerEmail", token.getEmail());
+
+		QuerySnapshot snapshot = ref.get().get();
+
+		var retList = new ArrayList<Url>();
+		for (DocumentSnapshot doc : snapshot) {
+			retList.add(doc.toObject(Url.class));
+		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(retList);
 	}

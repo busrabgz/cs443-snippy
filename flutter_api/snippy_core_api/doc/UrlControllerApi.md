@@ -12,12 +12,12 @@ Method | HTTP request | Description
 [**create**](UrlControllerApi.md#create) | **POST** /urls | 
 [**create1**](UrlControllerApi.md#create1) | **POST** /namedUrls | 
 [**getUrlForId**](UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | 
-[**getUrlForUser**](UrlControllerApi.md#geturlforuser) | **GET** /urls | 
+[**getUrlForUser**](UrlControllerApi.md#geturlforuser) | **GET** /userUrls | 
 [**redirectToURL**](UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | 
 
 
 # **create**
-> String create(body)
+> String create(body, faAuth)
 
 
 
@@ -27,9 +27,10 @@ import 'package:snippy_core_api/api.dart';
 
 final api_instance = UrlControllerApi();
 final body = String(); // String | 
+final faAuth = faAuth_example; // String | 
 
 try { 
-    final result = api_instance.create(body);
+    final result = api_instance.create(body, faAuth);
     print(result);
 } catch (e) {
     print('Exception when calling UrlControllerApi->create: $e\n');
@@ -41,6 +42,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | **String**|  | 
+ **faAuth** | **String**|  | [optional] 
 
 ### Return type
 

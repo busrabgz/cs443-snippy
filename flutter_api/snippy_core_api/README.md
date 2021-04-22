@@ -65,7 +65,7 @@ Class | Method | HTTP request | Description
 *UrlControllerApi* | [**create**](doc//UrlControllerApi.md#create) | **POST** /urls | 
 *UrlControllerApi* | [**create1**](doc//UrlControllerApi.md#create1) | **POST** /namedUrls | 
 *UrlControllerApi* | [**getUrlForId**](doc//UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | 
-*UrlControllerApi* | [**getUrlForUser**](doc//UrlControllerApi.md#geturlforuser) | **GET** /urls | 
+*UrlControllerApi* | [**getUrlForUser**](doc//UrlControllerApi.md#geturlforuser) | **GET** /userUrls | 
 *UrlControllerApi* | [**redirectToURL**](doc//UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | 
 
 

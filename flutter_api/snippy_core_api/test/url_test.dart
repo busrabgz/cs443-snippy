@@ -25,6 +25,11 @@ void main() {
       // TODO
     });
 
+    // String ownerEmail
+    test('to test the property `ownerEmail`', () async {
+      // TODO
+    });
+
 
   });
 

@@ -2,16 +2,24 @@ version: '3'
 services:
   app:
     environment:
-      - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
+      - 'FIRESTORE_EMULATOR_HOST=firebase:8200'
+      - 'FIREBASE_AUTH_EMULATOR_HOST=firebase:9099'
     links:
-      - 'firestore_emulator:firestore'
+      - 'firebase_tools:firebase'
   analytics:
     environment:
-      - 'FIRESTORE_EMULATOR_HOST=firestore:8200'
+      - 'FIRESTORE_EMULATOR_HOST=firebase:8200'
+      - 'FIREBASE_AUTH_EMULATOR_HOST=firebase:9099'
     links:
-      - 'firestore_emulator:firestore'
-  firestore_emulator:
-    image: mtlynch/firestore-emulator
-    environment:
-      - FIRESTORE_PROJECT_ID=snippy-me-cs443
-      - PORT=8200
+      - 'firebase_tools:firebase'
+  firebase_tools:
+    image: andreysenov/firebase-tools
+    ports:
+      - '9099:9099' # Auth
+      - '8200:8200' # Firestore
+      - '8888:4000'
+    volumes:
+      - './firebase.json:/home/emulator/firebase.json'
+      - './.d.env/:/home/emulator/'
+    working_dir: /home/emulator
+    command: ["firebase", "emulators:start", "--project", "snippy-me-cs443"]

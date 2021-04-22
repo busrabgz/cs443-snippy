@@ -50,17 +50,20 @@ public class Config {
 
       var useEmulator = System.getenv("FIRESTORE_EMULATOR_HOST") != null;
 
+      var credentialPath = "/home/env/key.json";
+      var serviceAccount = new FileInputStream(credentialPath);
+      var credentials = GoogleCredentials.fromStream(serviceAccount);
+
       if (useEmulator) {
         firestoreOptions = FirestoreOptions.newBuilder().setProjectId("snippy-me-cs443").build();
-        firebaseOptions = FirebaseOptions.builder().setProjectId("snippy-me-cs443").build();
+        firebaseOptions = FirebaseOptions.builder()
+        .setCredentials(credentials)
+        .setDatabaseUrl(System.getenv("FIRESTORE_EMULATOR_HOST"))
+        .setProjectId("snippy-me-cs443").build();
+
       } else {
-        var credentialPath = "/home/env/key.json";
-        var serviceAccount = new FileInputStream(credentialPath);
-        var credentials = GoogleCredentials.fromStream(serviceAccount);
-  
         firestoreOptions = FirestoreOptions.newBuilder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
         firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
-      
       }
 
       FirebaseApp.initializeApp(firebaseOptions);
@@ -72,7 +75,9 @@ public class Config {
   }
 
   public static FirebaseAuth getAuth() {
-    return FirebaseAuth.getInstance(FirebaseApp.getInstance());
+
+    var inst = FirebaseAuth.getInstance(FirebaseApp.getInstance());
+    return inst;
   }
 
   public static Firestore getDb() {

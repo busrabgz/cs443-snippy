@@ -13,17 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.validator.routines.UrlValidator;
 import com.snippy.libs.Url;
-import com.snippy.libs.Request;
-
 import static com.snippy.libs.Config.getDb;
 import static com.snippy.libs.Config.getJedis;
 
-import org.json.JSONObject;
-
 import java.net.URI;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @RestController
 public class UrlController {

@@ -30,6 +30,9 @@ spec:
         volumeMounts:
           - name: google-cloud-key
             mountPath: /home/env
+        env:
+          - name: FIREBASE_API_KEY
+            value: "AIzaSyD7LScsuwh9WRe5X0xgze2pYHpAxrmCe0A"
         ports:
         - containerPort: 8080
         workingDir: /home/app

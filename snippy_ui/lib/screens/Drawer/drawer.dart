@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:snippy_ui/services/auth.dart';
 
 class DrawerComponent extends StatelessWidget {
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -55,6 +57,12 @@ class DrawerComponent extends StatelessWidget {
           ListTile(
             title: Text('Settings', style: TextStyle(fontSize: 20.0, color: Colors.purple)),
             onTap: () {},
+          ),
+          ListTile(
+            title: Text('Log out', style: TextStyle(fontSize: 20.0, color: Colors.purple)),
+            onTap: () async{
+              await _auth.signOut();
+            },
           ),
         ]
       )

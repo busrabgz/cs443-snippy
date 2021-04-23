@@ -11,7 +11,7 @@ Feel free to edit this document.
 
 Snippy.me is a CS443 Cloud Computing project for shortening URLs.
 
-[Design Report](design report here)]
+[Design Report](https://github.com/busrabgz/cs443-snippy/blob/a60a94ed59f45002b9fbfe27aff99a08290fc15e/CS443%20Design%20Report.pdf)
 
 
 

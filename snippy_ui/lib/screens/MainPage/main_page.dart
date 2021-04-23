@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   final urlControllerApi = UrlControllerApi();
-  final FirebaseAuth fbauth = FirebaseAuth.instance;
+  final String email = FirebaseAuth.instance.currentUser.email;
   Future<List<Url>> temp;
   //final List<String> temp = ["url1asdasd", "url2", "url3", "url4","url2","url2","url2","url2","url2"];
   String url = "";
@@ -52,6 +52,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -61,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
           elevation: 10.0,
           toolbarHeight: 40,
         leading: const Icon(Icons.person),
-        title: Text('Sign Up', style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700)),
+        title: Text(email, style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700,fontSize: 15.0)),
           actions: <Widget>[
             IconButton(
                 icon: const Icon(Icons.logout),
@@ -146,15 +147,29 @@ class _MainScreenState extends State<MainScreen> {
                             FirebaseAuth.instance.currentUser
                                 .getIdToken()
                                 .then((token) {
-                              urlControllerApi
-                                  .create(url, faAuth: token)
-                                  .then((result) {
-                                urlControllerApi
-                                    .getUrlForUser(token)
-                                    .then((urls) => setState(() {
-                                          temp = Future.value(urls);
-                                        }));
-                              });
+                                  if (customName == "") {
+                                    urlControllerApi
+                                        .create(url, faAuth: token)
+                                        .then((result) {
+                                      urlControllerApi
+                                          .getUrlForUser(token)
+                                          .then((urls) => setState(() {
+                                        temp = Future.value(urls);
+                                      }));
+                                    });
+                                  }
+                                  else{
+                                    urlControllerApi
+                                        .create1(token, Url(id:customName, url: url, ownerEmail: email))
+                                        .then((result) {
+                                      urlControllerApi
+                                          .getUrlForUser(token)
+                                          .then((urls) => setState(() {
+                                        temp = Future.value(urls);
+                                      }));
+                                    });
+                                  }
+
                             });
                           } catch (e) {
                             print(

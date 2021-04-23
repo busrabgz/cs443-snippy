@@ -14,6 +14,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   String url = "";
+  String resultUrl = "";
 
   void copyToClipboard(String text) {
     Clipboard.setData(new ClipboardData(text: text)).then((_) {
@@ -100,35 +101,75 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Text("Snip!".toUpperCase(),
                         style: TextStyle(fontFamily: 'Quicksand', fontSize: 18)),
                     onPressed: () {
-                      try {
-                        print(url);
-                        FocusScope.of(context).unfocus();
-                        final result = urlControllerApi.create(url);
+                      showDialog(
+                        context: context,
+                        builder: (context)
+                      {
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40)),
+                          elevation: 15,
+                          backgroundColor: Color.fromRGBO(62, 84, 156, 1.0),
+                          child: Container(
+                            height: 300.0,
+                            width: 360.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(height:100.0),
+                                  Text(resultUrl, style: TextStyle(fontSize: 24.0, color: Colors.white)),
+                                  SizedBox(height: 100.0),
+                                  Align(
+                                    alignment: FractionalOffset.bottomRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 10.0, right:10.0),
+                                      child: IconButton(
+                                        icon: const Icon(Icons.copy_outlined),
+                                        color: Colors.white,
+                                        splashRadius: 25,
+                                        iconSize: 25,
+                                        alignment: Alignment.bottomCenter,
+                                        onPressed: () {
+                                          try {
+                                            print(url);
+                                            FocusScope.of(context).unfocus();
+                                            final result = urlControllerApi.create(url);
 
-                        FirebaseAuth.instance.currentUser
-                            .getIdToken()
-                            .then((token) {
-                          print(token);
-                          urlControllerApi
-                              .getUrlForUser(token)
-                              .then((value) => print(value));
-                        });
+                                            FirebaseAuth.instance.currentUser
+                                                .getIdToken()
+                                                .then((token) {
+                                              print(token);
+                                              urlControllerApi
+                                                  .getUrlForUser(token)
+                                                  .then((value) => print(value));
+                                            });
 
-                        FirebaseAuth.instance.currentUser.getIdToken().then(
-                            (token) => urlControllerApi
-                                .create1(
-                                    token,
-                                    Url(
-                                        id: "gog",
-                                        url: "http://www.google.com"))
-                                .then((value) => print(value)));
+                                            FirebaseAuth.instance.currentUser.getIdToken().then(
+                                                    (token) => urlControllerApi
+                                                    .create1(
+                                                    token,
+                                                    Url(
+                                                        id: "gog",
+                                                        url: "http://www.google.com"))
+                                                    .then((value) => print(value)));
 
-                        result.then((value) =>
-                            copyToClipboard("http://snippy.me/u/" + value));
-                      } catch (e) {
-                        print(
-                            'Exception when calling UrlControllerApi->create: $e\n');
-                      }
+                                            result.then((value) {
+                                                  resultUrl = "http://snippy.me/u/" + value;
+                                                  copyToClipboard(resultUrl);
+                                            });
+                                          } catch (e) {
+                                            print(
+                                                'Exception when calling UrlControllerApi->create: $e\n');
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ),
+                        );
+                      });
                     },
                     style: ButtonStyle(
                         elevation: MaterialStateProperty.all(5), //Defines Elevation

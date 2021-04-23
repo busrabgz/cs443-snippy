@@ -9,17 +9,16 @@ All URIs are relative to *http://10.0.2.2:8082*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**callSync**](AnalyticsApplicationApi.md#callsync) | **GET** /sync | 
-[**getAnalytics**](AnalyticsApplicationApi.md#getanalytics) | **GET** /analytics/{id} | 
-[**hello**](AnalyticsApplicationApi.md#hello) | **GET** /hello | 
-[**rootPath**](AnalyticsApplicationApi.md#rootpath) | **GET** / | 
-[**saveRequest**](AnalyticsApplicationApi.md#saverequest) | **POST** /analytics/{id} | 
+[**callSync**](AnalyticsApplicationApi.md#callsync) | **GET** /sync | Used for healtchecking by the App service.
+[**getAnalytics**](AnalyticsApplicationApi.md#getanalytics) | **GET** /analytics/{id} | Gets the access history of the given short URL.
+[**rootPath**](AnalyticsApplicationApi.md#rootpath) | **GET** / | Used for healtchecking by the Kubernetes services.
+[**saveRequest**](AnalyticsApplicationApi.md#saverequest) | **POST** /analytics/{id} | Logs an incoming request to the given short URL.
 
 
 # **callSync**
 > String callSync()
 
-
+Used for healtchecking by the App service.
 
 ### Example 
 ```dart
@@ -54,9 +53,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getAnalytics**
-> List<Request> getAnalytics(id)
+> List<Request> getAnalytics(id, faAuth)
 
-
+Gets the access history of the given short URL.
 
 ### Example 
 ```dart
@@ -64,9 +63,10 @@ import 'package:snippy_analytics_api/api.dart';
 
 final api_instance = AnalyticsApplicationApi();
 final id = id_example; // String | 
+final faAuth = faAuth_example; // String | 
 
 try { 
-    final result = api_instance.getAnalytics(id);
+    final result = api_instance.getAnalytics(id, faAuth);
     print(result);
 } catch (e) {
     print('Exception when calling AnalyticsApplicationApi->getAnalytics: $e\n');
@@ -78,6 +78,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **String**|  | 
+ **faAuth** | **String**|  | 
 
 ### Return type
 
@@ -94,51 +95,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **hello**
-> String hello(name)
-
-
-
-### Example 
-```dart
-import 'package:snippy_analytics_api/api.dart';
-
-final api_instance = AnalyticsApplicationApi();
-final name = name_example; // String | 
-
-try { 
-    final result = api_instance.hello(name);
-    print(result);
-} catch (e) {
-    print('Exception when calling AnalyticsApplicationApi->hello: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **name** | **String**|  | [optional] [default to 'World']
-
-### Return type
-
-**String**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: */*
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **rootPath**
 > String rootPath()
 
-
+Used for healtchecking by the Kubernetes services.
 
 ### Example 
 ```dart
@@ -175,7 +135,7 @@ No authorization required
 # **saveRequest**
 > Object saveRequest(id, body)
 
-
+Logs an incoming request to the given short URL.
 
 ### Example 
 ```dart
@@ -183,7 +143,7 @@ import 'package:snippy_analytics_api/api.dart';
 
 final api_instance = AnalyticsApplicationApi();
 final id = id_example; // String | 
-final body = String(); // String | 
+final body = int(); // int | 
 
 try { 
     final result = api_instance.saveRequest(id, body);
@@ -198,7 +158,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **String**|  | 
- **body** | **String**|  | 
+ **body** | **int**|  | 
 
 ### Return type
 

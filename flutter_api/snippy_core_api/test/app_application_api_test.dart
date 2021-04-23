@@ -16,28 +16,15 @@ void main() {
   final instance = AppApplicationApi();
 
   group('tests for AppApplicationApi', () {
-    //Future<String> collections() async
-    test('test collections', () async {
-      // TODO
-    });
-
-    // Checks health status of the microservices
+    // Returns health status of the all microservices.
     //
-    //Future healthCheck() async
+    //Future<String> healthCheck() async
     test('test healthCheck', () async {
       // TODO
     });
 
-    //Future<String> hello({ String name }) async
-    test('test hello', () async {
-      // TODO
-    });
-
-    //Future<String> logs(String id) async
-    test('test logs', () async {
-      // TODO
-    });
-
+    // Used for healtchecking by the Kubernetes services.
+    //
     //Future<String> rootPath() async
     test('test rootPath', () async {
       // TODO

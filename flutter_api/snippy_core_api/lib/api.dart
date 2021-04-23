@@ -28,8 +28,10 @@ part 'auth/http_basic_auth.dart';
 part 'auth/http_bearer_auth.dart';
 
 part 'api/app_application_api.dart';
+part 'api/auth_controller_api.dart';
 part 'api/url_controller_api.dart';
 
+part 'model/email_password.dart';
 part 'model/url.dart';
 
 

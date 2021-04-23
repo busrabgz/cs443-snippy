@@ -57,11 +57,10 @@ All URIs are relative to *http://10.0.2.2:8082*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AnalyticsApplicationApi* | [**callSync**](doc//AnalyticsApplicationApi.md#callsync) | **GET** /sync | 
-*AnalyticsApplicationApi* | [**getAnalytics**](doc//AnalyticsApplicationApi.md#getanalytics) | **GET** /analytics/{id} | 
-*AnalyticsApplicationApi* | [**hello**](doc//AnalyticsApplicationApi.md#hello) | **GET** /hello | 
-*AnalyticsApplicationApi* | [**rootPath**](doc//AnalyticsApplicationApi.md#rootpath) | **GET** / | 
-*AnalyticsApplicationApi* | [**saveRequest**](doc//AnalyticsApplicationApi.md#saverequest) | **POST** /analytics/{id} | 
+*AnalyticsApplicationApi* | [**callSync**](doc//AnalyticsApplicationApi.md#callsync) | **GET** /sync | Used for healtchecking by the App service.
+*AnalyticsApplicationApi* | [**getAnalytics**](doc//AnalyticsApplicationApi.md#getanalytics) | **GET** /analytics/{id} | Gets the access history of the given short URL.
+*AnalyticsApplicationApi* | [**rootPath**](doc//AnalyticsApplicationApi.md#rootpath) | **GET** / | Used for healtchecking by the Kubernetes services.
+*AnalyticsApplicationApi* | [**saveRequest**](doc//AnalyticsApplicationApi.md#saverequest) | **POST** /analytics/{id} | Logs an incoming request to the given short URL.
 
 
 ## Documentation For Models

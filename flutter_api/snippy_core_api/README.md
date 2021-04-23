@@ -43,10 +43,10 @@ import 'package:snippy_core_api/api.dart';
 final api_instance = AppApplicationApi();
 
 try {
-    final result = api_instance.collections();
+    final result = api_instance.healthCheck();
     print(result);
 } catch (e) {
-    print('Exception when calling AppApplicationApi->collections: $e\n');
+    print('Exception when calling AppApplicationApi->healthCheck: $e\n');
 }
 
 ```
@@ -57,20 +57,19 @@ All URIs are relative to *http://10.0.2.2:8089*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AppApplicationApi* | [**collections**](doc//AppApplicationApi.md#collections) | **GET** /collections | 
-*AppApplicationApi* | [**healthCheck**](doc//AppApplicationApi.md#healthcheck) | **GET** /healthcheck | Checks health status of the microservices
-*AppApplicationApi* | [**hello**](doc//AppApplicationApi.md#hello) | **GET** /hello | 
-*AppApplicationApi* | [**logs**](doc//AppApplicationApi.md#logs) | **GET** /logs/{id} | 
-*AppApplicationApi* | [**rootPath**](doc//AppApplicationApi.md#rootpath) | **GET** / | 
-*UrlControllerApi* | [**create**](doc//UrlControllerApi.md#create) | **POST** /urls | 
-*UrlControllerApi* | [**create1**](doc//UrlControllerApi.md#create1) | **POST** /namedUrls | 
-*UrlControllerApi* | [**getUrlForId**](doc//UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | 
-*UrlControllerApi* | [**getUrlForUser**](doc//UrlControllerApi.md#geturlforuser) | **GET** /userUrls | 
-*UrlControllerApi* | [**redirectToURL**](doc//UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | 
+*AppApplicationApi* | [**healthCheck**](doc//AppApplicationApi.md#healthcheck) | **GET** /healthcheck | Returns health status of the all microservices.
+*AppApplicationApi* | [**rootPath**](doc//AppApplicationApi.md#rootpath) | **GET** / | Used for healtchecking by the Kubernetes services.
+*AuthControllerApi* | [**auth**](doc//AuthControllerApi.md#auth) | **POST** /auth | A middle-man for the authentication with the firebase services.
+*UrlControllerApi* | [**create**](doc//UrlControllerApi.md#create) | **POST** /urls | Creates a shortened URL for the user.
+*UrlControllerApi* | [**createNamed**](doc//UrlControllerApi.md#createnamed) | **POST** /namedUrls | Creates a shortened URL with the defined id for the user.
+*UrlControllerApi* | [**getUrlForId**](doc//UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | Gets the original URL from the shortened URL.
+*UrlControllerApi* | [**getUrlForUser**](doc//UrlControllerApi.md#geturlforuser) | **GET** /urls | Queries the urls created by the current user.
+*UrlControllerApi* | [**redirectToURL**](doc//UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | Redirects a shortened URL to the original URL
 
 
 ## Documentation For Models
 
+ - [EmailPassword](doc//EmailPassword.md)
  - [Url](doc//Url.md)
 
 

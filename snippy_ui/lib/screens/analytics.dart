@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:snippy_ui/screens/Welcome/welcome_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -189,18 +190,24 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         elevation: 10.0,
         title: Text('Analytics'),
       ),
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.all(12.0),
-          child: StreamBuilder<List<Request>>(
-              stream: analyticsApi.getAnalytics(id).asStream(),
-              builder: (context, snapshot) {
-                return snapshot.hasData
-                    ? getList(snapshot.data)
-                    : getList(List<Request>.empty());
-              }),
-        ),
-      ),
+      body: FutureBuilder<String>(
+          future: FirebaseAuth.instance.currentUser.getIdToken(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return getList(List<Request>.empty());
+            return SafeArea(
+              child: Container(
+                padding: EdgeInsets.all(12.0),
+                child: StreamBuilder<List<Request>>(
+                    stream:
+                        analyticsApi.getAnalytics(id, snapshot.data).asStream(),
+                    builder: (context, snapshot) {
+                      return snapshot.hasData
+                          ? getList(snapshot.data)
+                          : getList(List<Request>.empty());
+                    }),
+              ),
+            );
+          }),
     );
   }
 }

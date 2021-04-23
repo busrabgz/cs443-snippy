@@ -3,11 +3,14 @@
 .travis.yml
 README.md
 doc/AppApplicationApi.md
+doc/AuthControllerApi.md
+doc/EmailPassword.md
 doc/Url.md
 doc/UrlControllerApi.md
 git_push.sh
 lib/api.dart
 lib/api/app_application_api.dart
+lib/api/auth_controller_api.dart
 lib/api/url_controller_api.dart
 lib/api_client.dart
 lib/api_exception.dart
@@ -17,8 +20,11 @@ lib/auth/authentication.dart
 lib/auth/http_basic_auth.dart
 lib/auth/http_bearer_auth.dart
 lib/auth/oauth.dart
+lib/model/email_password.dart
 lib/model/url.dart
 pubspec.yaml
 test/app_application_api_test.dart
+test/auth_controller_api_test.dart
+test/email_password_test.dart
 test/url_controller_api_test.dart
 test/url_test.dart

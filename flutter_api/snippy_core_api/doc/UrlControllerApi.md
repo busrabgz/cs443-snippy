@@ -9,17 +9,17 @@ All URIs are relative to *http://10.0.2.2:8089*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create**](UrlControllerApi.md#create) | **POST** /urls | 
-[**create1**](UrlControllerApi.md#create1) | **POST** /namedUrls | 
-[**getUrlForId**](UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | 
-[**getUrlForUser**](UrlControllerApi.md#geturlforuser) | **GET** /userUrls | 
-[**redirectToURL**](UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | 
+[**create**](UrlControllerApi.md#create) | **POST** /urls | Creates a shortened URL for the user.
+[**createNamed**](UrlControllerApi.md#createnamed) | **POST** /namedUrls | Creates a shortened URL with the defined id for the user.
+[**getUrlForId**](UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | Gets the original URL from the shortened URL.
+[**getUrlForUser**](UrlControllerApi.md#geturlforuser) | **GET** /urls | Queries the urls created by the current user.
+[**redirectToURL**](UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | Redirects a shortened URL to the original URL
 
 
 # **create**
 > String create(body, faAuth)
 
-
+Creates a shortened URL for the user.
 
 ### Example 
 ```dart
@@ -59,10 +59,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **create1**
-> String create1(faAuth, url)
+# **createNamed**
+> String createNamed(faAuth, url)
 
-
+Creates a shortened URL with the defined id for the user.
 
 ### Example 
 ```dart
@@ -73,10 +73,10 @@ final faAuth = faAuth_example; // String |
 final url = Url(); // Url | 
 
 try { 
-    final result = api_instance.create1(faAuth, url);
+    final result = api_instance.createNamed(faAuth, url);
     print(result);
 } catch (e) {
-    print('Exception when calling UrlControllerApi->create1: $e\n');
+    print('Exception when calling UrlControllerApi->createNamed: $e\n');
 }
 ```
 
@@ -105,7 +105,7 @@ No authorization required
 # **getUrlForId**
 > String getUrlForId(id)
 
-
+Gets the original URL from the shortened URL.
 
 ### Example 
 ```dart
@@ -144,9 +144,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getUrlForUser**
-> List<Url> getUrlForUser(faAuth)
+> List<Url> getUrlForUser(faAuth, page, size, sort)
 
-
+Queries the urls created by the current user.
 
 ### Example 
 ```dart
@@ -154,9 +154,12 @@ import 'package:snippy_core_api/api.dart';
 
 final api_instance = UrlControllerApi();
 final faAuth = faAuth_example; // String | 
+final page = 56; // int | Zero-based page index (0..N)
+final size = 56; // int | The size of the page to be returned
+final sort = []; // List<String> | Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
 
 try { 
-    final result = api_instance.getUrlForUser(faAuth);
+    final result = api_instance.getUrlForUser(faAuth, page, size, sort);
     print(result);
 } catch (e) {
     print('Exception when calling UrlControllerApi->getUrlForUser: $e\n');
@@ -168,6 +171,9 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **faAuth** | **String**|  | 
+ **page** | **int**| Zero-based page index (0..N) | [optional] [default to 0]
+ **size** | **int**| The size of the page to be returned | [optional] [default to 20]
+ **sort** | [**List<String>**](String.md)| Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional] [default to const []]
 
 ### Return type
 
@@ -187,7 +193,7 @@ No authorization required
 # **redirectToURL**
 > redirectToURL(id)
 
-
+Redirects a shortened URL to the original URL
 
 ### Example 
 ```dart

@@ -10,34 +10,39 @@
 import 'package:snippy_analytics_api/api.dart';
 import 'package:test/test.dart';
 
+
 /// tests for AnalyticsApplicationApi
 void main() {
   final instance = AnalyticsApplicationApi();
 
   group('tests for AnalyticsApplicationApi', () {
+    // Used for healtchecking by the App service.
+    //
     //Future<String> callSync() async
     test('test callSync', () async {
       // TODO
     });
 
-    //Future<List<Request>> getAnalytics(String id) async
+    // Gets the access history of the given short URL.
+    //
+    //Future<List<Request>> getAnalytics(String id, String faAuth) async
     test('test getAnalytics', () async {
       // TODO
     });
 
-    //Future<String> hello({ String name }) async
-    test('test hello', () async {
-      // TODO
-    });
-
+    // Used for healtchecking by the Kubernetes services.
+    //
     //Future<String> rootPath() async
     test('test rootPath', () async {
       // TODO
     });
 
-    //Future<Object> saveRequest(String id, String body) async
+    // Logs an incoming request to the given short URL.
+    //
+    //Future<Object> saveRequest(String id, int body) async
     test('test saveRequest', () async {
       // TODO
     });
+
   });
 }

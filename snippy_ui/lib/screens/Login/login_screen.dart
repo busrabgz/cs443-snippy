@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Color.fromRGBO(61, 82, 155, 1.0),
         elevation: 10.0,
         toolbarHeight: 100,
-        title: Text('Sign In'),
+          title: Text('Sign In', style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700)),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.house),
@@ -63,8 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (val) => val.isEmpty ? 'Enter an email' : null,
                   obscureText: false,
                   decoration: InputDecoration(
-                    hintText: 'Your Email',
-                    labelText: 'Email',
+                      hintText: 'Your Email',
+                      hintStyle: TextStyle(fontFamily: 'CaviarDreams'),
+                      labelText: 'Email',
+                      labelStyle: TextStyle(fontFamily: 'CaviarDreams'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     )
@@ -82,8 +84,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (val) => val.length < 6 ? 'Enter a valid password' : null,
                   obscureText: true,
                   decoration: InputDecoration(
-                    hintText: 'Your Password',
-                    labelText: 'Password',
+                      hintText: 'Your Password',
+                      hintStyle: TextStyle(fontFamily: 'CaviarDreams'),
+                      labelText: 'Password',
+                      labelStyle: TextStyle(fontFamily: 'CaviarDreams'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     )
@@ -100,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextButton(
                   child: Text(
                     "Sign In".toUpperCase(),
-                    style: TextStyle(fontSize: 14)
+                      style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700, fontSize: 14)
                   ),
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(5), //Defines Elevation
@@ -138,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text.rich(
                         TextSpan(
                           text: 'Forgot Password?',
-                          style: TextStyle(
+                          style: TextStyle( fontFamily: 'CaviarDreams',
                             color: Colors.purple[300]
                           )
                         )
@@ -149,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text.rich(
                         TextSpan(
                           text: 'Sign Up',
-                          style: TextStyle(
+                          style: TextStyle( fontFamily: 'CaviarDreams',
                             color: Colors.purple[300]
                           )
                         )

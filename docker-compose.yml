@@ -5,6 +5,7 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/home/env/key.json
       - FIRESTORE_PROJECT_ID=snippy-me-cs443
+      - FIREBASE_API_KEY=AIzaSyD7LScsuwh9WRe5X0xgze2pYHpAxrmCe0A
       - GRADLE_USER_HOME=.my-gradle
     ports:
       - '8089:8080'
@@ -22,6 +23,7 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/home/env/key.json
       - FIRESTORE_PROJECT_ID=snippy-me-cs443
+      - FIREBASE_API_KEY=AIzaSyD7LScsuwh9WRe5X0xgze2pYHpAxrmCe0A
       - GRADLE_USER_HOME=.my-gradle
     volumes:
       - './analytics:/home/src/analytics'

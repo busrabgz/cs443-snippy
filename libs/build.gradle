@@ -24,6 +24,10 @@ dependencies {
 	
 	compile 'redis.clients:jedis:2.7.0'
 
+
+	implementation 'org.springdoc:springdoc-openapi-ui:1.5.7'
+	implementation 'org.springdoc:springdoc-openapi-data-rest:1.5.2'
+
 	implementation "com.google.guava:guava:16+"
 
 	implementation 'commons-validator:commons-validator:1.7'

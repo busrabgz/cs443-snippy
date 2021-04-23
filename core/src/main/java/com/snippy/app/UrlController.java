@@ -4,6 +4,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.net.http.HttpRequest.BodyPublishers;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.apache.commons.validator.routines.UrlValidator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
+import org.apache.commons.validator.routines.UrlValidator;
+import org.springdoc.core.converters.models.Pageable;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.http.MediaType;
 
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -46,26 +51,27 @@ public class UrlController {
 		return shortUrl.getUrl();
 	}
 
+	@Operation(summary = "Redirects a shortened URL to the original URL")
 	@GetMapping("/u/{id}")
 	public ResponseEntity<Void> redirectToURL(@PathVariable String id) throws Exception {
 		String incoming_time = String.valueOf(System.currentTimeMillis());
 		String actualUrl = getUrl(id);
 		String redirectUrl = "redirect:" + actualUrl == null ? "https://www.cloudflare.com/404/" : actualUrl;
-		
+
 		var client = HttpClient.newHttpClient();
 		var analyticsRequest = HttpRequest.newBuilder(URI.create("http://analytics-service:8080/analytics/" + id))
-						.POST(BodyPublishers.ofString(incoming_time)).build();
-		
+				.POST(BodyPublishers.ofString(incoming_time)).build();
+
 		try {
 			var body = client.send(analyticsRequest, BodyHandlers.ofString()).body();
-			System.out.println(body);
-		}	catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(redirectUrl)).build();
 	}
 
+	@Operation(summary = "Gets the original URL from the shortened URL.")
 	@GetMapping("/urls/{id}")
 	public ResponseEntity<String> getUrlForId(@PathVariable String id) {
 		try {
@@ -77,6 +83,7 @@ public class UrlController {
 		}
 	}
 
+	@Operation(summary = "Creates a shortened URL for the user.")
 	@RequestMapping(value = "/urls", method = RequestMethod.POST, consumes = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<String> create(@RequestBody String url,
 			@RequestHeader(name = "fa-auth", required = false) String auth) {
@@ -105,8 +112,9 @@ public class UrlController {
 		return ResponseEntity.status(HttpStatus.OK).body(shortUrl.getId());
 	}
 
+	@Operation(summary = "Creates a shortened URL with the defined id for the user.")
 	@RequestMapping(value = "/namedUrls", method = RequestMethod.POST)
-	public ResponseEntity<String> create(@RequestBody Url url, @RequestHeader("fa-auth") String auth) {
+	public ResponseEntity<String> createNamed(@RequestBody Url url, @RequestHeader("fa-auth") String auth) {
 		var db = getDb();
 		var jedis = getJedis();
 
@@ -136,8 +144,11 @@ public class UrlController {
 
 	}
 
-	@GetMapping("/userUrls")
-	public ResponseEntity<List<Url>> getUrlForUser(@RequestHeader("fa-auth") String auth) throws Exception {
+	@Operation(summary = "Queries the urls created by the current user.")
+	@PageableAsQueryParam
+	@GetMapping("/urls")
+	public ResponseEntity<List<Url>> getUrlForUser(@RequestHeader("fa-auth") String auth, @Parameter(hidden=true) Pageable pageable)
+			throws Exception {
 		var db = getDb();
 
 		FirebaseToken token;
@@ -147,7 +158,10 @@ public class UrlController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 
-		var ref = db.collection("urls/").whereEqualTo("ownerEmail", token.getEmail());
+		var ref = db.collection("urls/")
+		.whereEqualTo("ownerEmail", token.getEmail())
+		.offset(pageable.getPage() * pageable.getSize())
+		.limit(pageable.getSize());
 
 		QuerySnapshot snapshot = ref.get().get();
 

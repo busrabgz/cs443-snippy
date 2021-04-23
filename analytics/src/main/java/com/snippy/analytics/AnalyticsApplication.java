@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.Operation;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import static com.snippy.libs.Config.SetupFirestore;
 import static com.snippy.libs.Config.SetupJedis;
@@ -40,25 +44,22 @@ public class AnalyticsApplication {
 		SpringApplication.run(AnalyticsApplication.class, args);
 	}
 
+	@Operation(summary = "Used for healtchecking by the Kubernetes services.")
 	@GetMapping("/")
 	public String rootPath() {
 		return "OK";
 	}
 
-	@GetMapping("/hello")
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return String.format("Hello from analytics %s!", name);
-	}
-
+	@Operation(summary = "Used for healtchecking by the App service.")
 	@GetMapping("/sync")
 	public String sync() {
 		return "analytics";
 	}
 
+	@Operation(summary = "Logs an incoming request to the given short URL.")
 	@PostMapping("/analytics/{id}")
-	public ResponseEntity<?> saveRequest(@PathVariable String id, @RequestBody String body) {
+	public ResponseEntity<?> saveRequest(@PathVariable String id, @RequestBody long incoming_time) {
 		var db = getDb();
-		long incoming_time = Long.parseLong(body);
 		long outgoing_time = System.currentTimeMillis();
 		Request newReq = new Request(incoming_time, outgoing_time);
 
@@ -79,8 +80,9 @@ public class AnalyticsApplication {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "Gets the access history of the given short URL.")
 	@GetMapping("/analytics/{id}")
-	public ResponseEntity<List<Request>> getAnalytics(@PathVariable String id) {
+	public ResponseEntity<List<Request>> getAnalytics(@PathVariable String id, @RequestHeader(name = "fa-auth") String auth) {
 		var db = getDb();
 
 		var docRef = db.collection("requests").document(id).get();

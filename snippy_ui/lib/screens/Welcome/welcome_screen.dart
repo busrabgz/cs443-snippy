@@ -7,6 +7,77 @@ import 'package:snippy_core_api/api.dart';
 import 'package:snippy_ui/services/auth.dart';
 import 'package:flutter/services.dart';
 
+var buttonStyle = ButtonStyle(
+    elevation: MaterialStateProperty.all(5), //Defines Elevation
+    shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
+    backgroundColor:
+        MaterialStateProperty.all<Color>(Color.fromRGBO(61, 82, 155, 1.0)),
+    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))));
+
+class ErrorDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    return AlertDialog(
+      title: Text("Simple Alert"),
+      content: Text("This is an alert message."),
+      actions: [
+        okButton,
+      ],
+    );
+  }
+}
+
+class URLDialog extends StatelessWidget {
+  final String resultUrl;
+  final Function onCopy;
+
+  URLDialog({Key key, this.resultUrl, this.onCopy}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      elevation: 15,
+      backgroundColor: Color.fromRGBO(62, 84, 156, 1.0),
+      child: Container(
+        height: 300.0,
+        width: 360.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 100.0),
+            Text(resultUrl,
+                style: TextStyle(fontSize: 24.0, color: Colors.white)),
+            SizedBox(height: 100.0),
+            Align(
+              alignment: FractionalOffset.bottomRight,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 10.0, right: 10.0),
+                child: IconButton(
+                  icon: const Icon(Icons.copy_outlined),
+                  color: Colors.white,
+                  splashRadius: 25,
+                  iconSize: 25,
+                  alignment: Alignment.bottomCenter,
+                  onPressed: onCopy,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class WelcomeScreen extends StatefulWidget {
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -59,7 +130,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Container(
                 width: width,
                 height: height * 0.4,
-                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -78,11 +149,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     hintText: 'Enter your URL here.',
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
-                      borderSide: const BorderSide(color: Color.fromRGBO(109, 143, 192, 1.0), width: 2.0),
+                      borderSide: const BorderSide(
+                          color: Color.fromRGBO(109, 143, 192, 1.0),
+                          width: 2.0),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
-                      borderSide: const BorderSide(color: Color.fromRGBO(109, 143, 192, 1.0), width: 5.0),
+                      borderSide: const BorderSide(
+                          color: Color.fromRGBO(109, 143, 192, 1.0),
+                          width: 5.0),
                     ),
                   ),
                   onChanged: (val) {
@@ -99,90 +174,45 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 width: 200.0,
                 child: TextButton(
                     child: Text("Snip!".toUpperCase(),
-                        style: TextStyle(fontFamily: 'Quicksand', fontSize: 18)),
+                        style:
+                            TextStyle(fontFamily: 'Quicksand', fontSize: 18)),
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context)
-                      {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40)),
-                          elevation: 15,
-                          backgroundColor: Color.fromRGBO(62, 84, 156, 1.0),
-                          child: Container(
-                            height: 300.0,
-                            width: 360.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(height:100.0),
-                                  Text(resultUrl, style: TextStyle(fontSize: 24.0, color: Colors.white)),
-                                  SizedBox(height: 100.0),
-                                  Align(
-                                    alignment: FractionalOffset.bottomRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(bottom: 10.0, right:10.0),
-                                      child: IconButton(
-                                        icon: const Icon(Icons.copy_outlined),
-                                        color: Colors.white,
-                                        splashRadius: 25,
-                                        iconSize: 25,
-                                        alignment: Alignment.bottomCenter,
-                                        onPressed: () {
-                                          try {
-                                            print(url);
-                                            FocusScope.of(context).unfocus();
-                                            final result = urlControllerApi.create(url);
+                      FocusScope.of(context).unfocus();
 
-                                            FirebaseAuth.instance.currentUser
-                                                .getIdToken()
-                                                .then((token) {
-                                              print(token);
-                                              urlControllerApi
-                                                  .getUrlForUser(token)
-                                                  .then((value) => print(value));
-                                            });
+                      final currentUser = FirebaseAuth.instance.currentUser;
 
-                                            FirebaseAuth.instance.currentUser.getIdToken().then(
-                                                    (token) => urlControllerApi
-                                                    .create1(
-                                                    token,
-                                                    Url(
-                                                        id: "gog",
-                                                        url: "http://www.google.com"))
-                                                    .then((value) => print(value)));
+                      final resultFuture = (currentUser != null)
+                          ? currentUser.getIdToken().then((token) =>
+                              urlControllerApi.create(resultUrl, faAuth: token))
+                          : urlControllerApi.create(resultUrl);
 
-                                            result.then((value) {
-                                                  resultUrl = "http://snippy.me/u/" + value;
-                                                  copyToClipboard(resultUrl);
-                                            });
-                                          } catch (e) {
-                                            print(
-                                                'Exception when calling UrlControllerApi->create: $e\n');
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                          ),
+                      resultFuture.then((result) {
+                        setState(
+                            () => resultUrl = "http://snippy.me/u/" + result);
+                        copyToClipboard(resultUrl);
+
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return URLDialog(
+                                resultUrl: resultUrl,
+                                onCopy: () => copyToClipboard(resultUrl),
+                              );
+                            });
+                      }).catchError((error, stackTrace) {
+                        // show the dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ErrorDialog();
+                          },
                         );
+                        print(
+                            'Exception when calling UrlControllerApi->create: $error\n');
                       });
                     },
-                    style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(5), //Defines Elevation
-                        shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromRGBO(61, 82, 155, 1.0)),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0))))),
-                                    //side: BorderSide(color: Colors.white))))),
+                    style: buttonStyle),
+                //side: BorderSide(color: Colors.white))))),
               ),
               SizedBox(
                 height: 150.0,
@@ -198,18 +228,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: TextButton(
                         child: Text("Sign in".toUpperCase(),
                             style: TextStyle(fontSize: 16)),
-                        style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(5), //Defines Elevation
-                            shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Color.fromRGBO(61, 82, 155, 1.0)),
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0)))),
-                                    //side: BorderSide(color: Colors.white)))),
+                        style: buttonStyle,
+                        //side: BorderSide(color: Colors.white)))),
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -224,18 +244,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: TextButton(
                           child: Text("Sign up".toUpperCase(),
                               style: TextStyle(fontSize: 16)),
-                          style: ButtonStyle(
-                              elevation: MaterialStateProperty.all(5), //Defines Elevation
-                              shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color.fromRGBO(61, 82, 155, 1.0)),
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0)))),
-                                      //side: BorderSide(color: Colors.white)))),
+                          style: buttonStyle,
+                          //side: BorderSide(color: Colors.white)))),
                           onPressed: () {
                             Navigator.push(
                                 context,

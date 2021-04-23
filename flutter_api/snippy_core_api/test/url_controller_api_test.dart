@@ -31,7 +31,7 @@ void main() {
       // TODO
     });
 
-    //Future<List<String>> getUrlForUser(String faAuth) async
+    //Future<List<Url>> getUrlForUser(String faAuth) async
     test('test getUrlForUser', () async {
       // TODO
     });

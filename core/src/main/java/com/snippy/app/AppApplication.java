@@ -142,7 +142,7 @@ public class AppApplication {
 
 		if (firestoreStatus) {
 			try {
-				db.document("doc/test").get().get(5000, TimeUnit.MILLISECONDS);
+				db.document("doc/test").get().get(10000, TimeUnit.MILLISECONDS);
 			} catch (Exception e) {
 				firestoreStatus = false;
 			}

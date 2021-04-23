@@ -20,6 +20,9 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
+dependency_overrides:
+  intl: ^0.17.0
+
 dependencies:
   flutter:
     sdk: flutter
@@ -30,6 +33,7 @@ dependencies:
     path: ../flutter_api/snippy_core_api
   snippy_analytics_api:
     path: ../flutter_api/snippy_analytics_api
+  syncfusion_flutter_charts: ^19.1.57+1
 
 
   # The following adds the Cupertino Icons font to your application.

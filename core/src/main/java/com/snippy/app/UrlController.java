@@ -41,7 +41,7 @@ public class UrlController {
 		if (actualUrl != null)
 			return actualUrl;
 
-		var docRef = db.document("urls/" + id).get();
+		var docRef = db.collection("urls").document(id).get();
 		Url shortUrl = (Url) docRef.get().toObject(Url.class);
 		return shortUrl.getUrl();
 	}
@@ -72,6 +72,7 @@ public class UrlController {
 			String shortUrl = getUrl(id);
 			return ResponseEntity.status(HttpStatus.OK).body(shortUrl);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
 		}
 	}

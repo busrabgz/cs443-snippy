@@ -27,16 +27,18 @@ class Graph extends StatelessWidget {
   Widget build(BuildContext context) {
     final transformer = (List<Request> input) {
       var timeNow = DateTime.now().millisecondsSinceEpoch;
-      var reduced = input.map((e) => (timeNow - e.incomingTime) ~/ unit);
       var map = Map<int, int>();
       for (var i = timeRange.start.toInt(); i <= timeRange.end.toInt(); i++) {
         map[i] = 0;
       }
 
-      reduced.forEach((element) {
-        if (element >= timeRange.start && element <= timeRange.end)
-          map[element] += 1;
-      });
+      if (input != null) {
+        var reduced = input.map((e) => (timeNow - e.incomingTime) ~/ unit);
+        reduced.forEach((element) {
+          if (element >= timeRange.start && element <= timeRange.end)
+            map[element] += 1;
+        });
+      }
 
       var returnList = map.entries.toList();
       returnList.sort((e, v) => v.key - e.key);
@@ -81,6 +83,99 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   int groupValue = minute;
   String id;
 
+  Widget getList(data) => ListView.builder(
+      itemCount: data.length + 3,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Row(
+            children: [
+              Radio(
+                value: minute,
+                groupValue: groupValue,
+                onChanged: (o) {
+                  setState(() {
+                    unit = minute;
+                    groupValue = minute;
+                  });
+                },
+              ),
+              Text('M'),
+              Radio(
+                value: hour,
+                groupValue: groupValue,
+                onChanged: (o) {
+                  setState(() {
+                    unit = hour;
+                    groupValue = hour;
+                  });
+                },
+              ),
+              Text('H'),
+              Radio(
+                value: day,
+                groupValue: groupValue,
+                onChanged: (o) {
+                  setState(() {
+                    unit = day;
+                    groupValue = day;
+                  });
+                },
+              ),
+              Text('D'),
+              Radio(
+                value: week,
+                groupValue: groupValue,
+                onChanged: (o) {
+                  setState(() {
+                    unit = week;
+                    groupValue = week;
+                  });
+                },
+              ),
+              Text('W'),
+            ],
+          );
+        } else if (index == 1) {
+          return Column(
+            children: [
+              Text('Range:'),
+              RangeSlider(
+                values: timeRange,
+                min: 0,
+                max: 50,
+                divisions: 50,
+                labels: RangeLabels(
+                  timeRange.start.round().toString(),
+                  timeRange.end.round().toString(),
+                ),
+                onChanged: (RangeValues values) {
+                  setState(() {
+                    timeRange = values;
+                  });
+                },
+              ),
+            ],
+          );
+        } else if (index == 2) {
+          return Graph(
+            data: data,
+            unit: unit,
+            timeRange: timeRange,
+          );
+        } else {
+          DateTime date = new DateTime.fromMillisecondsSinceEpoch(
+              data[index - 3].incomingTime);
+          DateFormat format = new DateFormat("y-MM-dd-hh-mm");
+          final text = format.format(date);
+          return Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Container(
+              child: Text(text),
+            ),
+          );
+        }
+      });
+
   @override
   _AnalyticsScreenState({this.id}) : super();
 
@@ -98,102 +193,12 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         child: Container(
           padding: EdgeInsets.all(12.0),
           child: StreamBuilder<List<Request>>(
-            stream: analyticsApi.getAnalytics(id).asStream(),
-            builder: (context, snapshot) => snapshot.hasData
-                ? ListView.builder(
-                    itemCount: snapshot.data.length + 3,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return Row(
-                          children: [
-                            Radio(
-                              value: minute,
-                              groupValue: groupValue,
-                              onChanged: (o) {
-                                setState(() {
-                                  unit = minute;
-                                  groupValue = minute;
-                                });
-                              },
-                            ),
-                            Text('M'),
-                            Radio(
-                              value: hour,
-                              groupValue: groupValue,
-                              onChanged: (o) {
-                                setState(() {
-                                  unit = hour;
-                                  groupValue = hour;
-                                });
-                              },
-                            ),
-                            Text('H'),
-                            Radio(
-                              value: day,
-                              groupValue: groupValue,
-                              onChanged: (o) {
-                                setState(() {
-                                  unit = day;
-                                  groupValue = day;
-                                });
-                              },
-                            ),
-                            Text('D'),
-                            Radio(
-                              value: week,
-                              groupValue: groupValue,
-                              onChanged: (o) {
-                                setState(() {
-                                  unit = week;
-                                  groupValue = week;
-                                });
-                              },
-                            ),
-                            Text('W'),
-                          ],
-                        );
-                      } else if (index == 1) {
-                        return Column(
-                          children: [
-                            Text('Range:'),
-                            RangeSlider(
-                              values: timeRange,
-                              min: 0,
-                              max: 50,
-                              divisions: 50,
-                              labels: RangeLabels(
-                                timeRange.start.round().toString(),
-                                timeRange.end.round().toString(),
-                              ),
-                              onChanged: (RangeValues values) {
-                                setState(() {
-                                  timeRange = values;
-                                });
-                              },
-                            ),
-                          ],
-                        );
-                      } else if (index == 2) {
-                        return Graph(
-                          data: snapshot.data,
-                          unit: unit,
-                          timeRange: timeRange,
-                        );
-                      } else {
-                        DateTime date = new DateTime.fromMillisecondsSinceEpoch(
-                            snapshot.data[index - 3].incomingTime);
-                        DateFormat format = new DateFormat("y-MM-dd-hh-mm");
-                        final text = format.format(date);
-                        return Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: Container(
-                            child: Text(text),
-                          ),
-                        );
-                      }
-                    })
-                : Text("Loading"),
-          ),
+              stream: analyticsApi.getAnalytics(id).asStream(),
+              builder: (context, snapshot) {
+                return snapshot.hasData
+                    ? getList(snapshot.data)
+                    : getList(List<Request>.empty());
+              }),
         ),
       ),
     );

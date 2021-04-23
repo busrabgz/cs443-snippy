@@ -12,15 +12,13 @@ class Wrapper extends StatelessWidget {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data != null) {
-          return RegisterScreen();
-        }
-        else {
+        print(snapshot.data);
+        if (!snapshot.hasData || snapshot.data == null) {
+          return WelcomeScreen();
+        } else {
           return MainScreen();
         }
-      } ,
+      },
     );
-
-
   }
 }

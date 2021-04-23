@@ -26,8 +26,8 @@ class ErrorDialog extends StatelessWidget {
       },
     );
     return AlertDialog(
-      title: Text("Simple Alert"),
-      content: Text("This is an alert message."),
+      title: Text("Invalid URL"),
+      content: Text("This URL is invalid."),
       actions: [
         okButton,
       ],
@@ -145,7 +145,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 50.0,
                 width: 350.0,
                 child: TextField(
+                  maxLines: 1,
                   decoration: InputDecoration(
+                    isDense: true,
                     hintText: 'Enter your URL here.',
                     hintStyle: TextStyle(fontFamily: 'CaviarDreams'),
                     enabledBorder: OutlineInputBorder(
@@ -175,8 +177,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 width: 200.0,
                 child: TextButton(
                     child: Text("Snip!".toUpperCase(),
-                        style:
-                            TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700, fontSize: 18)),
+                        style: TextStyle(
+                            fontFamily: 'CaviarDreams',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18)),
                     onPressed: () {
                       FocusScope.of(context).unfocus();
 
@@ -228,7 +232,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       width: 150.0,
                       child: TextButton(
                         child: Text("Sign in".toUpperCase(),
-                            style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700, fontSize: 16)),
+                            style: TextStyle(
+                                fontFamily: 'CaviarDreams',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16)),
                         style: buttonStyle,
                         //side: BorderSide(color: Colors.white)))),
                         onPressed: () {
@@ -244,7 +251,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       width: 150.0,
                       child: TextButton(
                           child: Text("Sign up".toUpperCase(),
-                              style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700,fontSize: 16)),
+                              style: TextStyle(
+                                  fontFamily: 'CaviarDreams',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16)),
                           style: buttonStyle,
                           //side: BorderSide(color: Colors.white)))),
                           onPressed: () {

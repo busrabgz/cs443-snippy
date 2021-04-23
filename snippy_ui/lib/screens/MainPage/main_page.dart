@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:snippy_analytics_api/api.dart';
 import 'package:snippy_core_api/api.dart';
-import 'package:snippy_ui/screens/Drawer/drawer.dart';
+import 'package:snippy_ui/screens/Welcome/welcome_screen.dart';
 import 'package:snippy_ui/screens/analytics.dart';
 import 'package:snippy_ui/services/auth.dart';
 
@@ -60,13 +60,21 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: Color.fromRGBO(61, 82, 155, 1.0),
           elevation: 10.0,
           toolbarHeight: 40,
-          leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              _scaffoldKey.currentState.openDrawer();
-            },
-          )),
-      drawer: DrawerComponent(),
+        leading: const Icon(Icons.person),
+        title: Text('Sign Up', style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700)),
+          actions: <Widget>[
+            IconButton(
+                icon: const Icon(Icons.logout),
+                iconSize: 30,
+                color: Colors.white,
+                onPressed: ()
+                  async {
+                    _auth.signOut();
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  }
+            )
+          ],
+          ),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -159,14 +167,22 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          Divider(
+                              color: Colors.blueAccent
+                          ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(0.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'Previous URLs',
-                                  style: TextStyle(
+                                  style: TextStyle( shadows: <Shadow>[
+                                  Shadow(
+                                  offset: Offset(1.0, 1.0),
+                              blurRadius: 5.0,
+                              color: Color.fromRGBO(61, 82, 155, 1.0),
+                            )],
                                       color: Color.fromRGBO(61, 82, 155, 1.0),
                                       fontFamily: 'CaviarDreams',
                                       fontSize: 20.0,
@@ -174,6 +190,9 @@ class _MainScreenState extends State<MainScreen> {
                                 ),
                               ],
                             ),
+                          ),
+                          Divider(
+                              color: Colors.blueAccent
                           ),
                           Expanded(
                             child: FutureBuilder<List<Url>>(
@@ -186,42 +205,46 @@ class _MainScreenState extends State<MainScreen> {
                                           itemCount: snapshot.data.length,
                                           shrinkWrap: true,
                                           itemBuilder: (context, index) {
-                                            return Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
-                                              ),
-                                              elevation: 5.0,
-                                              color: Colors.blue[100],
-                                              child: ListTile(
-                                                onTap: () {
-                                                  FocusScope.of(context)
-                                                      .unfocus();
+                                            return Container(
+                                              height: 60,
+                                              child: Card(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30.0),
+                                                ),
+                                                elevation: 5.0,
+                                                color: Color.fromRGBO(255,255,255,1.0),
+                                                child: ListTile(
+                                                  onTap: () {
+                                                    FocusScope.of(context)
+                                                        .unfocus();
 
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              AnalyticsScreen(
-                                                                id: snapshot
-                                                                    .data[index]
-                                                                    .id,
-                                                              )));
-                                                },
-                                                title: Text(
-                                                    snapshot.data[index].url,
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
-                                                trailing: IconButton(
-                                                  icon: const Icon(
-                                                    Icons.copy,
-                                                  ),
-                                                  onPressed: () {
-                                                    copyToClipboard(
-                                                        "https://snippy.me/u/" +
-                                                            snapshot.data[index]
-                                                                .id);
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                AnalyticsScreen(
+                                                                  id: snapshot
+                                                                      .data[index]
+                                                                      .id,
+                                                                )));
                                                   },
+                                                  title: Text(
+                                                      snapshot.data[index].url,
+                                                      style: TextStyle(
+                                                          color: Color.fromRGBO(61, 82, 155, 1.0))),
+                                                  trailing: IconButton(
+                                                    icon: const Icon(
+                                                      Icons.copy,
+                                                    ),
+                                                    color: Color.fromRGBO(61, 82, 155, 1.0),
+                                                    onPressed: () {
+                                                      copyToClipboard(
+                                                          "http://snippy.me/u/" +
+                                                              snapshot.data[index]
+                                                                  .id);
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                             );

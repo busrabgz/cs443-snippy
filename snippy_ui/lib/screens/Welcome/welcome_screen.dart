@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:snippy_ui/screens/Drawer/drawer.dart';
 import 'package:snippy_ui/screens/Login/login_screen.dart';
 import 'package:snippy_ui/screens/Register/register_screen.dart';
 import 'package:snippy_core_api/api.dart';
@@ -55,7 +54,7 @@ class URLDialog extends StatelessWidget {
           children: <Widget>[
             SizedBox(height: 100.0),
             Text(resultUrl,
-                style: TextStyle(fontSize: 24.0, color: Colors.white)),
+                style: TextStyle(fontSize: 21.0, color: Colors.white)),
             SizedBox(height: 100.0),
             Align(
               alignment: FractionalOffset.bottomRight,

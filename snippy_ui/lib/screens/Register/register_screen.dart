@@ -24,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Color.fromRGBO(61, 82, 155, 1.0),
           elevation: 10.0,
           toolbarHeight: 100,
-        title: Text('Sign Up'),
+        title: Text('Sign Up', style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700)),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.house),
@@ -61,24 +61,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validator: (val) => val.isEmpty ? 'Enter an email' : null,
                   obscureText: false,
                   decoration: InputDecoration(
-                    hintText: 'Your Username',
-                    labelText: 'Username',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    )
-                  )
-                )
-              ),
-              SizedBox(height:20.0),
-              SizedBox(
-                height: 50.0,
-                width: 350.0,
-                child: TextFormField(
-                  validator: (val) => val.isEmpty ? 'Enter an email' : null,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    hintText: 'Your Email',
-                    labelText: 'Email',
+                      hintText: 'Your Email',
+                      hintStyle: TextStyle(fontFamily: 'CaviarDreams'),
+                      labelText: 'Email',
+                      labelStyle: TextStyle(fontFamily: 'CaviarDreams'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     )
@@ -97,7 +83,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Your Password',
+                    hintStyle: TextStyle(fontFamily: 'CaviarDreams'),
                     labelText: 'Password',
+                    labelStyle: TextStyle(fontFamily: 'CaviarDreams'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     )
@@ -114,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: TextButton(
                   child: Text(
                     "Sign Up".toUpperCase(),
-                    style: TextStyle(fontSize: 14)
+                    style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700, fontSize: 14)
                   ),
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(5), //Defines Elevation
@@ -148,10 +136,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Text.rich(
                   TextSpan(
                     text: "Already have an account?  ",
+                      style: TextStyle(fontFamily: 'CaviarDreams'
+                      ),
                     children: [
                       TextSpan(
                         text: 'Sign In',
-                        style: TextStyle(
+                        style: TextStyle(fontFamily: 'CaviarDreams',
                           color: Colors.purple[300]
                         )
                       )

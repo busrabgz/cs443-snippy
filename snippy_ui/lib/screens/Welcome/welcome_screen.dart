@@ -5,6 +5,7 @@ import 'package:snippy_ui/screens/Register/register_screen.dart';
 import 'package:snippy_core_api/api.dart';
 import 'package:snippy_ui/services/auth.dart';
 import 'package:flutter/services.dart';
+import 'package:snippy_ui/globals.dart' as globals;
 
 var buttonStyle = ButtonStyle(
     elevation: MaterialStateProperty.all(5), //Defines Elevation
@@ -175,12 +176,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 45.0,
                 width: 200.0,
                 child: TextButton(
-                    child: Text("Snip!".toUpperCase(),
+                    child: globals.countLeft ?Text("Snip!".toUpperCase(),
                         style: TextStyle(
                             fontFamily: 'CaviarDreams',
                             fontWeight: FontWeight.w700,
-                            fontSize: 18)),
-                    onPressed: () {
+                            fontSize: 18)):  Text("Out of quota!", style: TextStyle(
+                    fontFamily: 'CaviarDreams',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18)),
+                    onPressed: globals.clickCounter >= 3 ? () {globals.countLeft = false;} : () {
                       FocusScope.of(context).unfocus();
 
                       final currentUser = FirebaseAuth.instance.currentUser;
@@ -191,6 +195,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           : urlControllerApi.create(url);
 
                       resultFuture.then((result) {
+                        globals.clickCounter+=1;
                         setState(
                             () => resultUrl = "http://snippy.me/u/" + result);
                         copyToClipboard(resultUrl);
@@ -215,7 +220,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             'Exception when calling UrlControllerApi->create: $error\n');
                       });
                     },
-                    style: buttonStyle),
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(5), //Defines Elevation
+                        shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
+                        backgroundColor: globals.countLeft ? MaterialStateProperty.all<Color>(Color.fromRGBO(61, 82, 155, 1.0)):  MaterialStateProperty.all<Color>(Colors.red),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))))),
                 //side: BorderSide(color: Colors.white))))),
               ),
               SizedBox(

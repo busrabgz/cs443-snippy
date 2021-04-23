@@ -7,6 +7,7 @@ import 'package:snippy_ui/screens/Welcome/welcome_screen.dart';
 import 'package:snippy_ui/screens/analytics.dart';
 import 'package:snippy_ui/services/auth.dart';
 
+
 var buttonStyle = ButtonStyle(
     elevation: MaterialStateProperty.all(5), //Defines Elevation
     shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor

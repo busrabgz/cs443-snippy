@@ -10,7 +10,6 @@
 import 'package:snippy_analytics_api/api.dart';
 import 'package:test/test.dart';
 
-
 /// tests for AnalyticsApplicationApi
 void main() {
   final instance = AnalyticsApplicationApi();
@@ -40,6 +39,5 @@ void main() {
     test('test saveRequest', () async {
       // TODO
     });
-
   });
 }

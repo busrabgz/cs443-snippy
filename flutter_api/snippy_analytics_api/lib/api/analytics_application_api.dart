@@ -9,9 +9,9 @@
 
 part of openapi.api;
 
-
 class AnalyticsApplicationApi {
-  AnalyticsApplicationApi([ApiClient apiClient]) : apiClient = apiClient ?? defaultApiClient;
+  AnalyticsApplicationApi([ApiClient apiClient])
+      : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
@@ -26,20 +26,18 @@ class AnalyticsApplicationApi {
     final formParams = <String, String>{};
 
     final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -62,8 +60,9 @@ class AnalyticsApplicationApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return apiClient.deserialize(_decodeBodyBytes(response), 'String') as String;
-        }
+      return apiClient.deserialize(_decodeBodyBytes(response), 'String')
+          as String;
+    }
     return Future<String>.value(null);
   }
 
@@ -74,11 +73,10 @@ class AnalyticsApplicationApi {
   Future<Response> getAnalyticsWithHttpInfo(String id) async {
     // Verify required params are set.
     if (id == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: id');
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: id');
     }
 
-    final path = r'/analytics/{id}'
-      .replaceAll('{' + 'id' + '}', id.toString());
+    final path = r'/analytics/{id}'.replaceAll('{' + 'id' + '}', id.toString());
 
     Object postBody;
 
@@ -87,20 +85,18 @@ class AnalyticsApplicationApi {
     final formParams = <String, String>{};
 
     final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -126,9 +122,10 @@ class AnalyticsApplicationApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (apiClient.deserialize(_decodeBodyBytes(response), 'List<Request>') as List)
-        .cast<Request>()
-        .toList(growable: false);
+      return (apiClient.deserialize(_decodeBodyBytes(response), 'List<Request>')
+              as List)
+          .cast<Request>()
+          .toList(growable: false);
     }
     return Future<List<Request>>.value(null);
   }
@@ -137,7 +134,7 @@ class AnalyticsApplicationApi {
   /// Parameters:
   ///
   /// * [String] name:
-  Future<Response> helloWithHttpInfo({ String name }) async {
+  Future<Response> helloWithHttpInfo({String name}) async {
     // Verify required params are set.
 
     final path = r'/hello';
@@ -149,24 +146,23 @@ class AnalyticsApplicationApi {
     final formParams = <String, String>{};
 
     if (name != null) {
-      queryParams.addAll(_convertParametersForCollectionFormat('', 'name', name));
+      queryParams
+          .addAll(_convertParametersForCollectionFormat('', 'name', name));
     }
 
     final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -183,8 +179,8 @@ class AnalyticsApplicationApi {
   /// Parameters:
   ///
   /// * [String] name:
-  Future<String> hello({ String name }) async {
-    final response = await helloWithHttpInfo( name: name );
+  Future<String> hello({String name}) async {
+    final response = await helloWithHttpInfo(name: name);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, _decodeBodyBytes(response));
     }
@@ -192,8 +188,9 @@ class AnalyticsApplicationApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return apiClient.deserialize(_decodeBodyBytes(response), 'String') as String;
-        }
+      return apiClient.deserialize(_decodeBodyBytes(response), 'String')
+          as String;
+    }
     return Future<String>.value(null);
   }
 
@@ -208,20 +205,18 @@ class AnalyticsApplicationApi {
     final formParams = <String, String>{};
 
     final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -244,8 +239,9 @@ class AnalyticsApplicationApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return apiClient.deserialize(_decodeBodyBytes(response), 'String') as String;
-        }
+      return apiClient.deserialize(_decodeBodyBytes(response), 'String')
+          as String;
+    }
     return Future<String>.value(null);
   }
 
@@ -258,14 +254,13 @@ class AnalyticsApplicationApi {
   Future<Response> saveRequestWithHttpInfo(String id, String body) async {
     // Verify required params are set.
     if (id == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: id');
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: id');
     }
     if (body == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: body');
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: body');
     }
 
-    final path = r'/analytics/{id}'
-      .replaceAll('{' + 'id' + '}', id.toString());
+    final path = r'/analytics/{id}'.replaceAll('{' + 'id' + '}', id.toString());
 
     Object postBody = body;
 
@@ -274,20 +269,18 @@ class AnalyticsApplicationApi {
     final formParams = <String, String>{};
 
     final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -315,8 +308,9 @@ class AnalyticsApplicationApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return apiClient.deserialize(_decodeBodyBytes(response), 'Object') as Object;
-        }
+      return apiClient.deserialize(_decodeBodyBytes(response), 'Object')
+          as Object;
+    }
     return Future<Object>.value(null);
   }
 }

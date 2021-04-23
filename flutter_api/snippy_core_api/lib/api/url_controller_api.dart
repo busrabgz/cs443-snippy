@@ -273,7 +273,7 @@ class UrlControllerApi {
   /// Parameters:
   ///
   /// * [String] faAuth (required):
-  Future<List<String>> getUrlForUser(String faAuth) async {
+  Future<List<Url>> getUrlForUser(String faAuth) async {
     final response = await getUrlForUserWithHttpInfo(faAuth);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, _decodeBodyBytes(response));
@@ -282,11 +282,11 @@ class UrlControllerApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (apiClient.deserialize(_decodeBodyBytes(response), 'List<String>') as List)
-        .cast<String>()
+      return (apiClient.deserialize(_decodeBodyBytes(response), 'List<Url>') as List)
+        .cast<Url>()
         .toList(growable: false);
     }
-    return Future<List<String>>.value(null);
+    return Future<List<Url>>.value(null);
   }
 
   /// Performs an HTTP 'GET /u/{id}' operation and returns the [Response].

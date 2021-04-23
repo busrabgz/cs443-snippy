@@ -9,12 +9,18 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data != null) {
+          return RegisterScreen();
+        }
+        else {
+          return MainScreen();
+        }
+      } ,
+    );
 
-    // if (user == null) {
-    return RegisterScreen();
-    // }
-    // else {
-    // return MainScreen();
-    // }
+
   }
 }

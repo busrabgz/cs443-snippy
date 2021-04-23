@@ -78,7 +78,8 @@ flutter:
     - family: CaviarDreams
       fonts:
        - asset: assets/fonts/CaviarDreams.ttf
-  #         style: italic
+       - asset: assets/fonts/CaviarDreams_Bold.ttf
+         weight: 700
     - family: Quicksand
       fonts:
        - asset: assets/fonts/Quicksand-Regular.ttf

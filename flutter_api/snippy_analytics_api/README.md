@@ -58,8 +58,10 @@ All URIs are relative to *http://10.0.2.2:8082*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AnalyticsApplicationApi* | [**callSync**](doc//AnalyticsApplicationApi.md#callsync) | **GET** /sync | 
+*AnalyticsApplicationApi* | [**getAnalytics**](doc//AnalyticsApplicationApi.md#getanalytics) | **GET** /analytics/{id} | 
 *AnalyticsApplicationApi* | [**hello**](doc//AnalyticsApplicationApi.md#hello) | **GET** /hello | 
 *AnalyticsApplicationApi* | [**rootPath**](doc//AnalyticsApplicationApi.md#rootpath) | **GET** / | 
+*AnalyticsApplicationApi* | [**saveRequest**](doc//AnalyticsApplicationApi.md#saverequest) | **POST** /analytics/{id} | 
 
 
 ## Documentation For Models

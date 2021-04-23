@@ -21,6 +21,11 @@ void main() {
       // TODO
     });
 
+    //Future<String> getAnalytics(String id) async
+    test('test getAnalytics', () async {
+      // TODO
+    });
+
     //Future<String> hello({ String name }) async
     test('test hello', () async {
       // TODO
@@ -28,6 +33,11 @@ void main() {
 
     //Future<String> rootPath() async
     test('test rootPath', () async {
+      // TODO
+    });
+
+    //Future saveRequest(String id, String body) async
+    test('test saveRequest', () async {
       // TODO
     });
 

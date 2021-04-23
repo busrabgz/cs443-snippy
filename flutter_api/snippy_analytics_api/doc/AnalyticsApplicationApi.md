@@ -10,8 +10,10 @@ All URIs are relative to *http://10.0.2.2:8082*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**callSync**](AnalyticsApplicationApi.md#callsync) | **GET** /sync | 
+[**getAnalytics**](AnalyticsApplicationApi.md#getanalytics) | **GET** /analytics/{id} | 
 [**hello**](AnalyticsApplicationApi.md#hello) | **GET** /hello | 
 [**rootPath**](AnalyticsApplicationApi.md#rootpath) | **GET** / | 
+[**saveRequest**](AnalyticsApplicationApi.md#saverequest) | **POST** /analytics/{id} | 
 
 
 # **callSync**
@@ -35,6 +37,47 @@ try {
 
 ### Parameters
 This endpoint does not need any parameter.
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getAnalytics**
+> String getAnalytics(id)
+
+
+
+### Example 
+```dart
+import 'package:snippy_analytics_api/api.dart';
+
+final api_instance = AnalyticsApplicationApi();
+final id = id_example; // String | 
+
+try { 
+    final result = api_instance.getAnalytics(id);
+    print(result);
+} catch (e) {
+    print('Exception when calling AnalyticsApplicationApi->getAnalytics: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -126,6 +169,48 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **saveRequest**
+> saveRequest(id, body)
+
+
+
+### Example 
+```dart
+import 'package:snippy_analytics_api/api.dart';
+
+final api_instance = AnalyticsApplicationApi();
+final id = id_example; // String | 
+final body = String(); // String | 
+
+try { 
+    api_instance.saveRequest(id, body);
+} catch (e) {
+    print('Exception when calling AnalyticsApplicationApi->saveRequest: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **String**|  | 
+ **body** | **String**|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

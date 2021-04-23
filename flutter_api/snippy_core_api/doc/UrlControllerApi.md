@@ -144,7 +144,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getUrlForUser**
-> List<String> getUrlForUser(faAuth)
+> List<Url> getUrlForUser(faAuth)
 
 
 
@@ -171,7 +171,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**List<String>**
+[**List<Url>**](Url.md)
 
 ### Authorization
 

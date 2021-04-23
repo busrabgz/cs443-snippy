@@ -147,6 +147,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Enter your URL here.',
+                    hintStyle: TextStyle(fontFamily: 'CaviarDreams'),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                       borderSide: const BorderSide(
@@ -175,7 +176,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: TextButton(
                     child: Text("Snip!".toUpperCase(),
                         style:
-                            TextStyle(fontFamily: 'Quicksand', fontSize: 18)),
+                            TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700, fontSize: 18)),
                     onPressed: () {
                       FocusScope.of(context).unfocus();
 
@@ -183,8 +184,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                       final resultFuture = (currentUser != null)
                           ? currentUser.getIdToken().then((token) =>
-                              urlControllerApi.create(resultUrl, faAuth: token))
-                          : urlControllerApi.create(resultUrl);
+                              urlControllerApi.create(url, faAuth: token))
+                          : urlControllerApi.create(url);
 
                       resultFuture.then((result) {
                         setState(
@@ -227,7 +228,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       width: 150.0,
                       child: TextButton(
                         child: Text("Sign in".toUpperCase(),
-                            style: TextStyle(fontSize: 16)),
+                            style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700, fontSize: 16)),
                         style: buttonStyle,
                         //side: BorderSide(color: Colors.white)))),
                         onPressed: () {
@@ -243,7 +244,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       width: 150.0,
                       child: TextButton(
                           child: Text("Sign up".toUpperCase(),
-                              style: TextStyle(fontSize: 16)),
+                              style: TextStyle(fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700,fontSize: 16)),
                           style: buttonStyle,
                           //side: BorderSide(color: Colors.white)))),
                           onPressed: () {

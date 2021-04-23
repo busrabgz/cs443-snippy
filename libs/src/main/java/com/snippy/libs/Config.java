@@ -7,6 +7,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.io.FileInputStream;
 import java.time.Duration;
 
+import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -60,19 +61,22 @@ public class Config {
 
       if (useEmulator) {
         firestoreOptions = FirestoreOptions.newBuilder().setProjectId("snippy-me-cs443").build();
-        firebaseOptions = FirebaseOptions.builder()
-        .setCredentials(credentials)
-        .setDatabaseUrl(System.getenv("FIRESTORE_EMULATOR_HOST"))
-        .setProjectId("snippy-me-cs443").build();
+        firebaseOptions = FirebaseOptions.builder().setCredentials(credentials)
+            .setDatabaseUrl(System.getenv("FIRESTORE_EMULATOR_HOST")).setProjectId("snippy-me-cs443").build();
 
       } else {
-        firestoreOptions = FirestoreOptions.newBuilder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
-        firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443").build();
+        InstantiatingGrpcChannelProvider channelProvider = InstantiatingGrpcChannelProvider.newBuilder()
+            .setKeepAliveTime(org.threeten.bp.Duration.ofSeconds(60L))
+            .setKeepAliveTimeout(org.threeten.bp.Duration.ofMinutes(5L)).build();
+
+        firestoreOptions = FirestoreOptions.newBuilder().setChannelProvider(channelProvider).setCredentials(credentials)
+            .setProjectId("snippy-me-cs443").build();
+        firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443")
+            .setFirestoreOptions(firestoreOptions).setConnectTimeout(5000).setReadTimeout(5000).build();
       }
 
       FirebaseApp.initializeApp(firebaseOptions);
 
-      
     } catch (Exception e) {
       e.printStackTrace();
     }

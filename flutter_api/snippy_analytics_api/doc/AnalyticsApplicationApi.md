@@ -54,7 +54,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getAnalytics**
-> String getAnalytics(id)
+> List<Request> getAnalytics(id)
 
 
 
@@ -81,7 +81,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**String**
+[**List<Request>**](Request.md)
 
 ### Authorization
 
@@ -173,7 +173,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **saveRequest**
-> saveRequest(id, body)
+> Object saveRequest(id, body)
 
 
 
@@ -186,7 +186,8 @@ final id = id_example; // String |
 final body = String(); // String | 
 
 try { 
-    api_instance.saveRequest(id, body);
+    final result = api_instance.saveRequest(id, body);
+    print(result);
 } catch (e) {
     print('Exception when calling AnalyticsApplicationApi->saveRequest: $e\n');
 }
@@ -201,7 +202,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**Object**](Object.md)
 
 ### Authorization
 
@@ -210,7 +211,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

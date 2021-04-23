@@ -66,6 +66,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Request](doc//Request.md)
 
 
 ## Documentation For Authorization

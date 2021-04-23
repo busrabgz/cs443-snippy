@@ -2,6 +2,7 @@ package com.snippy.analytics;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ import java.util.Map;
 import com.google.gson.*;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.snippy.libs.Request;
 
 @SpringBootApplication
@@ -54,7 +56,7 @@ public class AnalyticsApplication {
 	}
 
 	@PostMapping("/analytics/{id}")
-	public void saveRequest(@PathVariable String id, @RequestBody String body) {
+	public ResponseEntity<?> saveRequest(@PathVariable String id, @RequestBody String body) {
 		var db = getDb();
 		long incoming_time = Long.parseLong(body);
 		long outgoing_time = System.currentTimeMillis();
@@ -70,25 +72,24 @@ public class AnalyticsApplication {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
 		}
 	
 		docRef.update("history", FieldValue.arrayUnion(newReq));
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/analytics/{id}")
-	public String getAnalytics(@PathVariable String id) {
+	public ResponseEntity<List<Request>> getAnalytics(@PathVariable String id) {
 		var db = getDb();
 
 		var docRef = db.collection("requests").document(id).get();
 		try {
-
-			List<Request> history = docRef.get().toObject(ArrayList.class);
-
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			return gson.toJson(history);
+			List<Request> history = (ArrayList<Request>) docRef.get().get("history");
+			return history != null ? ResponseEntity.ok(history) : ResponseEntity.notFound().build();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "";
+			return ResponseEntity.notFound().build();
 		}
 	}
 

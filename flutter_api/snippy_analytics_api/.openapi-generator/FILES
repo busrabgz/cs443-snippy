@@ -3,6 +3,7 @@
 .travis.yml
 README.md
 doc/AnalyticsApplicationApi.md
+doc/Request.md
 git_push.sh
 lib/api.dart
 lib/api/analytics_application_api.dart
@@ -14,5 +15,7 @@ lib/auth/authentication.dart
 lib/auth/http_basic_auth.dart
 lib/auth/http_bearer_auth.dart
 lib/auth/oauth.dart
+lib/model/request.dart
 pubspec.yaml
 test/analytics_application_api_test.dart
+test/request_test.dart

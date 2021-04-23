@@ -9,9 +9,9 @@
 
 part of openapi.api;
 
-
 class UrlControllerApi {
-  UrlControllerApi([ApiClient apiClient]) : apiClient = apiClient ?? defaultApiClient;
+  UrlControllerApi([ApiClient apiClient])
+      : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
@@ -21,10 +21,10 @@ class UrlControllerApi {
   /// * [String] body (required):
   ///
   /// * [String] faAuth:
-  Future<Response> createWithHttpInfo(String body, { String faAuth }) async {
+  Future<Response> createWithHttpInfo(String body, {String faAuth}) async {
     // Verify required params are set.
     if (body == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: body');
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: body');
     }
 
     final path = r'/urls';
@@ -40,20 +40,18 @@ class UrlControllerApi {
     }
 
     final contentTypes = <String>['text/plain'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -72,8 +70,8 @@ class UrlControllerApi {
   /// * [String] body (required):
   ///
   /// * [String] faAuth:
-  Future<String> create(String body, { String faAuth }) async {
-    final response = await createWithHttpInfo(body,  faAuth: faAuth );
+  Future<String> create(String body, {String faAuth}) async {
+    final response = await createWithHttpInfo(body, faAuth: faAuth);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, _decodeBodyBytes(response));
     }
@@ -81,8 +79,9 @@ class UrlControllerApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return apiClient.deserialize(_decodeBodyBytes(response), 'String') as String;
-        }
+      return apiClient.deserialize(_decodeBodyBytes(response), 'String')
+          as String;
+    }
     return Future<String>.value(null);
   }
 
@@ -95,10 +94,11 @@ class UrlControllerApi {
   Future<Response> create1WithHttpInfo(String faAuth, Url url) async {
     // Verify required params are set.
     if (faAuth == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: faAuth');
+      throw ApiException(
+          HttpStatus.badRequest, 'Missing required param: faAuth');
     }
     if (url == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: url');
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: url');
     }
 
     final path = r'/namedUrls';
@@ -112,20 +112,18 @@ class UrlControllerApi {
     headerParams[r'fa-auth'] = parameterToString(faAuth);
 
     final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -153,8 +151,9 @@ class UrlControllerApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return apiClient.deserialize(_decodeBodyBytes(response), 'String') as String;
-        }
+      return apiClient.deserialize(_decodeBodyBytes(response), 'String')
+          as String;
+    }
     return Future<String>.value(null);
   }
 
@@ -165,11 +164,10 @@ class UrlControllerApi {
   Future<Response> getUrlForIdWithHttpInfo(String id) async {
     // Verify required params are set.
     if (id == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: id');
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: id');
     }
 
-    final path = r'/urls/{id}'
-      .replaceAll('{' + 'id' + '}', id.toString());
+    final path = r'/urls/{id}'.replaceAll('{' + 'id' + '}', id.toString());
 
     Object postBody;
 
@@ -178,20 +176,18 @@ class UrlControllerApi {
     final formParams = <String, String>{};
 
     final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -217,8 +213,9 @@ class UrlControllerApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return apiClient.deserialize(_decodeBodyBytes(response), 'String') as String;
-        }
+      return apiClient.deserialize(_decodeBodyBytes(response), 'String')
+          as String;
+    }
     return Future<String>.value(null);
   }
 
@@ -229,7 +226,8 @@ class UrlControllerApi {
   Future<Response> getUrlForUserWithHttpInfo(String faAuth) async {
     // Verify required params are set.
     if (faAuth == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: faAuth');
+      throw ApiException(
+          HttpStatus.badRequest, 'Missing required param: faAuth');
     }
 
     final path = r'/userUrls';
@@ -243,20 +241,18 @@ class UrlControllerApi {
     headerParams[r'fa-auth'] = parameterToString(faAuth);
 
     final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,
@@ -282,9 +278,10 @@ class UrlControllerApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (apiClient.deserialize(_decodeBodyBytes(response), 'List<Url>') as List)
-        .cast<Url>()
-        .toList(growable: false);
+      return (apiClient.deserialize(_decodeBodyBytes(response), 'List<Url>')
+              as List)
+          .cast<Url>()
+          .toList(growable: false);
     }
     return Future<List<Url>>.value(null);
   }
@@ -296,11 +293,10 @@ class UrlControllerApi {
   Future<Response> redirectToURLWithHttpInfo(String id) async {
     // Verify required params are set.
     if (id == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: id');
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: id');
     }
 
-    final path = r'/u/{id}'
-      .replaceAll('{' + 'id' + '}', id.toString());
+    final path = r'/u/{id}'.replaceAll('{' + 'id' + '}', id.toString());
 
     Object postBody;
 
@@ -309,20 +305,18 @@ class UrlControllerApi {
     final formParams = <String, String>{};
 
     final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final nullableContentType =
+        contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
-    if (
-      nullableContentType != null &&
-      nullableContentType.toLowerCase().startsWith('multipart/form-data')
-    ) {
+    if (nullableContentType != null &&
+        nullableContentType.toLowerCase().startsWith('multipart/form-data')) {
       bool hasFields = false;
       final mp = MultipartRequest(null, null);
       if (hasFields) {
         postBody = mp;
       }
-    } else {
-    }
+    } else {}
 
     return await apiClient.invokeAPI(
       path,

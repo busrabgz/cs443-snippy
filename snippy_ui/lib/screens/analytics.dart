@@ -187,7 +187,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(61, 82, 155, 1.0),
         elevation: 10.0,
-        title: Text('Sign Up'),
+        title: Text('Analytics'),
       ),
       body: SafeArea(
         child: Container(

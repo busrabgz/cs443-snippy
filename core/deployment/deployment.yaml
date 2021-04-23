@@ -22,11 +22,11 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            cpu: "50m"
-            memory: "128Mi"
-          limits:
-            cpu: "100m"
+            cpu: "250m"
             memory: "256Mi"
+          limits:
+            cpu: "1000m"
+            memory: "512Mi"
         volumeMounts:
           - name: google-cloud-key
             mountPath: /home/env

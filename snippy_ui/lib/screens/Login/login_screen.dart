@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snippy_ui/screens/Admin/admin_page.dart';
 import 'package:snippy_ui/screens/MainPage/main_page.dart';
 import 'package:snippy_ui/screens/Register/register_screen.dart';
 import 'package:snippy_ui/screens/Welcome/welcome_screen.dart';
@@ -125,7 +126,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                       else {
                         print("sign in complete");
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));
+                        if (email == "admin@snippy.me") {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminScreen()));
+                        }
+                        else {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));
+                        }
+                        
                       }
                     }
                   }

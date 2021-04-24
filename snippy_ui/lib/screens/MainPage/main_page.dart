@@ -115,7 +115,10 @@ class _MainScreenState extends State<MainScreen> {
                     labelStyle: TextStyle(fontFamily: 'CaviarDreams'),
                   ),
                   onChanged: (val) {
-                    setState(() => customName = val);
+                    setState(() {
+                      error = "";
+                      customName = val;
+                    });
                   },
                 )),
             SizedBox(height: 10.0),
@@ -136,7 +139,10 @@ class _MainScreenState extends State<MainScreen> {
                         borderRadius: BorderRadius.circular(20.0),
                       )),
                   onChanged: (val) {
-                    setState(() => url = val);
+                    setState(() {
+                      error = "";
+                      url = val;
+                    });
                   },
                 )),
             SizedBox(height: 20.0),

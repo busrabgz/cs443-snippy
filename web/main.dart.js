@@ -74658,7 +74658,7 @@ a7.V(0,m.c)
 c=H.av(a5)
 b=new H.em(new H.b3(a5,new L.WD(),c.i("b3<1>")),new L.WE(),c.i("em<1,k*>"))
 a=!b.ga7(b)?"?"+b.ck(0,"&"):""
-l="http://localhost:8082"+a3+a
+l="http://analytics.snippy.me"+a3+a
 p=4
 s=a6 instanceof D.yA?7:8
 break
@@ -75018,7 +75018,7 @@ a7.V(0,m.c)
 c=H.av(a5)
 b=new H.em(new H.b3(a5,new L.WF(),c.i("b3<1>")),new L.WG(),c.i("em<1,k*>"))
 a=!b.ga7(b)?"?"+b.ck(0,"&"):""
-l="http://localhost:8089"+a3+a
+l="http://snippy.me"+a3+a
 if(a9!=null)a7.n(0,"Content-Type",a9)
 p=4
 s=a6 instanceof D.yA?7:8

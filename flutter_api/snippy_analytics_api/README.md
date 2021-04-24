@@ -53,7 +53,7 @@ try {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://10.0.2.2:8082*
+All URIs are relative to *http://analytics.snippy.me*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------

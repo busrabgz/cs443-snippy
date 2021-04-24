@@ -102,7 +102,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(20.0),
                               )),
                           onChanged: (val) {
-                            setState(() => password = val);
+                            setState(() {
+                              error = "";
+                              password = val;
+                            });
                           },
                         )),
                     SizedBox(height: 30.0),

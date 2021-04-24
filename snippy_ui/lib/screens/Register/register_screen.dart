@@ -77,7 +77,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 borderRadius: BorderRadius.circular(20.0),
                               )),
                           onChanged: (val) {
-                            setState(() => email = val);
+                            setState(() {
+                              error = "";
+                              email = val;
+                            });
                           },
                         )),
                     SizedBox(height: 20.0),
@@ -97,7 +100,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 borderRadius: BorderRadius.circular(20.0),
                               )),
                           onChanged: (val) {
-                            setState(() => password = val);
+                            setState(() {
+                              error = "";
+                              password = val;
+                            });
                           },
                         )),
                     SizedBox(height: 30.0),

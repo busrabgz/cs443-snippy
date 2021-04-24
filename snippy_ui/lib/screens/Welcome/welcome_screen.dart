@@ -172,8 +172,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   onChanged: (val) {
-                    print(val);
-                    setState(() => url = val);
+                    setState(() {
+                      error = "";
+                      url = val;
+                    });
                   },
                 ),
               ),

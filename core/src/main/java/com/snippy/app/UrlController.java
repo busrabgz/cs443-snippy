@@ -187,7 +187,7 @@ public class UrlController {
 		}
 		
 		System.out.println(email);
-		String email = email.substring(1, email.length() - 1);
+		email = email.substring(1, email.length() - 1);
 		System.out.println(email);
 		if (token.getEmail().equals("admin@snippy.me")){
 			var ref = db.collection("urls/")

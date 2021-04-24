@@ -60,6 +60,7 @@ Class | Method | HTTP request | Description
 *AppApplicationApi* | [**healthCheck**](doc//AppApplicationApi.md#healthcheck) | **GET** /healthcheck | Returns health status of the all microservices.
 *AppApplicationApi* | [**rootPath**](doc//AppApplicationApi.md#rootpath) | **GET** / | Used for healtchecking by the Kubernetes services.
 *AuthControllerApi* | [**auth**](doc//AuthControllerApi.md#auth) | **POST** /auth | A middle-man for the authentication with the firebase services.
+*AuthControllerApi* | [**getUsers**](doc//AuthControllerApi.md#getusers) | **POST** /users | Queries all users if the request comes from admin.
 *UrlControllerApi* | [**create**](doc//UrlControllerApi.md#create) | **POST** /urls | Creates a shortened URL for the user.
 *UrlControllerApi* | [**createNamed**](doc//UrlControllerApi.md#createnamed) | **POST** /namedUrls | Creates a shortened URL with the defined id for the user.
 *UrlControllerApi* | [**getUrlForId**](doc//UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | Gets the original URL from the shortened URL.

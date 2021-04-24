@@ -23,5 +23,12 @@ void main() {
       // TODO
     });
 
+    // Queries all users if the request comes from admin.
+    //
+    //Future<List<String>> getUsers(String body) async
+    test('test getUsers', () async {
+      // TODO
+    });
+
   });
 }

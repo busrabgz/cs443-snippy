@@ -85,7 +85,7 @@ public class AuthController {
     public ResponseEntity<List<String>> getUsers(@RequestBody String email) { 
         ListUsersPage page = null;
         String admin = "admin@snippy.me";
-        if(email.equals(admin)){
+        if(email.equals('"' + admin + '"')){
             try {
                 page = FirebaseAuth.getInstance().listUsers(null);
                 System.out.println(page);

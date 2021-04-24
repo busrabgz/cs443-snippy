@@ -38,7 +38,6 @@ Widget setupAlertDialoadContainer() {
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      height: 60,
                       child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius:
@@ -168,7 +167,7 @@ Widget setupAlertDialoadContainer() {
                                                     context: context, 
                                                     builder: (BuildContext context) {
                                                       return AlertDialog(
-                                                        title: Text("try"),
+                                                        title: Text("Snipped URL's"),
                                                         content: setupAlertDialoadContainer()
                                                       );
                                                     }

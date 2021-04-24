@@ -13,10 +13,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.concurrent.TimeUnit;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -31,7 +36,17 @@ public class AppApplication {
 		SpringApplication.run(AppApplication.class, args);
 	}
 
-    @Operation(summary = "Used for healtchecking by the Kubernetes services.")
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedMethods("*");
+			}
+		};
+	}
+
+	@Operation(summary = "Used for healtchecking by the Kubernetes services.")
 	@GetMapping("/")
 	public String rootPath() {
 		return "OK";
@@ -48,11 +63,12 @@ public class AppApplication {
 
 		var authStatus = false;
 		try {
-			authStatus = getAuth().getUser("lnSE1qjnn1R70TwfWomSPzqmx7Q2").getEmail().compareTo("dogacel@gmail.com") == 0;
+			authStatus = getAuth().getUser("lnSE1qjnn1R70TwfWomSPzqmx7Q2").getEmail()
+					.compareTo("dogacel@gmail.com") == 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-			
+
 		boolean analyticsStatus = false;
 
 		try {
@@ -74,10 +90,9 @@ public class AppApplication {
 			}
 		}
 
-		return String.format("App status: up<br/>Auth status: %s<br/>Analytics status: %s<br/>Redis status: %s<br/>Firestore status: %s", 
-				authStatus ? "up" : "down",
-				analyticsStatus ? "up" : "down",
-				redisResponse ? "up" : "down",
+		return String.format(
+				"App status: up<br/>Auth status: %s<br/>Analytics status: %s<br/>Redis status: %s<br/>Firestore status: %s",
+				authStatus ? "up" : "down", analyticsStatus ? "up" : "down", redisResponse ? "up" : "down",
 				firestoreStatus ? "up" : "down");
 	}
 

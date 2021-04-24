@@ -141,7 +141,6 @@ class _MainScreenState extends State<MainScreen> {
                     onPressed: () {
                       try {
                         FocusScope.of(context).unfocus();
-                        print(url);
                         FirebaseAuth.instance.currentUser
                             .getIdToken()
                             .then((token) {
@@ -212,7 +211,6 @@ class _MainScreenState extends State<MainScreen> {
                         child: FutureBuilder<List<Url>>(
                             future: temp,
                             builder: (context, snapshot) {
-                              print(snapshot.connectionState);
                               return snapshot.hasData
                                   ? ListView.builder(
                                       scrollDirection: Axis.vertical,

@@ -2,7 +2,7 @@
 
 export VERSION=v2
 export PROJECT_ID=snippy-me-cs443
-gcloud container clusters get-credentials snippy-standard
+gcloud container clusters get-credentials autopilot-cluster-1 
 
 pushd ../core
 docker build -t eu.gcr.io/${PROJECT_ID}/cs443-snippy_app:${VERSION} -t eu.gcr.io/${PROJECT_ID}/cs443-snippy_app:latest .

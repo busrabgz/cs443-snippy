@@ -34,6 +34,7 @@ dependencies:
   snippy_analytics_api:
     path: ../flutter_api/snippy_analytics_api
   syncfusion_flutter_charts: ^19.1.57+1
+  syncfusion_flutter_datepicker: ^19.1.57-beta
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:snippy_ui/screens/Welcome/welcome_screen.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:snippy_analytics_api/api.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +15,9 @@ const week = 7 * day;
 
 class Graph extends StatelessWidget {
   final List<Request> data;
-  final int unit;
+  final int unit, offset;
   final RangeValues timeRange;
+  final String mode;
 
   @override
   Graph({
@@ -22,6 +25,8 @@ class Graph extends StatelessWidget {
     this.data,
     this.unit,
     this.timeRange,
+    this.offset,
+    this.mode,
   }) : super(key: key);
 
   @override
@@ -29,16 +34,48 @@ class Graph extends StatelessWidget {
     final transformer = (List<Request> input) {
       var timeNow = DateTime.now().millisecondsSinceEpoch;
       var map = Map<int, int>();
+      var counts = Map<int, int>();
+
       for (var i = timeRange.start.toInt(); i <= timeRange.end.toInt(); i++) {
         map[i] = 0;
+        counts[i] = 0;
       }
 
-      if (input != null) {
-        var reduced = input.map((e) => (timeNow - e.incomingTime) ~/ unit);
+      if (input != null && this.mode == 'Visits') {
+        var reduced =
+            input.map((e) => (timeNow - offset - e.incomingTime) ~/ unit);
         reduced.forEach((element) {
           if (element >= timeRange.start && element <= timeRange.end)
             map[element] += 1;
         });
+      } else if (input != null && this.mode == 'Latency') {
+        var reduced = input.map((e) => [
+              (timeNow - e.incomingTime) ~/ unit,
+              e.outgoingTime - e.incomingTime
+            ]);
+
+        reduced.forEach((element) {
+          if (element[0] >= timeRange.start && element[0] <= timeRange.end) {
+            counts[element[0]] += 1;
+            map[element[0]] += element[1];
+          }
+        });
+
+        for (int i = timeRange.start.toInt(); i <= timeRange.end.toInt(); i++) {
+          if (counts[i] > 0) {
+            map[i] ~/= counts[i];
+          }
+        }
+
+        var lastStop = -1;
+        for (int i = timeRange.start.toInt(); i <= timeRange.end.toInt(); i++) {
+          if (map[i] != 0) {
+            for (int j = i - 1; j > lastStop; j--) {
+              if (map[j] == 0) map[j] = map[i];
+            }
+            lastStop = i;
+          }
+        }
       }
 
       var returnList = map.entries.toList();
@@ -60,6 +97,7 @@ class Graph extends StatelessWidget {
               dataSource: transformer(data),
               xValueMapper: (MapEntry<int, int> req, _) => req.key.toString(),
               yValueMapper: (MapEntry<int, int> req, _) => req.value,
+              legendItemText: mode == 'Latency' ? 'Latency (ms)' : 'Visits',
               dataLabelSettings: DataLabelSettings(isVisible: true)),
         ],
       ),
@@ -68,7 +106,7 @@ class Graph extends StatelessWidget {
 }
 
 class AnalyticsScreen extends StatefulWidget {
-  String id;
+  final String id;
 
   @override
   AnalyticsScreen({Key key, this.id}) : super(key: key);
@@ -79,94 +117,118 @@ class AnalyticsScreen extends StatefulWidget {
 
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   List<Request> request;
-  int unit = minute;
   RangeValues timeRange = RangeValues(0, 10);
-  int groupValue = minute;
   String id;
+  String unitValue = 'Minutes';
+  String modeValue = 'Visits';
+  int offset = 0;
+
+  final unitMapping = {
+    'Minutes': minute,
+    'Hours': hour,
+    'Days': day,
+    'Weeks': week
+  };
 
   Widget getList(data) => ListView.builder(
       itemCount: data.length + 3,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return Row(
-            children: [
-              Radio(
-                value: minute,
-                groupValue: groupValue,
-                onChanged: (o) {
-                  setState(() {
-                    unit = minute;
-                    groupValue = minute;
-                  });
-                },
+          return Row(children: [
+            Text('Duration: '),
+            DropdownButton<String>(
+              value: unitValue,
+              icon: const Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              style: const TextStyle(color: Color.fromRGBO(61, 82, 155, 1.0)),
+              underline: Container(
+                height: 2,
+                color: Colors.blue[900],
               ),
-              Text('M'),
-              Radio(
-                value: hour,
-                groupValue: groupValue,
-                onChanged: (o) {
-                  setState(() {
-                    unit = hour;
-                    groupValue = hour;
-                  });
-                },
+              onChanged: (String newValue) {
+                setState(() {
+                  unitValue = newValue;
+                });
+              },
+              items: <String>['Minutes', 'Hours', 'Days', 'Weeks']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            Text('Mode: '),
+            DropdownButton<String>(
+              value: modeValue,
+              icon: const Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              style: const TextStyle(color: Color.fromRGBO(61, 82, 155, 1.0)),
+              underline: Container(
+                height: 2,
+                color: Colors.blue[900],
               ),
-              Text('H'),
-              Radio(
-                value: day,
-                groupValue: groupValue,
-                onChanged: (o) {
-                  setState(() {
-                    unit = day;
-                    groupValue = day;
-                  });
-                },
-              ),
-              Text('D'),
-              Radio(
-                value: week,
-                groupValue: groupValue,
-                onChanged: (o) {
-                  setState(() {
-                    unit = week;
-                    groupValue = week;
-                  });
-                },
-              ),
-              Text('W'),
-            ],
-          );
+              onChanged: (String newValue) {
+                setState(() {
+                  modeValue = newValue;
+                });
+              },
+              items: <String>['Visits', 'Latency']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            MaterialButton(
+              onPressed: () {
+                var selectedDate = DateTime.fromMillisecondsSinceEpoch(
+                    DateTime.now().millisecondsSinceEpoch - offset);
+                showDatePicker(
+                  context: context,
+                  initialDate: selectedDate,
+                  firstDate: selectedDate.subtract(Duration(days: 90)),
+                  lastDate: DateTime.now(),
+                ).then((value) => setState(() {
+                      offset = DateTime.now().millisecondsSinceEpoch -
+                          value.millisecondsSinceEpoch;
+                    }));
+              },
+              child: Text('Pick a date'),
+            )
+          ]);
         } else if (index == 1) {
-          return Column(
-            children: [
-              Text('Range:'),
-              RangeSlider(
-                values: timeRange,
-                min: 0,
-                max: 50,
-                divisions: 50,
-                labels: RangeLabels(
-                  timeRange.start.round().toString(),
-                  timeRange.end.round().toString(),
-                ),
-                onChanged: (RangeValues values) {
-                  setState(() {
-                    timeRange = values;
-                  });
-                },
-              ),
-            ],
+          return RangeSlider(
+            values: timeRange,
+            activeColor: Color.fromRGBO(61, 82, 155, 1.0),
+            min: 0,
+            max: 50,
+            divisions: 50,
+            labels: RangeLabels(
+              timeRange.start.round().toString(),
+              timeRange.end.round().toString(),
+            ),
+            onChanged: (RangeValues values) {
+              setState(() {
+                timeRange = values;
+              });
+            },
           );
         } else if (index == 2) {
           return Graph(
             data: data,
-            unit: unit,
+            unit: unitMapping[unitValue],
             timeRange: timeRange,
+            offset: offset,
+            mode: modeValue,
           );
         } else {
           DateTime date = new DateTime.fromMillisecondsSinceEpoch(
               data[index - 3].incomingTime);
-          DateFormat format = new DateFormat("y-MM-dd-hh-mm");
+          DateFormat format = new DateFormat("y-MM-dd-hh:mm");
           final text = format.format(date);
           return Padding(
             padding: EdgeInsets.all(12.0),

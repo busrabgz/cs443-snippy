@@ -2,11 +2,14 @@ package com.snippy.analytics;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.*;
 import com.google.cloud.firestore.DocumentReference;
@@ -42,6 +46,16 @@ public class AnalyticsApplication {
 		SetupJedis();
 
 		SpringApplication.run(AnalyticsApplication.class, args);
+	}
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedMethods("*");
+			}
+		};
 	}
 
 	@Operation(summary = "Used for healtchecking by the Kubernetes services.")
@@ -66,28 +80,30 @@ public class AnalyticsApplication {
 		DocumentReference docRef = db.collection("requests").document(id);
 
 		try {
-			if(!docRef.get().get().exists()) {
+			if (!docRef.get().get().exists()) {
 				Map<String, Object> map = new HashMap<>();
 				map.put("history", new ArrayList<Request>());
-				docRef.set(map).get();
+				docRef.set(map).get(10000, TimeUnit.MILLISECONDS);
 			}
+
+			docRef.update("history", FieldValue.arrayUnion(newReq)).get();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
-	
-		docRef.update("history", FieldValue.arrayUnion(newReq));
+
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "Gets the access history of the given short URL.")
 	@GetMapping("/analytics/{id}")
-	public ResponseEntity<List<Request>> getAnalytics(@PathVariable String id, @RequestHeader(name = "fa-auth") String auth) {
+	public ResponseEntity<List<Request>> getAnalytics(@PathVariable String id,
+			@RequestHeader(name = "fa-auth") String auth) {
 		var db = getDb();
 
-		var docRef = db.collection("requests").document(id).get();
 		try {
-			List<Request> history = (ArrayList<Request>) docRef.get().get("history");
+			var docRef = db.collection("requests").document(id).get();
+			List<Request> history = (ArrayList<Request>) docRef.get(10000, TimeUnit.MILLISECONDS).get("history");
 			return history != null ? ResponseEntity.ok(history) : ResponseEntity.notFound().build();
 		} catch (Exception e) {
 			e.printStackTrace();

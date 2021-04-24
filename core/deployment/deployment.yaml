@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: app-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: app
@@ -20,13 +20,6 @@ spec:
       - name: app
         image: eu.gcr.io/snippy-me-cs443/cs443-snippy_app:latest
         imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: "250m"
-            memory: "256Mi"
-          limits:
-            cpu: "1000m"
-            memory: "512Mi"
         volumeMounts:
           - name: google-cloud-key
             mountPath: /home/env

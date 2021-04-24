@@ -34,6 +34,9 @@ import static com.snippy.libs.Config.getJedis;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 public class UrlController {
@@ -47,7 +50,7 @@ public class UrlController {
 			return actualUrl;
 
 		var docRef = db.collection("urls").document(id).get();
-		Url shortUrl = (Url) docRef.get().toObject(Url.class);
+		Url shortUrl = (Url) docRef.get(10000, TimeUnit.MILLISECONDS).toObject(Url.class);
 		return shortUrl.getUrl();
 	}
 
@@ -108,13 +111,17 @@ public class UrlController {
 		Url shortUrl = Url.create(url, email);
 
 		jedis.set(shortUrl.getId(), shortUrl.getUrl());
-		db.document("urls/" + shortUrl.getId()).create(shortUrl);
+		try {
+			db.document("urls/" + shortUrl.getId()).create(shortUrl).get(10000, TimeUnit.MILLISECONDS);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return ResponseEntity.status(HttpStatus.OK).body(shortUrl.getId());
 	}
 
 	@Operation(summary = "Creates a shortened URL with the defined id for the user.")
 	@RequestMapping(value = "/namedUrls", method = RequestMethod.POST)
-	public ResponseEntity<String> createNamed(@RequestBody Url url, @RequestHeader("fa-auth") String auth) {
+	public ResponseEntity<String> createNamed(@RequestBody Url url, @RequestHeader("fa-auth") String auth) throws InterruptedException, ExecutionException, TimeoutException {
 		var db = getDb();
 		var jedis = getJedis();
 
@@ -137,7 +144,7 @@ public class UrlController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URL name already exists.");
 		} catch (Exception e) {
 			jedis.set(url.getId(), url.getUrl());
-			db.document("urls/" + url.getId()).create(url);
+			db.document("urls/" + url.getId()).create(url).get(10000, TimeUnit.MILLISECONDS);
 
 			return ResponseEntity.status(HttpStatus.OK).body(url.getId());
 		}
@@ -163,7 +170,7 @@ public class UrlController {
 		.offset(pageable.getPage() * pageable.getSize())
 		.limit(pageable.getSize());
 
-		QuerySnapshot snapshot = ref.get().get();
+		QuerySnapshot snapshot = ref.get().get(10000, TimeUnit.MILLISECONDS);
 
 		var retList = new ArrayList<Url>();
 		for (DocumentSnapshot doc : snapshot) {

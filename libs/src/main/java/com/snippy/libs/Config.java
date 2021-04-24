@@ -5,7 +5,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.FileInputStream;
-import java.time.Duration;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
@@ -15,6 +14,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.cloud.FirestoreClient;
+
+import org.threeten.bp.Duration;
 
 public class Config {
 
@@ -66,6 +67,7 @@ public class Config {
             .setDatabaseUrl(System.getenv("FIRESTORE_EMULATOR_HOST")).setProjectId("snippy-me-cs443").build();
 
       } else {
+
         firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443")
             .setFirestoreOptions(firestoreOptions).setConnectTimeout(5000).setReadTimeout(5000).build();
       }

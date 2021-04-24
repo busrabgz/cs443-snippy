@@ -4,7 +4,6 @@ metadata:
   name: app-service
 spec:
   type: LoadBalancer
-  loadBalancerIP: "35.189.115.2"
   selector:
     app: app
   ports:

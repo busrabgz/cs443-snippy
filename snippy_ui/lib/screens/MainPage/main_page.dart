@@ -218,7 +218,6 @@ class _MainScreenState extends State<MainScreen> {
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
                                         return Container(
-                                          height: 60,
                                           child: Card(
                                             shape: RoundedRectangleBorder(
                                               borderRadius:

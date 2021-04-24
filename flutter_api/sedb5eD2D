@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://10.0.2.2:8082
+  description: Generated server url
+paths:
+  /analytics/{id}:
+    get:
+      tags:
+      - analytics-application
+      summary: Gets the access history of the given short URL.
+      operationId: getAnalytics
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fa-auth
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Request'
+    post:
+      tags:
+      - analytics-application
+      summary: Logs an incoming request to the given short URL.
+      operationId: saveRequest
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /sync:
+    get:
+      tags:
+      - analytics-application
+      summary: Used for healtchecking by the App service.
+      operationId: sync
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /:
+    get:
+      tags:
+      - analytics-application
+      summary: Used for healtchecking by the Kubernetes services.
+      operationId: rootPath
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    Request:
+      type: object
+      properties:
+        incomingTime:
+          type: integer
+          format: int64
+        outgoingTime:
+          type: integer
+          format: int64

@@ -215,4 +215,38 @@ public class UrlController {
 		return ResponseEntity.status(HttpStatus.OK).body(retList);
 	}
 
+	@Operation(summary = "Queries the urls of a user with the given email to admin.")
+	@RequestMapping(value = "/adminUrls", method = RequestMethod.POST, consumes=MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<List<Url>> getUrlForUserFromAdmin(@RequestBody String email, @RequestHeader("fa-auth") String auth) throws InterruptedException, ExecutionException {
+		var db = getDb();
+
+		FirebaseToken token;
+		try {
+			token = FirebaseAuth.getInstance().verifyIdToken(auth);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		
+		System.out.println(email);
+		email = email.substring(1, email.length() - 1);
+		System.out.println(email);
+		if (token.getEmail().equals("admin@snippy.me")){
+			var ref = db.collection("urls/")
+			.whereEqualTo("ownerEmail", email);
+
+			QuerySnapshot snapshot = ref.get().get();
+
+			var retList = new ArrayList<Url>();
+			for (DocumentSnapshot doc : snapshot) {
+				retList.add(doc.toObject(Url.class));
+			}
+
+			return ResponseEntity.status(HttpStatus.OK).body(retList);
+		}
+		else{
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		
+	}
+
 }

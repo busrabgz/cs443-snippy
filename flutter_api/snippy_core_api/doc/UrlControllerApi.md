@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**createNamed**](UrlControllerApi.md#createnamed) | **POST** /namedUrls | Creates a shortened URL with the defined id for the user.
 [**getUrlForId**](UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | Gets the original URL from the shortened URL.
 [**getUrlForUser**](UrlControllerApi.md#geturlforuser) | **GET** /urls | Queries the urls created by the current user.
+[**getUrlForUserFromAdmin**](UrlControllerApi.md#geturlforuserfromadmin) | **POST** /adminUrls | Queries the urls of a user with the given email to admin.
 [**redirectToURL**](UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | Redirects a shortened URL to the original URL
 
 
@@ -186,6 +187,49 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getUrlForUserFromAdmin**
+> List<Url> getUrlForUserFromAdmin(faAuth, body)
+
+Queries the urls of a user with the given email to admin.
+
+### Example 
+```dart
+import 'package:snippy_core_api/api.dart';
+
+final api_instance = UrlControllerApi();
+final faAuth = faAuth_example; // String | 
+final body = String(); // String | 
+
+try { 
+    final result = api_instance.getUrlForUserFromAdmin(faAuth, body);
+    print(result);
+} catch (e) {
+    print('Exception when calling UrlControllerApi->getUrlForUserFromAdmin: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **faAuth** | **String**|  | 
+ **body** | **String**|  | 
+
+### Return type
+
+[**List<Url>**](Url.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: text/plain
  - **Accept**: */*
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -162,17 +162,19 @@ Widget setupAlertDialoadContainer() {
                                             child: ListTile(
                                               onTap: () {
                                                 FocusScope.of(context).unfocus();
-                                                FirebaseAuth.instance.currentUser.getIdToken().then((token)=>  urlControllerApi.getUrlForUserFromAdmin(token, snapshot.data[index]).then((res)=>userUrls = Future.value(res)));
-                                                showDialog(
-                                                  context: context, 
-                                                  builder: (BuildContext context) {
-                                                    return AlertDialog(
-                                                      title: Text("try"),
-                                                      content: setupAlertDialoadContainer()
-                                                    );
-                                                  }
-                                                );
-
+                                                FirebaseAuth.instance.currentUser.getIdToken().then((token)=>  urlControllerApi.getUrlForUserFromAdmin(token, snapshot.data[index]).then((res){
+                                                  userUrls = Future.value(res);
+                                                  showDialog(
+                                                    context: context, 
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text("try"),
+                                                        content: setupAlertDialoadContainer()
+                                                      );
+                                                    }
+                                                  );
+                                                }
+                                                ));
                                               },
                                               title: Text(
                                                   snapshot.data[index],

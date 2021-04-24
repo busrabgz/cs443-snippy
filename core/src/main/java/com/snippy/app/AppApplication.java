@@ -25,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-@SpringBootApplication
+@SpringBootApplication	
 @RestController
 public class AppApplication {
 	public static void main(String[] args) {
@@ -56,8 +56,6 @@ public class AppApplication {
 	@GetMapping("/healthcheck")
 	public String healthCheck() {
 
-		var db = getDb();
-		var jedis = getJedis();
 		// create a client
 		var client = HttpClient.newHttpClient();
 
@@ -79,7 +77,11 @@ public class AppApplication {
 			e.printStackTrace();
 		}
 
+		var jedis = getJedis();
 		var redisResponse = jedis.isConnected();
+		jedis.close();
+
+		var db = getDb();
 		var firestoreStatus = db != null;
 
 		if (firestoreStatus) {
@@ -87,6 +89,8 @@ public class AppApplication {
 				db.document("doc/test").get().get(10000, TimeUnit.MILLISECONDS);
 			} catch (Exception e) {
 				firestoreStatus = false;
+			} finally {
+				
 			}
 		}
 

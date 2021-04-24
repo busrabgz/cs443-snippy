@@ -73,14 +73,13 @@ public class AnalyticsApplication {
 	@Operation(summary = "Logs an incoming request to the given short URL.")
 	@PostMapping("/analytics/{id}")
 	public ResponseEntity<?> saveRequest(@PathVariable String id, @RequestBody long incoming_time) {
-		var db = getDb();
+		
 		long outgoing_time = System.currentTimeMillis();
 		Request newReq = new Request(incoming_time, outgoing_time);
 
+		var db = getDb();
 		DocumentReference docRef = db.collection("requests").document(id);
-
-		System.out.println("GOT IT");
-
+		
 		try {
 			if (!docRef.get().get(10000, TimeUnit.MILLISECONDS).exists()) {
 				Map<String, Object> map = new HashMap<>();
@@ -88,11 +87,9 @@ public class AnalyticsApplication {
 				list.add(newReq);
 				map.put("history", newReq);
 				var resp = docRef.create(map);
-				resp.get(10000, TimeUnit.MILLISECONDS);
 
-				System.out.println(resp);
 			} else {
-				docRef.update("history", FieldValue.arrayUnion(newReq)).get(10000, TimeUnit.MILLISECONDS);
+				docRef.update("history", FieldValue.arrayUnion(newReq));
 			}
 
 		} catch (Exception e) {
@@ -112,10 +109,12 @@ public class AnalyticsApplication {
 		try {
 			var docRef = db.collection("requests").document(id).get();
 			List<Request> history = (ArrayList<Request>) docRef.get(10000, TimeUnit.MILLISECONDS).get("history");
+			
 			return history != null ? ResponseEntity.ok(history) : ResponseEntity.notFound().build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.notFound().build();
+		} finally {
 		}
 	}
 

@@ -12,10 +12,17 @@ spec:
       labels:
         app: analytics
     spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: gauth-key
       containers:
       - name: analytics
         image: eu.gcr.io/snippy-me-cs443/cs443-snippy_analytics:latest
         imagePullPolicy: Always
+        volumeMounts:
+          - name: google-cloud-key
+            mountPath: /home/env
         ports:
         - containerPort: 8080
         workingDir: /home/app

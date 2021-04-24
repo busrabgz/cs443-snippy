@@ -5,11 +5,20 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.JsonParser;
+import com.snippy.libs.User;
+import com.google.firebase.auth.ExportedUserRecord;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.ListUsersPage;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,5 +78,31 @@ public class AuthController {
         }
 
         return token;
+    }
+
+    @Operation(summary = "Queries all users if the request comes from admin.")
+    @PostMapping("/users")
+    public ResponseEntity<List<String>> getUsers(@RequestBody String email) { 
+        ListUsersPage page = null;
+        String admin = "admin@snippy.me";
+        if(email.equals(admin)){
+            try {
+                page = FirebaseAuth.getInstance().listUsers(null);
+                System.out.println(page);
+            } catch (FirebaseAuthException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            var retList = new ArrayList<String>();
+            while (page != null){
+                for (ExportedUserRecord user: page.getValues()){
+                    retList.add(user.getEmail());
+                }
+                page = page.getNextPage();
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(retList);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 }

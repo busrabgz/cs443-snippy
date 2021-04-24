@@ -79,14 +79,22 @@ public class AnalyticsApplication {
 
 		DocumentReference docRef = db.collection("requests").document(id);
 
+		System.out.println("GOT IT");
+
 		try {
-			if (!docRef.get().get().exists()) {
+			if (!docRef.get().get(10000, TimeUnit.MILLISECONDS).exists()) {
 				Map<String, Object> map = new HashMap<>();
-				map.put("history", new ArrayList<Request>());
-				docRef.set(map).get(10000, TimeUnit.MILLISECONDS);
+				var list = new ArrayList<Request>();
+				list.add(newReq);
+				map.put("history", newReq);
+				var resp = docRef.create(map);
+				resp.get(10000, TimeUnit.MILLISECONDS);
+
+				System.out.println(resp);
+			} else {
+				docRef.update("history", FieldValue.arrayUnion(newReq)).get(10000, TimeUnit.MILLISECONDS);
 			}
 
-			docRef.update("history", FieldValue.arrayUnion(newReq)).get();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();

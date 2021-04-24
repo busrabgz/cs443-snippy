@@ -56,17 +56,25 @@ public class UrlController {
 
 	@Operation(summary = "Redirects a shortened URL to the original URL")
 	@GetMapping("/u/{id}")
-	public ResponseEntity<Void> redirectToURL(@PathVariable String id) throws Exception {
+	public ResponseEntity<Void> redirectToURL(@PathVariable String id) {
 		String incoming_time = String.valueOf(System.currentTimeMillis());
-		String actualUrl = getUrl(id);
+		String actualUrl = null;
+		try {
+			actualUrl = getUrl(id);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		String redirectUrl = "redirect:" + actualUrl == null ? "https://www.cloudflare.com/404/" : actualUrl;
+
+		System.out.println("GOING");
 
 		var client = HttpClient.newHttpClient();
 		var analyticsRequest = HttpRequest.newBuilder(URI.create("http://analytics-service:8080/analytics/" + id))
-				.POST(BodyPublishers.ofString(incoming_time)).build();
+				.POST(BodyPublishers.ofString(incoming_time)).header("content-type", "application/json").build();
 
 		try {
 			var body = client.send(analyticsRequest, BodyHandlers.ofString()).body();
+			System.out.println(body);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

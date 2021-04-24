@@ -8,7 +8,7 @@ then
     CORE_BASE=localhost:8089
     ANALYTICS_BASE=localhost:8082
 else
-    CORE_BASE=app.snippy.me
+    CORE_BASE=snippy.me
     ANALYTICS_BASE=analytics.snippy.me
 fi
 

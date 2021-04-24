@@ -16,4 +16,11 @@ spec:
           serviceName: analytics-service
           servicePort: 8080
         pathType: ImplementationSpecific
+  - host: app.snippy.me
+    http:
+      paths:
+      - backend:
+          serviceName: ui-service
+          servicePort: 80
+        pathType: ImplementationSpecific
 

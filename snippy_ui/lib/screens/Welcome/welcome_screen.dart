@@ -86,6 +86,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   String url = "";
   String resultUrl = "";
+  String error = "";
 
   void copyToClipboard(String text) {
     Clipboard.setData(new ClipboardData(text: text)).then((_) {
@@ -141,6 +142,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ],
                 ),
               ),
+              error != null
+                  ? Text(
+                      error,
+                      style: TextStyle(color: Colors.redAccent),
+                    )
+                  : Text(''),
               SizedBox(height: 40.0),
               SizedBox(
                 height: 50.0,
@@ -216,16 +223,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       onCopy: () => copyToClipboard(resultUrl),
                                     );
                                   });
-                            }).catchError((error, stackTrace) {
+                            }).catchError((e, stackTrace) {
                               // show the dialog
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return ErrorDialog();
-                                },
-                              );
+                              setState(() => error =
+                                  "Invalid URL, please provide a valid HTTP or HTTPS link.");
                               print(
-                                  'Exception when calling UrlControllerApi->create: $error\n');
+                                  'Exception when calling UrlControllerApi->create: $e\n');
                             });
                           },
                     style: ButtonStyle(

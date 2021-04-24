@@ -79,10 +79,10 @@ public class AnalyticsApplication {
 				var list = new ArrayList<Request>();
 				list.add(newReq);
 				map.put("history", newReq);
-				var resp = docRef.create(map);
+				var resp = docRef.create(map).get(10000, TimeUnit.MILLISECONDS);
 
 			} else {
-				docRef.update("history", FieldValue.arrayUnion(newReq));
+				docRef.update("history", FieldValue.arrayUnion(newReq)).get(10000, TimeUnit.MILLISECONDS);;
 			}
 
 		} catch (Exception e) {

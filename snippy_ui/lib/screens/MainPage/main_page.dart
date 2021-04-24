@@ -31,6 +31,7 @@ class _MainScreenState extends State<MainScreen> {
   //final List<String> temp = ["url1asdasd", "url2", "url3", "url4","url2","url2","url2","url2","url2"];
   String url = "";
   String customName = "";
+  String error = "";
 
   void copyToClipboard(String text) {
     Clipboard.setData(new ClipboardData(text: text)).then((_) {
@@ -94,6 +95,12 @@ class _MainScreenState extends State<MainScreen> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
               Widget>[
             SizedBox(height: 130.0),
+            error != null
+                ? Text(
+                    error,
+                    style: TextStyle(color: Colors.redAccent),
+                  )
+                : Text(''),
             SizedBox(
                 height: 50.0,
                 width: 280.0,
@@ -150,15 +157,24 @@ class _MainScreenState extends State<MainScreen> {
                             .getIdToken()
                             .then((token) {
                           if (customName == "") {
-                            urlControllerApi
-                                .create(url, faAuth: token)
-                                .then((result) {
-                              urlControllerApi
-                                  .getUrlForUser(token)
-                                  .then((urls) => setState(() {
-                                        temp = Future.value(urls);
-                                      }));
-                            });
+                            urlControllerApi.create(url, faAuth: token).then(
+                                (result) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return URLDialog(
+                                      resultUrl: "http://snippy.me/u/" + result,
+                                      onCopy: () => copyToClipboard(
+                                          "http://snippy.me/u/" + result),
+                                    );
+                                  });
+                              urlControllerApi.getUrlForUser(token,
+                                  page: 0, size: 50, sort: []).then((urls) => setState(
+                                      () {
+                                    temp = Future.value(urls);
+                                  }));
+                            }).catchError(
+                                (e) => setState(() => error = e.toString()));
                           } else {
                             urlControllerApi
                                 .createNamed(
@@ -168,15 +184,27 @@ class _MainScreenState extends State<MainScreen> {
                                         url: url,
                                         ownerEmail: email))
                                 .then((result) {
-                              urlControllerApi
-                                  .getUrlForUser(token)
-                                  .then((urls) => setState(() {
-                                        temp = Future.value(urls);
-                                      }));
-                            });
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return URLDialog(
+                                      resultUrl: "http://snippy.me/u/" + result,
+                                      onCopy: () => copyToClipboard(
+                                          "http://snippy.me/u/" + result),
+                                    );
+                                  });
+                              urlControllerApi.getUrlForUser(token,
+                                  page: 0, size: 50, sort: []).then((urls) => setState(
+                                      () {
+                                    temp = Future.value(urls);
+                                  }));
+                            }).catchError((e) =>
+                                    setState(() => error = e.toString()));
+                            ;
                           }
                         });
                       } catch (e) {
+                        setState(() => error = e.toString());
                         print(
                             'Exception when calling UrlControllerApi->create: $e\n');
                       }

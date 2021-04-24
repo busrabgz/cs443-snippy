@@ -59,6 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                     ),
+                    error != null
+                        ? Text(
+                            error,
+                            style: TextStyle(color: Colors.redAccent),
+                          )
+                        : Text(''),
                     SizedBox(height: 40.0),
                     SizedBox(
                         height: 50.0,
@@ -127,11 +133,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ))),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                dynamic result =
+                                var result =
                                     await _auth.signInWithEmailAndPassword(
                                         email, password);
+                                print(result);
                                 if (result == null) {
-                                  setState(() => error = "Sign in failed");
+                                  setState(
+                                      () => error = "Invalid credentials.");
                                 } else {
                                   Navigator.push(
                                       context,

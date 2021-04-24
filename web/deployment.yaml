@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+      - name: app
+        image: eu.gcr.io/snippy-me-cs443/flutter_web_snippy
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80

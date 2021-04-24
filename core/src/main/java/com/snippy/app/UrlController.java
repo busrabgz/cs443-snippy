@@ -59,11 +59,11 @@ public class UrlController {
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
 		}
-		
+
 		if (shortUrl != null) {
 			jedis.set(id, shortUrl.getUrl());
-			jedis.close();
 		}
+		jedis.close();
 
 		return shortUrl == null ? null : shortUrl.getUrl();
 	}
@@ -73,7 +73,7 @@ public class UrlController {
 	public ResponseEntity<Void> redirectToURL(@PathVariable String id) {
 		String incoming_time = String.valueOf(System.currentTimeMillis());
 		String actualUrl = getUrl(id);
-		
+
 		String redirectUrl = "redirect:" + actualUrl == null ? "https://www.cloudflare.com/404/" : actualUrl;
 
 		var client = HttpClient.newHttpClient();
@@ -134,7 +134,7 @@ public class UrlController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
+
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(shortUrl.getId());
 	}
@@ -142,7 +142,6 @@ public class UrlController {
 	@Operation(summary = "Creates a shortened URL with the defined id for the user.")
 	@RequestMapping(value = "/namedUrls", method = RequestMethod.POST)
 	public ResponseEntity<String> createNamed(@RequestBody Url url, @RequestHeader("fa-auth") String auth) {
-		
 
 		FirebaseToken token;
 		try {
@@ -157,26 +156,19 @@ public class UrlController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid URL.");
 		}
 
-		try {
-			getUrl(url.getId());
-
+		if (getUrl(url.getId()) != null)
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URL name already exists.");
-		} catch (Exception e) {
-			var jedis = getJedis();
-			jedis.set(url.getId(), url.getUrl());
-			jedis.close();
 
-			var db = getDb();
-			try {
-				db.document("urls/" + url.getId()).create(url).get(10000, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException | ExecutionException | TimeoutException e1) {
-				e1.printStackTrace();
-			} finally {
-				
-			}
+		var db = getDb();
+		try {
+			db.document("urls/" + url.getId()).create(url).get(10000, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e1) {
+			e1.printStackTrace();
+		} finally {
 
-			return ResponseEntity.status(HttpStatus.OK).body(url.getId());
 		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(url.getId());
 
 	}
 
@@ -204,7 +196,7 @@ public class UrlController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} finally {
-			
+
 		}
 
 		var retList = new ArrayList<Url>();
@@ -216,23 +208,24 @@ public class UrlController {
 	}
 
 	@Operation(summary = "Queries the urls of a user with the given email to admin.")
-	@RequestMapping(value = "/adminUrls", method = RequestMethod.POST, consumes=MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<List<Url>> getUrlForUserFromAdmin(@RequestBody String email, @RequestHeader("fa-auth") String auth) throws InterruptedException, ExecutionException {
+	@RequestMapping(value = "/adminUrls", method = RequestMethod.POST, consumes = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<List<Url>> getUrlForUserFromAdmin(@RequestBody String email,
+			@RequestHeader("fa-auth") String auth) throws InterruptedException, ExecutionException {
 		var db = getDb();
 
 		FirebaseToken token;
 		try {
 			token = getAuth().verifyIdToken(auth);
+			
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		
+
 		System.out.println(email);
 		email = email.substring(1, email.length() - 1);
 		System.out.println(email);
-		if (token.getEmail().equals("admin@snippy.me")){
-			var ref = db.collection("urls/")
-			.whereEqualTo("ownerEmail", email);
+		if (token.getEmail().equals("admin@snippy.me")) {
+			var ref = db.collection("urls/").whereEqualTo("ownerEmail", email);
 
 			QuerySnapshot snapshot = ref.get().get();
 
@@ -242,11 +235,10 @@ public class UrlController {
 			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(retList);
-		}
-		else{
+		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		
+
 	}
 
 }

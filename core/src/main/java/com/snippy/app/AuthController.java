@@ -99,7 +99,7 @@ public class AuthController {
         }
 
         try {
-            page = FirebaseAuth.getInstance().listUsers(null);
+            page = getAuth().listUsers(null);
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
         }

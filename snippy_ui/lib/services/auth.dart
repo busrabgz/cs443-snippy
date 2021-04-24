@@ -49,6 +49,7 @@ class AuthService {
       return user;
     } catch (e) {
       print(e.toString());
+      return null;
     }
   }
 

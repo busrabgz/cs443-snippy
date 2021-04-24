@@ -337,6 +337,85 @@ class UrlControllerApi {
     return Future<List<Url>>.value(null);
   }
 
+  /// Queries the urls of a user with the given email to admin.
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [String] faAuth (required):
+  ///
+  /// * [String] body (required):
+  Future<Response> getUrlForUserFromAdminWithHttpInfo(String faAuth, String body) async {
+    // Verify required params are set.
+    if (faAuth == null) {
+     throw ApiException(HttpStatus.badRequest, 'Missing required param: faAuth');
+    }
+    if (body == null) {
+     throw ApiException(HttpStatus.badRequest, 'Missing required param: body');
+    }
+
+    final path = r'/adminUrls';
+
+    Object postBody = body;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    headerParams[r'fa-auth'] = parameterToString(faAuth);
+
+    final contentTypes = <String>['text/plain'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    if (
+      nullableContentType != null &&
+      nullableContentType.toLowerCase().startsWith('multipart/form-data')
+    ) {
+      bool hasFields = false;
+      final mp = MultipartRequest(null, null);
+      if (hasFields) {
+        postBody = mp;
+      }
+    } else {
+    }
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Queries the urls of a user with the given email to admin.
+  ///
+  /// Parameters:
+  ///
+  /// * [String] faAuth (required):
+  ///
+  /// * [String] body (required):
+  Future<List<Url>> getUrlForUserFromAdmin(String faAuth, String body) async {
+    final response = await getUrlForUserFromAdminWithHttpInfo(faAuth, body);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return (apiClient.deserialize(_decodeBodyBytes(response), 'List<Url>') as List)
+        .cast<Url>()
+        .toList(growable: false);
+    }
+    return Future<List<Url>>.value(null);
+  }
+
   /// Redirects a shortened URL to the original URL
   ///
   /// Note: This method returns the HTTP [Response].

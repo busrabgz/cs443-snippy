@@ -44,6 +44,13 @@ void main() {
       // TODO
     });
 
+    // Queries the urls of a user with the given email to admin.
+    //
+    //Future<List<Url>> getUrlForUserFromAdmin(String faAuth, String body) async
+    test('test getUrlForUserFromAdmin', () async {
+      // TODO
+    });
+
     // Redirects a shortened URL to the original URL
     //
     //Future redirectToURL(String id) async

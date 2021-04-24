@@ -1,0 +1,242 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://10.0.2.2:8089
+  description: Generated server url
+paths:
+  /users:
+    post:
+      tags:
+      - auth-controller
+      summary: Queries all users if the request comes from admin.
+      operationId: getUsers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+  /urls:
+    get:
+      tags:
+      - url-controller
+      summary: Queries the urls created by the current user.
+      operationId: getUrlForUser
+      parameters:
+      - name: fa-auth
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        schema:
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        schema:
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property(,asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Url'
+    post:
+      tags:
+      - url-controller
+      summary: Creates a shortened URL for the user.
+      operationId: create
+      parameters:
+      - name: fa-auth
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /namedUrls:
+    post:
+      tags:
+      - url-controller
+      summary: Creates a shortened URL with the defined id for the user.
+      operationId: createNamed
+      parameters:
+      - name: fa-auth
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Url'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /auth:
+    post:
+      tags:
+      - auth-controller
+      summary: A middle-man for the authentication with the firebase services.
+      operationId: auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailPassword'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /urls/{id}:
+    get:
+      tags:
+      - url-controller
+      summary: Gets the original URL from the shortened URL.
+      operationId: getUrlForId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /u/{id}:
+    get:
+      tags:
+      - url-controller
+      summary: Redirects a shortened URL to the original URL
+      operationId: redirectToURL
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /healthcheck:
+    get:
+      tags:
+      - app-application
+      summary: Returns health status of the all microservices.
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /adminUrls:
+    get:
+      tags:
+      - url-controller
+      summary: Queries the urls of a user with the given email to admin.
+      operationId: getUrlForUserFromAdmin
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: fa-auth
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Url'
+  /:
+    get:
+      tags:
+      - app-application
+      summary: Used for healtchecking by the Kubernetes services.
+      operationId: rootPath
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    Url:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        ownerEmail:
+          type: string
+    EmailPassword:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string

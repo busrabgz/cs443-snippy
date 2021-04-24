@@ -175,7 +175,7 @@ public class UrlController {
 	}
 
 	@Operation(summary = "Queries the urls of a user with the given email to admin.")
-	@GetMapping("/adminUrls")
+	@RequestMapping(value = "/adminUrls", method = RequestMethod.POST, consumes=MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<List<Url>> getUrlForUserFromAdmin(@RequestBody String email, @RequestHeader("fa-auth") String auth) throws InterruptedException, ExecutionException {
 		var db = getDb();
 
@@ -185,7 +185,10 @@ public class UrlController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-
+		
+		System.out.println(email);
+		String email = email.substring(1, email.length() - 1);
+		System.out.println(email);
 		if (token.getEmail().equals("admin@snippy.me")){
 			var ref = db.collection("urls/")
 			.whereEqualTo("ownerEmail", email);

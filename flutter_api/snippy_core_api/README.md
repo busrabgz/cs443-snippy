@@ -65,6 +65,7 @@ Class | Method | HTTP request | Description
 *UrlControllerApi* | [**createNamed**](doc//UrlControllerApi.md#createnamed) | **POST** /namedUrls | Creates a shortened URL with the defined id for the user.
 *UrlControllerApi* | [**getUrlForId**](doc//UrlControllerApi.md#geturlforid) | **GET** /urls/{id} | Gets the original URL from the shortened URL.
 *UrlControllerApi* | [**getUrlForUser**](doc//UrlControllerApi.md#geturlforuser) | **GET** /urls | Queries the urls created by the current user.
+*UrlControllerApi* | [**getUrlForUserFromAdmin**](doc//UrlControllerApi.md#geturlforuserfromadmin) | **POST** /adminUrls | Queries the urls of a user with the given email to admin.
 *UrlControllerApi* | [**redirectToURL**](doc//UrlControllerApi.md#redirecttourl) | **GET** /u/{id} | Redirects a shortened URL to the original URL
 
 

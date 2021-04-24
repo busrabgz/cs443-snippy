@@ -13,7 +13,9 @@ class AdminScreen extends StatefulWidget {
 class _AdminScreenState extends State<AdminScreen> {
   final AuthService _auth = AuthService();
   final authControllerApi = AuthControllerApi();
+  final urlControllerApi = UrlControllerApi();
   Future<List<String>> temp;
+  Future<List<Url>> userUrls;
   final String email = FirebaseAuth.instance.currentUser.email;
 
   @override
@@ -22,6 +24,57 @@ class _AdminScreenState extends State<AdminScreen> {
     print(email);
     temp = authControllerApi.getUsers(email);
   }
+
+Widget setupAlertDialoadContainer() {
+    return Container(
+      width: double.maxFinite,
+      child: FutureBuilder<List<Url>>(
+        future: userUrls,
+        builder: (context, snapshot) {
+          print(snapshot.connectionState);
+          return snapshot.hasData
+              ? ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 60,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(30.0),
+                        ),
+                        elevation: 5.0,
+                        color: Color.fromRGBO(
+                            255, 255, 255, 1.0),
+                        child: ListTile(
+                          onTap: () {
+                            FocusScope.of(context)
+                                .unfocus();
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        AnalyticsScreen(
+                                          id: snapshot
+                                              .data[index]
+                                              .id,
+                                        )));
+                          },
+                          title: Text(
+                              snapshot.data[index].url,
+                              style: TextStyle(
+                                  color: Color.fromRGBO(
+                                      61, 82, 155, 1.0))),
+                        ),
+                      ),
+                    );
+                  })
+              : Text("Loading");
+        }),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -108,17 +161,18 @@ class _AdminScreenState extends State<AdminScreen> {
                                                 255, 255, 255, 1.0),
                                             child: ListTile(
                                               onTap: () {
-                                                FocusScope.of(context)
-                                                    .unfocus();
+                                                FocusScope.of(context).unfocus();
+                                                FirebaseAuth.instance.currentUser.getIdToken().then((token)=>  urlControllerApi.getUrlForUserFromAdmin(token, snapshot.data[index]).then((res)=>userUrls = Future.value(res)));
+                                                showDialog(
+                                                  context: context, 
+                                                  builder: (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title: Text("try"),
+                                                      content: setupAlertDialoadContainer()
+                                                    );
+                                                  }
+                                                );
 
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AnalyticsScreen(
-                                                              id: snapshot
-                                                                  .data[index]
-                                                            )));
                                               },
                                               title: Text(
                                                   snapshot.data[index],

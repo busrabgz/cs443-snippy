@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:snippy_core_api/api.dart';
 import 'package:snippy_ui/screens/analytics.dart';
@@ -11,6 +12,17 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
   final AuthService _auth = AuthService();
+  final authControllerApi = AuthControllerApi();
+  Future<List<String>> temp;
+  final String email = FirebaseAuth.instance.currentUser.email;
+
+  @override
+  void initState() {
+    super.initState();
+    print(email);
+    temp = authControllerApi.getUsers(email);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +86,7 @@ class _AdminScreenState extends State<AdminScreen> {
                       ),
                       Divider(color: Colors.blueAccent),
                       Expanded(
-                        child: FutureBuilder<List<Url>>(
+                        child: FutureBuilder<List<String>>(
                             future: temp,
                             builder: (context, snapshot) {
                               print(snapshot.connectionState);
@@ -106,11 +118,10 @@ class _AdminScreenState extends State<AdminScreen> {
                                                             AnalyticsScreen(
                                                               id: snapshot
                                                                   .data[index]
-                                                                  .id,
                                                             )));
                                               },
                                               title: Text(
-                                                  snapshot.data[index].url,
+                                                  snapshot.data[index],
                                                   style: TextStyle(
                                                       color: Color.fromRGBO(
                                                           61, 82, 155, 1.0))),

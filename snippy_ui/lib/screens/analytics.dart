@@ -119,7 +119,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   List<Request> request;
   RangeValues timeRange = RangeValues(0, 10);
   String id;
-  String unitValue = 'Minutes';
+  String unitValue = 'Days';
   String modeValue = 'Visits';
   int offset = 0;
 

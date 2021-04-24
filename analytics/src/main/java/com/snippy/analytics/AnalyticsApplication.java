@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,20 +19,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import static com.snippy.libs.Config.SetupFirestore;
 import static com.snippy.libs.Config.SetupJedis;
 import static com.snippy.libs.Config.getDb;
-import static com.snippy.libs.Config.getJedis;
-import static com.snippy.libs.Config.getAuth;
-import static com.snippy.libs.Config.getDb;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.google.gson.*;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.snippy.libs.Request;
 
 @SpringBootApplication
@@ -73,13 +66,13 @@ public class AnalyticsApplication {
 	@Operation(summary = "Logs an incoming request to the given short URL.")
 	@PostMapping("/analytics/{id}")
 	public ResponseEntity<?> saveRequest(@PathVariable String id, @RequestBody long incoming_time) {
-		
+
 		long outgoing_time = System.currentTimeMillis();
 		Request newReq = new Request(incoming_time, outgoing_time);
 
 		var db = getDb();
 		DocumentReference docRef = db.collection("requests").document(id);
-		
+
 		try {
 			if (!docRef.get().get(10000, TimeUnit.MILLISECONDS).exists()) {
 				Map<String, Object> map = new HashMap<>();
@@ -108,8 +101,8 @@ public class AnalyticsApplication {
 
 		try {
 			var docRef = db.collection("requests").document(id).get();
-			List<Request> history = (ArrayList<Request>) docRef.get(10000, TimeUnit.MILLISECONDS).get("history");
-			
+			List<Request> history = (ArrayList<Request>) docRef.get(60000, TimeUnit.MILLISECONDS).get("history");
+
 			return history != null ? ResponseEntity.ok(history) : ResponseEntity.notFound().build();
 		} catch (Exception e) {
 			e.printStackTrace();

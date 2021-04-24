@@ -119,6 +119,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           image: DecorationImage(
             image: AssetImage("assets/images/background.png"),
             fit: BoxFit.cover,
+            alignment: Alignment.center,
           ),
         ),
         height: height,
@@ -176,57 +177,73 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 45.0,
                 width: 200.0,
                 child: TextButton(
-                    child: globals.countLeft ?Text("Snip!".toUpperCase(),
-                        style: TextStyle(
-                            fontFamily: 'CaviarDreams',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18)):  Text("Out of quota!", style: TextStyle(
-                    fontFamily: 'CaviarDreams',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18)),
-                    onPressed: globals.clickCounter >= 3 ? () {globals.countLeft = false;} : () {
-                      FocusScope.of(context).unfocus();
+                    child: globals.countLeft
+                        ? Text("Snip!".toUpperCase(),
+                            style: TextStyle(
+                                fontFamily: 'CaviarDreams',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18))
+                        : Text("Out of quota!",
+                            style: TextStyle(
+                                fontFamily: 'CaviarDreams',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18)),
+                    onPressed: globals.clickCounter >= 3
+                        ? () {
+                            globals.countLeft = false;
+                          }
+                        : () {
+                            FocusScope.of(context).unfocus();
 
-                      final currentUser = FirebaseAuth.instance.currentUser;
+                            final currentUser =
+                                FirebaseAuth.instance.currentUser;
 
-                      final resultFuture = (currentUser != null)
-                          ? currentUser.getIdToken().then((token) =>
-                              urlControllerApi.create(url, faAuth: token))
-                          : urlControllerApi.create(url);
+                            final resultFuture = (currentUser != null)
+                                ? currentUser.getIdToken().then((token) =>
+                                    urlControllerApi.create(url, faAuth: token))
+                                : urlControllerApi.create(url);
 
-                      resultFuture.then((result) {
-                        globals.clickCounter+=1;
-                        setState(
-                            () => resultUrl = "http://snippy.me/u/" + result);
-                        copyToClipboard(resultUrl);
+                            resultFuture.then((result) {
+                              globals.clickCounter += 1;
+                              setState(() =>
+                                  resultUrl = "http://snippy.me/u/" + result);
 
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return URLDialog(
-                                resultUrl: resultUrl,
-                                onCopy: () => copyToClipboard(resultUrl),
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return URLDialog(
+                                      resultUrl: resultUrl,
+                                      onCopy: () => copyToClipboard(resultUrl),
+                                    );
+                                  });
+                            }).catchError((error, stackTrace) {
+                              // show the dialog
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ErrorDialog();
+                                },
                               );
+                              print(
+                                  'Exception when calling UrlControllerApi->create: $error\n');
                             });
-                      }).catchError((error, stackTrace) {
-                        // show the dialog
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return ErrorDialog();
                           },
-                        );
-                        print(
-                            'Exception when calling UrlControllerApi->create: $error\n');
-                      });
-                    },
                     style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(5), //Defines Elevation
-                        shadowColor: MaterialStateProperty.all(Colors.black), //Defines shadowColor
-                        backgroundColor: globals.countLeft ? MaterialStateProperty.all<Color>(Color.fromRGBO(61, 82, 155, 1.0)):  MaterialStateProperty.all<Color>(Colors.red),
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))))),
+                        elevation:
+                            MaterialStateProperty.all(5), //Defines Elevation
+                        shadowColor: MaterialStateProperty.all(
+                            Colors.black), //Defines shadowColor
+                        backgroundColor: globals.countLeft
+                            ? MaterialStateProperty.all<Color>(
+                                Color.fromRGBO(61, 82, 155, 1.0))
+                            : MaterialStateProperty.all<Color>(Colors.red),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(18.0))))),
                 //side: BorderSide(color: Colors.white))))),
               ),
               SizedBox(
@@ -235,7 +252,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
                       height: 40.0,

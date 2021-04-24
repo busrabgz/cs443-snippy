@@ -89,22 +89,24 @@ class AuthControllerApi {
   ///
   /// Parameters:
   ///
-  /// * [String] body (required):
-  Future<Response> getUsersWithHttpInfo(String body) async {
+  /// * [String] faAuth (required):
+  Future<Response> getUsersWithHttpInfo(String faAuth) async {
     // Verify required params are set.
-    if (body == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: body');
+    if (faAuth == null) {
+     throw ApiException(HttpStatus.badRequest, 'Missing required param: faAuth');
     }
 
     final path = r'/users';
 
-    Object postBody = body;
+    Object postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
+    headerParams[r'fa-auth'] = parameterToString(faAuth);
+
+    final contentTypes = <String>[];
     final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
     final authNames = <String>[];
 
@@ -136,9 +138,9 @@ class AuthControllerApi {
   ///
   /// Parameters:
   ///
-  /// * [String] body (required):
-  Future<List<String>> getUsers(String body) async {
-    final response = await getUsersWithHttpInfo(body);
+  /// * [String] faAuth (required):
+  Future<List<String>> getUsers(String faAuth) async {
+    final response = await getUsersWithHttpInfo(faAuth);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, _decodeBodyBytes(response));
     }

@@ -8,21 +8,18 @@ import 'package:snippy_ui/screens/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:snippy_ui/services/auth.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(
       value: AuthService().user,
-      child: MaterialApp(
-      home: Wrapper()
-      ),
+      child: MaterialApp(home: Wrapper()),
     );
   }
 }

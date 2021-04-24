@@ -13,8 +13,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.concurrent.TimeUnit;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-@SpringBootApplication	
+@SpringBootApplication
 @RestController
 public class AppApplication {
 	public static void main(String[] args) {
@@ -35,6 +33,7 @@ public class AppApplication {
 
 		SpringApplication.run(AppApplication.class, args);
 	}
+
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
@@ -90,7 +89,7 @@ public class AppApplication {
 			} catch (Exception e) {
 				firestoreStatus = false;
 			} finally {
-				
+
 			}
 		}
 

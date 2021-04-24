@@ -25,11 +25,11 @@ import org.springframework.http.MediaType;
 
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.snippy.libs.Url;
 import static com.snippy.libs.Config.getDb;
 import static com.snippy.libs.Config.getJedis;
+import static com.snippy.libs.Config.getAuth;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -117,7 +117,7 @@ public class UrlController {
 
 		var email = "";
 		try {
-			var token = FirebaseAuth.getInstance().verifyIdToken(auth);
+			var token = getAuth().verifyIdToken(auth);
 			email = token.getEmail();
 		} catch (Exception e) {
 		}
@@ -146,7 +146,7 @@ public class UrlController {
 
 		FirebaseToken token;
 		try {
-			token = FirebaseAuth.getInstance().verifyIdToken(auth);
+			token = getAuth().verifyIdToken(auth);
 			url.setOwnerEmail(token.getEmail());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
@@ -188,7 +188,7 @@ public class UrlController {
 
 		FirebaseToken token;
 		try {
-			token = FirebaseAuth.getInstance().verifyIdToken(auth);
+			token = getAuth().verifyIdToken(auth);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
@@ -222,7 +222,7 @@ public class UrlController {
 
 		FirebaseToken token;
 		try {
-			token = FirebaseAuth.getInstance().verifyIdToken(auth);
+			token = getAuth().verifyIdToken(auth);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}

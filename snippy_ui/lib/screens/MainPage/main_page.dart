@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:snippy_analytics_api/api.dart';
 import 'package:snippy_core_api/api.dart';
+import 'package:snippy_ui/screens/Admin/admin_page.dart';
 import 'package:snippy_ui/screens/Welcome/welcome_screen.dart';
 import 'package:snippy_ui/screens/analytics.dart';
 import 'package:snippy_ui/services/auth.dart';
@@ -53,6 +54,10 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
+    if (FirebaseAuth.instance.currentUser.email == "admin@snippy.me")
+      return AdminScreen();
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(

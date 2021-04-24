@@ -5,7 +5,7 @@
 import 'package:snippy_core_api/api.dart';
 ```
 
-All URIs are relative to *http://snippy.me*
+All URIs are relative to *http://10.0.2.2:8089*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

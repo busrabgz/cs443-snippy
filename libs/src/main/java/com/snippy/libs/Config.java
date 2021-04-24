@@ -8,12 +8,13 @@ import java.io.FileInputStream;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.cloud.FirestoreClient;
+
+import java.util.UUID;
 
 import org.threeten.bp.Duration;
 
@@ -35,6 +36,7 @@ public class Config {
   }
 
   private static JedisPool jedisPool;
+  private static FirebaseApp firebaseApp;
 
   public static void SetupJedis() {
     jedisPool = new JedisPool(buildPoolConfig(), "redis-service", 6379, 4000);
@@ -45,34 +47,17 @@ public class Config {
       jedisPool.getResource().flushAll();
   }
 
-  private static FirestoreOptions firestoreOptions;
-  private static FirebaseOptions firebaseOptions;
-
   public static void SetupFirestore() {
-    if (firebaseOptions != null || firebaseOptions != null) {
-      return;
-    }
 
     try {
-
-      var useEmulator = System.getenv("FIRESTORE_EMULATOR_HOST") != null;
 
       var credentialPath = "/home/env/key.json";
       var serviceAccount = new FileInputStream(credentialPath);
       var credentials = GoogleCredentials.fromStream(serviceAccount);
 
-      if (useEmulator) {
-        firestoreOptions = FirestoreOptions.newBuilder().setProjectId("snippy-me-cs443").build();
-        firebaseOptions = FirebaseOptions.builder().setCredentials(credentials)
-            .setDatabaseUrl(System.getenv("FIRESTORE_EMULATOR_HOST")).setProjectId("snippy-me-cs443").build();
-
-      } else {
-
-        firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443")
-            .setFirestoreOptions(firestoreOptions).setConnectTimeout(5000).setReadTimeout(5000).build();
-      }
-
-      FirebaseApp.initializeApp(firebaseOptions);
+      var firebaseOptions = FirebaseOptions.builder().setCredentials(credentials).setProjectId("snippy-me-cs443")
+          .setConnectTimeout(5000).setReadTimeout(5000).build();
+      firebaseApp = FirebaseApp.initializeApp(firebaseOptions, UUID.randomUUID().toString());
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -80,11 +65,15 @@ public class Config {
   }
 
   public static FirebaseAuth getAuth() {
-    return FirebaseAuth.getInstance();
+    if (firebaseApp == null)
+      SetupFirestore();
+    return FirebaseAuth.getInstance(firebaseApp);
   }
 
   public static Firestore getDb() {
-    return FirestoreClient.getFirestore();
+    if (firebaseApp == null)
+      SetupFirestore();
+    return FirestoreClient.getFirestore(firebaseApp);
   }
 
   public static Jedis getJedis() {

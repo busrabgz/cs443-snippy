@@ -25,7 +25,7 @@ void main() {
 
     // Queries all users if the request comes from admin.
     //
-    //Future<List<String>> getUsers(String body) async
+    //Future<List<String>> getUsers(String faAuth) async
     test('test getUsers', () async {
       // TODO
     });
